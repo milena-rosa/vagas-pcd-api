@@ -1,8 +1,8 @@
 import { CompaniesRepository } from '@/repositories/companies-repository'
 import { Company } from '@prisma/client'
 import { hash } from 'bcryptjs'
-import { CNPJAlreadyRegisteredError } from './errors/cnpj-already-registered-error'
-import { EmailAlreadyRegisteredError } from './errors/email-already-registered-error'
+import { CNPJAlreadyRegisteredError } from '../errors/cnpj-already-registered-error'
+import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 
 interface RegisterCompanyUseCaseRequest {
   cnpj: string

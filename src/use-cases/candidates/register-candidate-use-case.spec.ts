@@ -2,7 +2,7 @@ import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { InMemoryCandidatesRepository } from '@/repositories/in-memory/in-memory-candidates-repository'
 import { compare } from 'bcryptjs'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { EmailAlreadyRegisteredError } from './errors/email-already-registered-error'
+import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 import { RegisterCandidateUseCase } from './register-candidate-use-case'
 
 let candidatesRepository: CandidatesRepository
