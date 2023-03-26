@@ -59,13 +59,13 @@ model Company {
 }
 
 model Address {
-  id         String @id @default(uuid())
+  id         String  @id @default(uuid())
   street     String
   number     String
   city       String
   state      String
   zipCode    String
-  complement String
+  complement String?
 
   company_id String
   company    Company @relation(fields: [company_id], references: [id])
