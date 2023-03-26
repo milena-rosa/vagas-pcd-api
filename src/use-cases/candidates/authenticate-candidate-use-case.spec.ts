@@ -10,9 +10,9 @@ import { AuthenticateCandidateUseCase } from './authenticate-candidate-use-case'
 let candidatesRepository: CandidatesRepository
 let sut: AuthenticateCandidateUseCase
 
-describe('authenticate candidate use case', () => {
-  vi.mock('@/libs/prisma')
+vi.mock('@/libs/prisma')
 
+describe('authenticate candidate use case', () => {
   beforeEach(() => {
     candidatesRepository = new PrismaCandidatesRepository()
     sut = new AuthenticateCandidateUseCase(candidatesRepository)

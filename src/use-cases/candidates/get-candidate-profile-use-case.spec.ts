@@ -10,9 +10,9 @@ import { GetCandidateProfileUseCase } from './get-candidate-profile-use-case'
 let candidatesRepository: CandidatesRepository
 let sut: GetCandidateProfileUseCase
 
-describe('get candidate profile use case', () => {
-  vi.mock('@/libs/prisma')
+vi.mock('@/libs/prisma')
 
+describe('get candidate profile use case', () => {
   beforeEach(() => {
     candidatesRepository = new PrismaCandidatesRepository()
     sut = new GetCandidateProfileUseCase(candidatesRepository)

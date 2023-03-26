@@ -11,9 +11,9 @@ import { RegisterCandidateUseCase } from './register-candidate-use-case'
 let candidatesRepository: CandidatesRepository
 let sut: RegisterCandidateUseCase
 
-describe('register candidate use case', () => {
-  vi.mock('@/libs/prisma')
+vi.mock('@/libs/prisma')
 
+describe('register candidate use case', () => {
   beforeEach(() => {
     candidatesRepository = new PrismaCandidatesRepository()
     sut = new RegisterCandidateUseCase(candidatesRepository)

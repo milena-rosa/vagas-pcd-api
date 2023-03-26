@@ -10,9 +10,9 @@ import { UpdateCandidateUseCase } from './update-candidate-use-case'
 let candidatesRepository: CandidatesRepository
 let sut: UpdateCandidateUseCase
 
-describe('update candidate use case', () => {
-  vi.mock('@/libs/prisma')
+vi.mock('@/libs/prisma')
 
+describe('update candidate use case', () => {
   beforeEach(() => {
     candidatesRepository = new PrismaCandidatesRepository()
     sut = new UpdateCandidateUseCase(candidatesRepository)

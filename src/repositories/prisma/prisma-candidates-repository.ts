@@ -16,7 +16,6 @@ export class PrismaCandidatesRepository implements CandidatesRepository {
   }
 
   async update(id: string, data: Prisma.CandidateUpdateInput) {
-    console.log('aaaaaaaa', data)
     return await prisma.candidate.update({
       where: { id },
       data,
