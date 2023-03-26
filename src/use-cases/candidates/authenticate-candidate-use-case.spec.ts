@@ -1,7 +1,9 @@
+import { prisma } from '@/libs/__mocks__/prisma'
 import { CandidatesRepository } from '@/repositories/candidates-repository'
-import { InMemoryCandidatesRepository } from '@/repositories/in-memory/in-memory-candidates-repository'
-import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
+import { getNewCandidate } from '@/utils/tests/get-new-candidate'
+import { Candidate } from '@prisma/client'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { AuthenticateCandidateUseCase } from './authenticate-candidate-use-case'
 
@@ -9,23 +11,24 @@ let candidatesRepository: CandidatesRepository
 let sut: AuthenticateCandidateUseCase
 
 describe('authenticate candidate use case', () => {
+  vi.mock('@/libs/prisma')
+
   beforeEach(() => {
-    candidatesRepository = new InMemoryCandidatesRepository()
+    candidatesRepository = new PrismaCandidatesRepository()
     sut = new AuthenticateCandidateUseCase(candidatesRepository)
   })
 
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('should be able to authenticate a candidate', async () => {
-    const email = 'janedoe@example.com'
-    await candidatesRepository.create({
-      name: 'Jane Doe',
-      email,
-      password_hash: await hash('123456', 6),
-      phone: null,
-      resume: 'linkedin',
-    })
+    const newCandidate: Candidate = await getNewCandidate()
+
+    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
 
     const { candidate } = await sut.execute({
-      email,
+      email: newCandidate.email,
       password: '123456',
     })
 
@@ -42,18 +45,13 @@ describe('authenticate candidate use case', () => {
   })
 
   it('should not be able to authenticate with a wrong password', async () => {
-    const email = 'janedoe@example.com'
-    await candidatesRepository.create({
-      name: 'Jane Doe',
-      email,
-      password_hash: await hash('123456', 6),
-      phone: null,
-      resume: 'linkedin',
-    })
+    const newCandidate: Candidate = await getNewCandidate()
+
+    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
 
     await expect(() =>
       sut.execute({
-        email,
+        email: newCandidate.email,
         password: '654321',
       }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError)

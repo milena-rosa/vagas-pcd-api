@@ -9,7 +9,7 @@ LinkedIn Jobs like API.
 - [x] Deve ser possível se cadastrar;
 - [x] Deve ser possível se autenticar;
 - [x] Deve ser possível alterar informações do perfil de um usuário logado;
-- [ ] Deve ser possível obter o perfil de um candidato logado;
+- [x] Deve ser possível obter o perfil de um candidato logado;
 - [ ] Deve ser possível buscar vagas por título, habilidades ou empresa;
 - [ ] Deve ser possível buscar vagas por localidade;
 - [ ] Deve ser possível buscar vagas por tipo de deficiência;

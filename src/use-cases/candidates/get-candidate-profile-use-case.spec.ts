@@ -1,7 +1,9 @@
+import { prisma } from '@/libs/__mocks__/prisma'
 import { CandidatesRepository } from '@/repositories/candidates-repository'
-import { InMemoryCandidatesRepository } from '@/repositories/in-memory/in-memory-candidates-repository'
-import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
+import { getNewCandidate } from '@/utils/tests/get-new-candidate'
+import { Candidate } from '@prisma/client'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { GetCandidateProfileUseCase } from './get-candidate-profile-use-case'
 
@@ -9,26 +11,28 @@ let candidatesRepository: CandidatesRepository
 let sut: GetCandidateProfileUseCase
 
 describe('get candidate profile use case', () => {
+  vi.mock('@/libs/prisma')
+
   beforeEach(() => {
-    candidatesRepository = new InMemoryCandidatesRepository()
+    candidatesRepository = new PrismaCandidatesRepository()
     sut = new GetCandidateProfileUseCase(candidatesRepository)
   })
 
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('should be able to get a candidate profile', async () => {
-    const createdCandidate = await candidatesRepository.create({
-      name: 'Jane Doe',
-      email: 'janedoe@example.com',
-      password_hash: await hash('123456', 6),
-      phone: null,
-      resume: 'linkedin',
-    })
+    const newCandidate: Candidate = await getNewCandidate()
+
+    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
 
     const { candidate } = await sut.execute({
-      candidateId: createdCandidate.id,
+      candidateId: newCandidate.id,
     })
 
     expect(candidate.id).toEqual(expect.any(String))
-    expect(candidate.name).toEqual('Jane Doe')
+    expect(candidate.name).toEqual(newCandidate.name)
   })
 
   it('should not be able to get a candidate profile with a wrong id', async () => {
