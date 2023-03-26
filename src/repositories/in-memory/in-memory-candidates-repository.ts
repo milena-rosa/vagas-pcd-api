@@ -5,13 +5,18 @@ import { CandidatesRepository } from '../candidates-repository'
 export class InMemoryCandidatesRepository implements CandidatesRepository {
   public candidates: Candidate[] = []
 
+  async findById(id: string) {
+    return this.candidates.find((candidate) => candidate.id === id) || null
+  }
+
   async findByEmail(email: string) {
-    const candidate = this.candidates.find((item) => item.email)
-    return candidate || null
+    return (
+      this.candidates.find((candidate) => candidate.email === email) || null
+    )
   }
 
   async create(data: Prisma.CandidateUncheckedCreateInput) {
-    const candidate: Candidate = {
+    const newCandidate: Candidate = {
       id: randomUUID(),
       resume: data.resume,
       email: data.email,
@@ -21,8 +26,8 @@ export class InMemoryCandidatesRepository implements CandidatesRepository {
       created_at: new Date(),
     }
 
-    this.candidates.push(candidate)
+    this.candidates.push(newCandidate)
 
-    return candidate
+    return newCandidate
   }
 }

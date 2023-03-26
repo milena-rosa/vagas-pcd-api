@@ -1,7 +1,7 @@
 import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { Candidate } from '@prisma/client'
 import { hash } from 'bcryptjs'
-import { EmailAlreadyRegisteredError } from './errors/email-already-registered-error'
+import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 
 interface RegisterCandidateUseCaseRequest {
   name: string
