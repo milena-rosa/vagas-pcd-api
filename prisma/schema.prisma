@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DisabilityType {
+  PHYSICAL
+  HEARING
+  VISUAL
+  MENTAL
+  MULTIPLE
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  phone         String?
+  password_hash String
+  created_at    DateTime @default(now())
+
+  company   Company?
+  candidate Candidate?
+
+  @@map("users")
+}
+
+model Candidate {
+  id     String @id @default(uuid())
+  resume String
+
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  applications Application[]
+
+  @@map("candidates")
+}
+
+model Company {
+  id   String @id @default(uuid())
+  cnpj String @unique
+
+  addresses Address[]
+
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  jobs Job[]
+
+  @@map("companies")
+}
+
+model Address {
+  id         String @id @default(uuid())
+  street     String
+  number     String
+  city       String
+  state      String
+  zipCode    String
+  complement String
+
+  company_id String
+  company    Company @relation(fields: [company_id], references: [id])
+
+  @@map("addresses")
+}
+
+model Job {
+  id              String         @id @default(uuid())
+  title           String
+  description     String
+  role            String
+  salary          String
+  disability_type DisabilityType
+  created_at      DateTime       @default(now())
+  closed_at       DateTime?
+
+  company_id String
+  company    Company @relation(fields: [company_id], references: [id])
+
+  applications Application[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+
+  candidate_id String
+  candidate    Candidate @relation(fields: [candidate_id], references: [id])
+
+  job_id String
+  job    Job    @relation(fields: [job_id], references: [id])
+
+  @@map("applications")
+}
