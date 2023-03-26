@@ -18,26 +18,14 @@ enum DisabilityType {
   MULTIPLE
 }
 
-model User {
+model Candidate {
   id            String   @id @default(uuid())
   name          String
   email         String   @unique
   phone         String?
+  resume        String
   password_hash String
   created_at    DateTime @default(now())
-
-  company   Company?
-  candidate Candidate?
-
-  @@map("users")
-}
-
-model Candidate {
-  id     String @id @default(uuid())
-  resume String
-
-  user_id String @unique
-  user    User   @relation(fields: [user_id], references: [id])
 
   applications Application[]
 
@@ -45,32 +33,14 @@ model Candidate {
 }
 
 model Company {
-  id   String @id @default(uuid())
-  cnpj String @unique
-
-  addresses Address[]
-
-  user_id String @unique
-  user    User   @relation(fields: [user_id], references: [id])
+  id            String @id @default(uuid())
+  cnpj          String @unique
+  email         String @unique
+  password_hash String
 
   jobs Job[]
 
   @@map("companies")
-}
-
-model Address {
-  id         String  @id @default(uuid())
-  street     String
-  number     String
-  city       String
-  state      String
-  zipCode    String
-  complement String?
-
-  company_id String
-  company    Company @relation(fields: [company_id], references: [id])
-
-  @@map("addresses")
 }
 
 model Job {

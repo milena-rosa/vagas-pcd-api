@@ -5,11 +5,20 @@ import { CandidatesRepository } from '../candidates-repository'
 export class InMemoryCandidatesRepository implements CandidatesRepository {
   public candidates: Candidate[] = []
 
+  async findByEmail(email: string) {
+    const candidate = this.candidates.find((item) => item.email)
+    return candidate || null
+  }
+
   async create(data: Prisma.CandidateUncheckedCreateInput) {
     const candidate: Candidate = {
       id: randomUUID(),
       resume: data.resume,
-      user_id: data.user_id,
+      email: data.email,
+      name: data.name,
+      phone: data.phone || null,
+      password_hash: data.password_hash,
+      created_at: new Date(),
     }
 
     this.candidates.push(candidate)

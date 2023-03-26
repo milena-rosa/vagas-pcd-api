@@ -1,83 +1,77 @@
-import { AddressesRepository } from '@/repositories/addresses-repository'
 import { CompaniesRepository } from '@/repositories/companies-repository'
-import { InMemoryAddressesRepository } from '@/repositories/in-memory/in-memory-addresses-repository'
 import { InMemoryCompaniesRepository } from '@/repositories/in-memory/in-memory-companies-repository'
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
-import { UsersRepository } from '@/repositories/users-repository'
 import { compare } from 'bcryptjs'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { CNPJAlreadyRegisteredError } from './errors/cnpj-already-registered-error'
 import { EmailAlreadyRegisteredError } from './errors/email-already-registered-error'
 import { RegisterCompanyUseCase } from './register-company-use-case'
 
-let usersRepository: UsersRepository
 let companiesRepository: CompaniesRepository
-let addressesRepository: AddressesRepository
 let sut: RegisterCompanyUseCase
-const email = 'janedoe@example.com'
-const newCompany = {
-  name: 'Jane Doe',
-  email,
-  password: '123456',
-  phone: null,
-  cnpj: '23.243.199/0001-84',
-  zipCode: '04617902',
-  street: 'Rua Vieira de Morais',
-  number: '1900',
-  city: 'São Paulo',
-  state: 'SP',
-  complement: null,
-}
 
 describe('register company use case', () => {
   beforeEach(() => {
-    usersRepository = new InMemoryUsersRepository()
     companiesRepository = new InMemoryCompaniesRepository()
-    addressesRepository = new InMemoryAddressesRepository()
-    sut = new RegisterCompanyUseCase(
-      usersRepository,
-      companiesRepository,
-      addressesRepository,
-    )
+    sut = new RegisterCompanyUseCase(companiesRepository)
   })
 
-  it('should be able to register company', async () => {
-    const { company } = await sut.execute(newCompany)
-
-    const foundUser = await usersRepository.findByEmail(email)
-    const foundAddress = await addressesRepository.findByCompanyId(company.id)
+  it('should be able to register a company', async () => {
+    const email = 'janedoe@example.com'
+    const { company } = await sut.execute({
+      email,
+      password: '123456',
+      cnpj: '23.243.199/0001-84',
+    })
 
     expect(company.id).toEqual(expect.any(String))
-    expect(foundUser?.id).toEqual(company.user_id)
-    expect(foundAddress?.company_id).toEqual(company.id)
   })
 
   it('should hash user password on registry', async () => {
-    await sut.execute(newCompany)
-
-    const foundUser = await usersRepository.findByEmail(email)
-    expect(foundUser).toBeTruthy()
+    const email = 'janedoe@example.com'
+    const { company } = await sut.execute({
+      email,
+      password: '123456',
+      cnpj: '23.243.199/0001-84',
+    })
 
     const isPasswordCorrectlyHashed = await compare(
       '123456',
-      foundUser!.password_hash,
+      company.password_hash,
     )
     expect(isPasswordCorrectlyHashed).toBe(true)
   })
 
-  it('should not be able to register with an email twice', async () => {
-    await sut.execute(newCompany)
+  it('should not be able to register a company with an email twice', async () => {
+    const email = 'janedoe@example.com'
+    await sut.execute({
+      email,
+      password: '123456',
+      cnpj: '23.243.199/0001-84',
+    })
 
-    await expect(() => sut.execute(newCompany)).rejects.toBeInstanceOf(
-      EmailAlreadyRegisteredError,
-    )
+    await expect(() =>
+      sut.execute({
+        email,
+        password: '123456',
+        cnpj: '23.243.199/0001-84',
+      }),
+    ).rejects.toBeInstanceOf(EmailAlreadyRegisteredError)
+  })
 
-    const foundUser = await usersRepository.findByEmail(email)
-    expect(foundUser).toBeTruthy()
+  it('should not be able to register a company with a cnpj twice', async () => {
+    const cnpj = '23.243.199/0001-84'
+    await sut.execute({
+      email: 'janedoe@example.com',
+      password: '123456',
+      cnpj,
+    })
 
-    const isPasswordCorrectlyHashed = await compare(
-      '123456',
-      foundUser!.password_hash,
-    )
-    expect(isPasswordCorrectlyHashed).toBe(true)
+    await expect(() =>
+      sut.execute({
+        email: 'janedoe2@example.com',
+        password: '123456',
+        cnpj,
+      }),
+    ).rejects.toBeInstanceOf(CNPJAlreadyRegisteredError)
   })
 })
