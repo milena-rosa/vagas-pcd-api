@@ -16,6 +16,7 @@ enum DisabilityType {
   VISUAL
   MENTAL
   MULTIPLE
+  ANY
 }
 
 model Candidate {
@@ -48,7 +49,7 @@ model Job {
   title           String
   description     String
   role            String
-  salary          String
+  salary          Float
   disability_type DisabilityType
   created_at      DateTime       @default(now())
   closed_at       DateTime?
