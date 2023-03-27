@@ -3,6 +3,10 @@ import { Job, Prisma } from '@prisma/client'
 import { JobsRepository } from '../jobs-repository'
 
 export class PrismaJobsRepository implements JobsRepository {
+  async findById(id: string) {
+    return await prisma.job.findUnique({ where: { id } })
+  }
+
   async findManyOpenByCompanyId(
     companyId: string,
     page: number,
@@ -24,5 +28,12 @@ export class PrismaJobsRepository implements JobsRepository {
 
   async create(data: Prisma.JobUncheckedCreateInput) {
     return await prisma.job.create({ data })
+  }
+
+  async update(id: string, data: Prisma.JobUncheckedUpdateInput) {
+    return await prisma.job.update({
+      where: { id },
+      data,
+    })
   }
 }

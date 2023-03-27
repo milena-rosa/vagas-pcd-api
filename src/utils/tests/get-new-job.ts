@@ -1,6 +1,6 @@
 import { DisabilityType } from '@prisma/client'
 
-export async function getNewJob() {
+export function getNewJob() {
   return {
     id: '123',
     title: 'Engenheiro de software',
@@ -9,7 +9,7 @@ export async function getNewJob() {
     disability_type: DisabilityType.ANY,
     company_id: '123',
     salary: 10000,
-    created_at: new Date(),
+    created_at: new Date(2023, 0, 1),
     closed_at: null,
   }
 }
