@@ -31,11 +31,12 @@ export class UpdateCandidateUseCase {
     if (!foundCandidate) {
       throw new ResourceNotFoundError()
     }
+    const password_hash = password ? await hash(password, 6) : undefined
 
     const candidate = await this.candidatesRepository.update(id, {
       email,
       name,
-      password_hash: password ? await hash(password, 6) : undefined,
+      password_hash,
       phone,
       resume,
     })

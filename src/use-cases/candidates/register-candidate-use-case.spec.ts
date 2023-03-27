@@ -60,17 +60,9 @@ describe('register candidate use case', () => {
   it('should not be able to register with an email twice', async () => {
     const newCandidate: Candidate = await getNewCandidate()
 
-    prisma.candidate.create
+    prisma.candidate.findUnique
       .mockResolvedValueOnce(newCandidate)
-      .mockRejectedValueOnce(new EmailAlreadyRegisteredError())
-
-    await sut.execute({
-      email: newCandidate.email,
-      name: newCandidate.name,
-      password: '123456',
-      phone: newCandidate.phone,
-      resume: newCandidate.resume,
-    })
+      .mockRejectedValue(new EmailAlreadyRegisteredError())
 
     await expect(() =>
       sut.execute({

@@ -5,6 +5,7 @@ import { getNewCompany } from '@/utils/tests/get-new-company'
 import { Company } from '@prisma/client'
 import { compare } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { CNPJAlreadyRegisteredError } from '../errors/cnpj-already-registered-error'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 import { RegisterCompanyUseCase } from './register-company-use-case'
 
@@ -57,21 +58,15 @@ describe('register company use case', () => {
   it('should not be able to register a company with an email twice', async () => {
     const newCompany: Company = await getNewCompany()
 
-    prisma.company.create
+    prisma.company.findUnique
       .mockResolvedValueOnce(newCompany)
       .mockRejectedValueOnce(new EmailAlreadyRegisteredError())
-
-    await sut.execute({
-      email: newCompany.email,
-      password: '123456',
-      cnpj: newCompany.cnpj,
-    })
 
     await expect(() =>
       sut.execute({
         email: newCompany.email,
         password: '123456',
-        cnpj: newCompany.cnpj,
+        cnpj: '23.111.111/0001-11',
       }),
     ).rejects.toBeInstanceOf(EmailAlreadyRegisteredError)
   })
@@ -79,22 +74,17 @@ describe('register company use case', () => {
   it('should not be able to register a company with a cnpj twice', async () => {
     const newCompany: Company = await getNewCompany()
 
-    prisma.company.create
+    prisma.company.findUnique
+      .mockResolvedValueOnce(null)
       .mockResolvedValueOnce(newCompany)
-      .mockRejectedValueOnce(new EmailAlreadyRegisteredError())
-
-    await sut.execute({
-      email: newCompany.email,
-      password: '123456',
-      cnpj: newCompany.cnpj,
-    })
+      .mockRejectedValueOnce(new CNPJAlreadyRegisteredError())
 
     await expect(() =>
       sut.execute({
-        email: 'other-email',
-        password: '123456',
         cnpj: newCompany.cnpj,
+        email: 'new@example.com',
+        password: '123456',
       }),
-    ).rejects.toBeInstanceOf(EmailAlreadyRegisteredError)
+    ).rejects.toBeInstanceOf(CNPJAlreadyRegisteredError)
   })
 })
