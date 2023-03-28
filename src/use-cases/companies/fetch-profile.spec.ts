@@ -5,7 +5,7 @@ import { Company } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { FetchCompanyProfileUseCase } from './fetch-company-profile-use-case'
+import { FetchCompanyProfileUseCase } from './fetch-profile'
 
 let companiesRepository: CompaniesRepository
 let sut: FetchCompanyProfileUseCase

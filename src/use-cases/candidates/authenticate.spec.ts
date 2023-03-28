@@ -5,7 +5,7 @@ import { Candidate } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
-import { AuthenticateCandidateUseCase } from './authenticate-candidate-use-case'
+import { AuthenticateCandidateUseCase } from './authenticate'
 
 let candidatesRepository: CandidatesRepository
 let sut: AuthenticateCandidateUseCase

@@ -6,7 +6,7 @@ import { compare, hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CNPJAlreadyRegisteredError } from '../errors/cnpj-already-registered-error'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
-import { RegisterCompanyUseCase } from './register-company-use-case'
+import { RegisterCompanyUseCase } from './register'
 
 let companiesRepository: CompaniesRepository
 let sut: RegisterCompanyUseCase

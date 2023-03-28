@@ -4,7 +4,7 @@ import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-reposito
 import { DisabilityType, Location } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { FetchCompanyJobsHistoryUseCase } from './fetch-company-jobs-history-use-case'
+import { FetchCompanyJobsHistoryUseCase } from './fetch-company-jobs-history'
 
 let jobsRepository: JobsRepository
 let sut: FetchCompanyJobsHistoryUseCase

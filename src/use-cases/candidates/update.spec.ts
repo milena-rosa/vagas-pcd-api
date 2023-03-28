@@ -6,7 +6,7 @@ import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { UpdateCandidateUseCase } from './update-candidate-use-case'
+import { UpdateCandidateUseCase } from './update'
 
 let candidatesRepository: CandidatesRepository
 let sut: UpdateCandidateUseCase

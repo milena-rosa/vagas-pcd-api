@@ -5,7 +5,7 @@ import { DisabilityType, Location } from '@prisma/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { JobAlreadyClosedError } from '../errors/job-already-closed-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { CloseJobUseCase } from './close-job-use-case'
+import { CloseJobUseCase } from './close-job'
 
 let jobsRepository: JobsRepository
 let sut: CloseJobUseCase

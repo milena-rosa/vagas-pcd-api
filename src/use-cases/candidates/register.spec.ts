@@ -5,7 +5,7 @@ import { Candidate } from '@prisma/client'
 import { compare, hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
-import { RegisterCandidateUseCase } from './register-candidate-use-case'
+import { RegisterCandidateUseCase } from './register'
 
 let candidatesRepository: CandidatesRepository
 let sut: RegisterCandidateUseCase

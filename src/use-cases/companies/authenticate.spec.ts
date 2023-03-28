@@ -5,7 +5,7 @@ import { Company } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
-import { AuthenticateCompanyUseCase } from './authenticate-company-use-case'
+import { AuthenticateCompanyUseCase } from './authenticate'
 
 let companiesRepository: CompaniesRepository
 let sut: AuthenticateCompanyUseCase

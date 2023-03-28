@@ -5,7 +5,7 @@ import { Candidate } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { GetCandidateProfileUseCase } from './get-candidate-profile-use-case'
+import { GetCandidateProfileUseCase } from './get-profile'
 
 let candidatesRepository: CandidatesRepository
 let sut: GetCandidateProfileUseCase

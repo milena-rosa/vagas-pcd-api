@@ -4,14 +4,13 @@ import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-reposito
 import { DisabilityType, Location } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { SearchJobsUseCase } from './search-jobs-use-case'
+import { SearchJobsUseCase } from './search-jobs'
 
 let jobsRepository: JobsRepository
 let sut: SearchJobsUseCase
 
 vi.mock('@/libs/prisma')
-// TODO: exceptions
-// TODO: errors
+
 describe('search jobs use case', () => {
   beforeEach(() => {
     jobsRepository = new PrismaJobsRepository()

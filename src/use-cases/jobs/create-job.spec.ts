@@ -3,7 +3,7 @@ import { JobsRepository } from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
 import { DisabilityType, Location } from '@prisma/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { CreateJobUseCase } from './create-job-use-case'
+import { CreateJobUseCase } from './create-job'
 
 let jobsRepository: JobsRepository
 let sut: CreateJobUseCase
