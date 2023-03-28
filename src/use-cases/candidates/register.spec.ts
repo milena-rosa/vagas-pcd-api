@@ -85,9 +85,7 @@ describe('register candidate use case', () => {
       created_at: new Date(),
     }
 
-    prisma.candidate.findUnique.mockImplementationOnce(() => {
-      throw new EmailAlreadyRegisteredError()
-    })
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
 
     await expect(() =>
       sut.execute({

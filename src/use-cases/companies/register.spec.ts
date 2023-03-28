@@ -81,13 +81,26 @@ describe('register company use case', () => {
   })
 
   it('should not be able to register a company with an email twice', async () => {
-    prisma.company.findUnique.mockImplementationOnce(() => {
-      throw new EmailAlreadyRegisteredError()
-    })
+    const newCompany: Company = {
+      id: '123',
+      cnpj: '23.243.199/0001-84',
+      email: 'lojasponei@example.com',
+      name: 'Lojas Pônei',
+      password_hash: await hash('123456', 6),
+      city: 'Pirassununga',
+      state: 'SP',
+      street: 'Rua dos Bobos',
+      number: '0',
+      phone: '11999222333',
+      zipCode: '13636085',
+      complement: null,
+    }
+
+    prisma.company.findUnique.mockResolvedValueOnce(newCompany)
 
     await expect(() =>
       sut.execute({
-        email: 'janedoe@example.com',
+        email: 'lojasponei@example.com',
         password: '123456',
         cnpj: '23.111.111/0001-11',
       }),
@@ -95,14 +108,29 @@ describe('register company use case', () => {
   })
 
   it('should not be able to register a company with a cnpj twice', async () => {
-    prisma.company.findUnique.mockImplementationOnce(() => {
-      throw new CNPJAlreadyRegisteredError()
-    })
+    const newCompany: Company = {
+      id: '123',
+      cnpj: '23.243.199/0001-84',
+      email: 'lojasponei@example.com',
+      name: 'Lojas Pônei',
+      password_hash: await hash('123456', 6),
+      city: 'Pirassununga',
+      state: 'SP',
+      street: 'Rua dos Bobos',
+      number: '0',
+      phone: '11999222333',
+      zipCode: '13636085',
+      complement: null,
+    }
+
+    prisma.company.findUnique
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(newCompany)
 
     await expect(() =>
       sut.execute({
-        cnpj: '23.111.111/0001-11',
         email: 'new@example.com',
+        cnpj: '23.243.199/0001-84',
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(CNPJAlreadyRegisteredError)

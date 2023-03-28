@@ -3,7 +3,7 @@ import { JobsRepository } from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
 import { DisabilityType, Location } from '@prisma/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { JobAlreadyClosedError } from '../errors/job-already-closed-error'
+import { JobClosedError } from '../errors/job-closed-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { CloseJobUseCase } from './close-job'
 
@@ -55,12 +55,6 @@ describe('close job use case', () => {
   })
 
   it('should not be able to close the job given an incorrect id', async () => {
-    vi.setSystemTime(new Date(2023, 2, 1))
-
-    prisma.job.findUnique.mockImplementationOnce(() => {
-      throw new ResourceNotFoundError()
-    })
-
     await expect(() =>
       sut.execute({
         jobId: 'non-existent-id',
@@ -91,6 +85,6 @@ describe('close job use case', () => {
       sut.execute({
         jobId: '123',
       }),
-    ).rejects.toBeInstanceOf(JobAlreadyClosedError)
+    ).rejects.toBeInstanceOf(JobClosedError)
   })
 })

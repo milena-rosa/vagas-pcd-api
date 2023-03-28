@@ -70,6 +70,27 @@ describe('update candidate use case', () => {
     ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 
+  it('should not be able to change the password if the old password is undefined', async () => {
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
+
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
+
+    await expect(() =>
+      sut.execute({
+        id: newCandidate.id,
+        password: '654321',
+      }),
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
+  })
+
   it('should be able to change the password given a correct id and the old password correctly', async () => {
     const newCandidate: Candidate = {
       id: '123',

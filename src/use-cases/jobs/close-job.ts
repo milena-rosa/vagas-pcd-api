@@ -1,6 +1,6 @@
 import { JobsRepository } from '@/repositories/jobs-repository'
 import { Job } from '@prisma/client'
-import { JobAlreadyClosedError } from '../errors/job-already-closed-error'
+import { JobClosedError } from '../errors/job-closed-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface CloseJobUseCaseRequest {
@@ -23,7 +23,7 @@ export class CloseJobUseCase {
     }
 
     if (foundJob.closed_at !== null) {
-      throw new JobAlreadyClosedError()
+      throw new JobClosedError()
     }
 
     const job = await this.jobsRepository.update(jobId, {
