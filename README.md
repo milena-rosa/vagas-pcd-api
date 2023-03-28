@@ -31,7 +31,7 @@ LinkedIn Jobs like API.
 
 ### Gov
 
-- [ ] Deve ser possível se cadastrar;
+- [x] Deve ser possível se cadastrar;
 - [ ] Deve ser possível se autenticar;
 - [ ] Deve ser possível emitir lista com nome, CNPJ, endereço, telefone de contato, vagas divulgadas por empresa e número de CVs enviados para cada empresa e vaga;
 
