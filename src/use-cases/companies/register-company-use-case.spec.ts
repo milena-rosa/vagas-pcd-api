@@ -1,9 +1,8 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { CompaniesRepository } from '@/repositories/companies-repository'
 import { PrismaCompaniesRepository } from '@/repositories/prisma/prisma-companies-repository'
-import { getNewCompany } from '@/utils/tests/get-new-company'
 import { Company } from '@prisma/client'
-import { compare } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CNPJAlreadyRegisteredError } from '../errors/cnpj-already-registered-error'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
@@ -25,8 +24,21 @@ describe('register company use case', () => {
   })
 
   it('should be able to register a company', async () => {
-    const newCompany: Company = await getNewCompany()
-    prisma.company.create.mockResolvedValue(newCompany)
+    const newCompany: Company = {
+      id: '123',
+      cnpj: '23.243.199/0001-84',
+      email: 'lojasponei@example.com',
+      name: 'Lojas Pônei',
+      password_hash: await hash('123456', 6),
+      city: 'Pirassununga',
+      state: 'SP',
+      street: 'Rua dos Bobos',
+      number: '0',
+      phone: '11999222333',
+      zipCode: '13636085',
+      complement: null,
+    }
+    prisma.company.create.mockResolvedValueOnce(newCompany)
 
     const { company } = await sut.execute({
       email: newCompany.email,
@@ -34,13 +46,26 @@ describe('register company use case', () => {
       cnpj: newCompany.cnpj,
     })
 
-    expect(company.id).toEqual(expect.any(String))
-    expect(company.cnpj).toEqual(newCompany.cnpj)
+    expect(company).toStrictEqual(newCompany)
   })
 
   it('should hash company password on registry', async () => {
-    const newCompany: Company = await getNewCompany()
-    prisma.company.create.mockResolvedValue(newCompany)
+    const newCompany: Company = {
+      id: '123',
+      cnpj: '23.243.199/0001-84',
+      email: 'lojasponei@example.com',
+      name: 'Lojas Pônei',
+      password_hash: await hash('123456', 6),
+      city: 'Pirassununga',
+      state: 'SP',
+      street: 'Rua dos Bobos',
+      number: '0',
+      phone: '11999222333',
+      zipCode: '13636085',
+      complement: null,
+    }
+
+    prisma.company.create.mockResolvedValueOnce(newCompany)
 
     const { company } = await sut.execute({
       email: newCompany.email,
@@ -56,15 +81,13 @@ describe('register company use case', () => {
   })
 
   it('should not be able to register a company with an email twice', async () => {
-    const newCompany: Company = await getNewCompany()
-
-    prisma.company.findUnique
-      .mockResolvedValueOnce(newCompany)
-      .mockRejectedValueOnce(new EmailAlreadyRegisteredError())
+    prisma.company.findUnique.mockImplementationOnce(() => {
+      throw new EmailAlreadyRegisteredError()
+    })
 
     await expect(() =>
       sut.execute({
-        email: newCompany.email,
+        email: 'janedoe@example.com',
         password: '123456',
         cnpj: '23.111.111/0001-11',
       }),
@@ -72,16 +95,13 @@ describe('register company use case', () => {
   })
 
   it('should not be able to register a company with a cnpj twice', async () => {
-    const newCompany: Company = await getNewCompany()
-
-    prisma.company.findUnique
-      .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce(newCompany)
-      .mockRejectedValueOnce(new CNPJAlreadyRegisteredError())
+    prisma.company.findUnique.mockImplementationOnce(() => {
+      throw new CNPJAlreadyRegisteredError()
+    })
 
     await expect(() =>
       sut.execute({
-        cnpj: newCompany.cnpj,
+        cnpj: '23.111.111/0001-11',
         email: 'new@example.com',
         password: '123456',
       }),

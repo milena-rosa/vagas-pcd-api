@@ -1,10 +1,10 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
-import { getNewCandidate } from '@/utils/tests/get-new-candidate'
 import { Candidate } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { UpdateCandidateUseCase } from './update-candidate-use-case'
 
@@ -24,24 +24,62 @@ describe('update candidate use case', () => {
   })
 
   it('should be able to update the name of a candidate given an correct id', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
-    prisma.candidate.update.mockResolvedValue({
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
+
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
+    prisma.candidate.update.mockResolvedValueOnce({
       ...newCandidate,
-      name: 'Joana',
+      name: 'Joana Doe',
     })
-    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
 
     const { candidate } = await sut.execute({
       id: newCandidate.id,
-      name: 'Joana',
+      name: 'Joana Doe',
     })
 
-    expect(candidate.id).toEqual(expect.any(String))
-    expect(candidate.name).toEqual('Joana')
+    expect(candidate).toStrictEqual({ ...newCandidate, name: 'Joana Doe' })
   })
 
-  it('should be able to update the password of a candidate given an correct id', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
+  it('should not be able to change the password if the old password is not correct', async () => {
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
+
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
+
+    await expect(() =>
+      sut.execute({
+        id: newCandidate.id,
+        oldPassword: 'wrong-password',
+        password: '654321',
+      }),
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
+  })
+
+  it('should be able to change the password given a correct id and the old password correctly', async () => {
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
     const newPasswordHash = await hash('654321', 6)
 
     prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
@@ -52,33 +90,45 @@ describe('update candidate use case', () => {
 
     const { candidate } = await sut.execute({
       id: newCandidate.id,
+      oldPassword: '123456',
       password: '654321',
     })
 
-    expect(candidate.id).toEqual(expect.any(String))
-    expect(candidate.password_hash).toEqual(newPasswordHash)
+    expect(candidate).toStrictEqual({
+      ...newCandidate,
+      password_hash: newPasswordHash,
+    })
   })
 
-  it('should not be able to update the name of a candidate given an correct id if the name is undefined', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
-    prisma.candidate.update.mockResolvedValue(newCandidate)
-    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
+  it('should not be able to update the name of a candidate given a correct id if the name is undefined', async () => {
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
+
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
+    prisma.candidate.update.mockResolvedValueOnce(newCandidate)
 
     const { candidate } = await sut.execute({
       id: newCandidate.id,
+      name: undefined,
     })
 
-    expect(candidate.id).toEqual(expect.any(String))
-    expect(candidate.name).toEqual(newCandidate.name)
+    expect(candidate).toStrictEqual(newCandidate)
   })
 
   it('should not be able to update the name of a candidate given an incorrect id', async () => {
-    prisma.candidate.create.mockRejectedValueOnce(new ResourceNotFoundError())
+    prisma.candidate.update.mockRejectedValueOnce(new ResourceNotFoundError())
 
     await expect(() =>
       sut.execute({
         id: 'non-existent-id',
-        name: 'Joana',
+        name: 'JoanaDoe',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })

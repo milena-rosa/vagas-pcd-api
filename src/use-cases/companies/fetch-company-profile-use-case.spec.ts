@@ -1,21 +1,21 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { CompaniesRepository } from '@/repositories/companies-repository'
 import { PrismaCompaniesRepository } from '@/repositories/prisma/prisma-companies-repository'
-import { getNewCompany } from '@/utils/tests/get-new-company'
 import { Company } from '@prisma/client'
+import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { FetchCompanyInformationUseCase } from './fetch-company-information-use-case'
+import { FetchCompanyProfileUseCase } from './fetch-company-profile-use-case'
 
 let companiesRepository: CompaniesRepository
-let sut: FetchCompanyInformationUseCase
+let sut: FetchCompanyProfileUseCase
 
 vi.mock('@/libs/prisma')
 
 describe('fetch company profile use case', () => {
   beforeEach(() => {
     companiesRepository = new PrismaCompaniesRepository()
-    sut = new FetchCompanyInformationUseCase(companiesRepository)
+    sut = new FetchCompanyProfileUseCase(companiesRepository)
   })
 
   afterEach(() => {
@@ -23,15 +23,26 @@ describe('fetch company profile use case', () => {
   })
 
   it('should be able to fetch a company profile with cnpj', async () => {
-    const newCompany: Company = await getNewCompany()
+    const newCompany: Company = {
+      id: '123',
+      cnpj: '23.243.199/0001-84',
+      email: 'lojasponei@example.com',
+      name: 'Lojas Pônei',
+      password_hash: await hash('123456', 6),
+      city: 'Pirassununga',
+      state: 'SP',
+      street: 'Rua dos Bobos',
+      number: '0',
+      phone: '11999222333',
+      zipCode: '13636085',
+      complement: null,
+    }
 
-    prisma.company.findUnique.mockResolvedValue(newCompany)
+    prisma.company.findUnique.mockResolvedValueOnce(newCompany)
 
-    const { company } = await sut.execute({
-      cnpj: newCompany.cnpj,
-    })
+    const { company } = await sut.execute({ cnpj: newCompany.cnpj })
 
-    expect(company.name).toEqual('ARIOVALDO DE OLIVEIRA')
+    expect(company).toStrictEqual(newCompany)
   })
 
   it('should not be able to fetch a company profile with an inexistent cnpj', async () => {

@@ -6,7 +6,7 @@ interface CreateJobUseCaseRequest {
   description: string
   role: string
   salary: number
-  disabilityType: DisabilityType
+  disability_type: DisabilityType
   companyId: string
 }
 
@@ -20,7 +20,7 @@ export class CreateJobUseCase {
   async execute({
     companyId,
     description,
-    disabilityType,
+    disability_type,
     role,
     salary,
     title,
@@ -28,7 +28,7 @@ export class CreateJobUseCase {
     const job = await this.jobsRepository.create({
       company_id: companyId,
       description,
-      disability_type: disabilityType,
+      disability_type,
       role,
       salary,
       title,

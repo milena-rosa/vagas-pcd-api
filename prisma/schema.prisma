@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -17,6 +18,12 @@ enum DisabilityType {
   MENTAL
   MULTIPLE
   ANY
+}
+
+enum Location {
+  REMOTE
+  HYBRID
+  ON_SITE
 }
 
 model Candidate {
@@ -39,6 +46,15 @@ model Company {
   email         String @unique
   password_hash String
 
+  name       String?
+  phone      String?
+  street     String?
+  zipCode    String?
+  number     String?
+  complement String?
+  city       String?
+  state      String?
+
   jobs Job[]
 
   @@map("companies")
@@ -49,6 +65,7 @@ model Job {
   title           String
   description     String
   role            String
+  location        Location       @default(ON_SITE)
   salary          Float
   disability_type DisabilityType
   created_at      DateTime       @default(now())

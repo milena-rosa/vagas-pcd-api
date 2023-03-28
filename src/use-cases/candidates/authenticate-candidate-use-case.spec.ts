@@ -1,8 +1,8 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
-import { getNewCandidate } from '@/utils/tests/get-new-candidate'
 import { Candidate } from '@prisma/client'
+import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { AuthenticateCandidateUseCase } from './authenticate-candidate-use-case'
@@ -22,10 +22,19 @@ describe('authenticate candidate use case', () => {
     vi.restoreAllMocks()
   })
 
+  // TODO: test jwt
   it('should be able to authenticate a candidate', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
 
-    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
 
     const { candidate } = await sut.execute({
       email: newCandidate.email,
@@ -45,9 +54,17 @@ describe('authenticate candidate use case', () => {
   })
 
   it('should not be able to authenticate with a wrong password', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
 
-    prisma.candidate.findUnique.mockResolvedValue(newCandidate)
+    prisma.candidate.findUnique.mockResolvedValueOnce(newCandidate)
 
     await expect(() =>
       sut.execute({

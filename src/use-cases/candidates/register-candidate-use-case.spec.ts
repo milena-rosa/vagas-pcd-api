@@ -1,9 +1,8 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
-import { getNewCandidate } from '@/utils/tests/get-new-candidate'
 import { Candidate } from '@prisma/client'
-import { compare } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 import { RegisterCandidateUseCase } from './register-candidate-use-case'
@@ -24,8 +23,17 @@ describe('register candidate use case', () => {
   })
 
   it('should be able to register a candidate', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
-    prisma.candidate.create.mockResolvedValue(newCandidate)
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
+
+    prisma.candidate.create.mockResolvedValueOnce(newCandidate)
 
     const { candidate } = await sut.execute({
       email: newCandidate.email,
@@ -34,12 +42,21 @@ describe('register candidate use case', () => {
       phone: newCandidate.phone,
       resume: newCandidate.resume,
     })
-    expect(candidate.id).toEqual(expect.any(String))
-    expect(candidate.name).toEqual(newCandidate.name)
+
+    expect(candidate).toStrictEqual(newCandidate)
   })
 
   it('should hash candidate password on registry', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
+
     prisma.candidate.create.mockResolvedValueOnce(newCandidate)
 
     const { candidate } = await sut.execute({
@@ -58,11 +75,19 @@ describe('register candidate use case', () => {
   })
 
   it('should not be able to register with an email twice', async () => {
-    const newCandidate: Candidate = await getNewCandidate()
+    const newCandidate: Candidate = {
+      id: '123',
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      phone: null,
+      password_hash: await hash('123456', 6),
+      resume: 'https://linkedin.com/in/milena-rosa',
+      created_at: new Date(),
+    }
 
-    prisma.candidate.findUnique
-      .mockResolvedValueOnce(newCandidate)
-      .mockRejectedValue(new EmailAlreadyRegisteredError())
+    prisma.candidate.findUnique.mockImplementationOnce(() => {
+      throw new EmailAlreadyRegisteredError()
+    })
 
     await expect(() =>
       sut.execute({

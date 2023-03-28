@@ -1,7 +1,7 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { JobsRepository } from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
-import { DisabilityType } from '@prisma/client'
+import { DisabilityType, Location } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { FetchCompanyJobsHistoryUseCase } from './fetch-company-jobs-history-use-case'
@@ -23,48 +23,41 @@ describe('fetch company jobs history use case', () => {
     vi.useRealTimers()
   })
 
-  it('should be able to fetch company jobs history use case', async () => {
+  it('should be able to fetch the company jobs history', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
+
+    const newJob = {
+      description: 'Vaga massinha com uma descrição legal.',
+      role: 'Analista',
+      disability_type: DisabilityType.ANY,
+      location: Location.ON_SITE,
+      company_id: '123',
+      salary: 10000,
+      created_at: new Date(),
+      closed_at: null,
+    }
 
     prisma.job.findMany.mockResolvedValue([
       {
+        ...newJob,
         id: randomUUID(),
         title: 'Engenheiro de software',
-        description: 'Vaga massinha com uma descrição legal.',
-        role: 'Analista',
-        disability_type: DisabilityType.ANY,
-        company_id: '123',
-        salary: 10000,
-        created_at: new Date(),
-        closed_at: null,
       },
       {
+        ...newJob,
         id: randomUUID(),
         title: 'Engenheiro de computação',
-        description: 'Vaga massinha com uma descrição legal.',
-        role: 'Analista',
-        disability_type: DisabilityType.ANY,
-        company_id: '123',
-        salary: 10000,
-        created_at: new Date(),
-        closed_at: null,
       },
       {
+        ...newJob,
         id: randomUUID(),
         title: 'Engenheiro de qualidade',
-        description: 'Vaga massinha com uma descrição legal.',
-        role: 'Analista',
-        disability_type: DisabilityType.ANY,
-        company_id: '123',
-        salary: 10000,
         created_at: new Date(2023, 0, 1),
         closed_at: new Date(2023, 1, 1),
       },
     ])
 
-    const { jobs } = await sut.execute({
-      companyId: '123',
-    })
+    const { jobs } = await sut.execute({ companyId: '123' })
 
     expect(jobs).toHaveLength(3)
     expect(jobs).toEqual([
@@ -76,22 +69,27 @@ describe('fetch company jobs history use case', () => {
 
   it('should be able to fetch paginated company jobs history', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
+    const newJob = {
+      description: 'Vaga massinha com uma descrição legal.',
+      role: 'Analista',
+      disability_type: DisabilityType.ANY,
+      location: Location.ON_SITE,
+      company_id: '123',
+      salary: 10000,
+      created_at: new Date(),
+      closed_at: null,
+    }
+
     const newJobs = []
     for (let i = 21; i <= 22; i++) {
       newJobs.push({
+        ...newJob,
         id: randomUUID(),
         title: `Engenheiro ${i}`,
-        description: 'Vaga massinha com uma descrição legal.',
-        role: 'Analista',
-        disability_type: DisabilityType.ANY,
-        company_id: '123',
-        salary: 10000,
-        created_at: new Date(),
-        closed_at: null,
       })
     }
 
-    prisma.job.findMany.mockResolvedValue(newJobs)
+    prisma.job.findMany.mockResolvedValueOnce(newJobs)
 
     const { jobs, page } = await sut.execute({
       companyId: '123',
