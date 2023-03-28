@@ -9,5 +9,10 @@ export interface ApplicationsRepository {
     candidateId: string,
     page: number,
   ): Promise<Application[]>
+  findManyByCompanyAndJobId(
+    companyId: string,
+    jobId: string,
+    page: number,
+  ): Promise<Application[]>
   create(data: Prisma.ApplicationUncheckedCreateInput): Promise<Application>
 }

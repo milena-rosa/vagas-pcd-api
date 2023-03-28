@@ -15,8 +15,8 @@ LinkedIn Jobs like API.
 - [x] Deve ser possível buscar vagas por tipo de deficiência;
 - [x] Deve ser possível ver o perfil de uma empresa;
 - [x] Deve ser possível se candidatar para uma vaga;
-- [ ] Deve ser possível listar todas as vagas de um candidato;
-- [ ] Deve ser possível enviar CV para uma vaga para o e-mail cadastrado da empresa;
+- [x] Deve ser possível listar todas as vagas de um candidato;
+<!-- - [ ] Deve ser possível enviar CV para uma vaga para o e-mail cadastrado da empresa; -->
 
 ### Empresa
 
@@ -27,7 +27,7 @@ LinkedIn Jobs like API.
 - [x] Deve ser possível listar o histórico de vagas de uma empresa;
 - [x] Deve ser possível listar todas as vagas abertas de uma empresa;
 - [x] Deve ser possível fechar uma vaga;
-- [ ] Deve ser possível listar todos os candidatos de uma vaga;
+- [x] Deve ser possível listar todos os candidatos de uma vaga;
 
 ### Gov
 

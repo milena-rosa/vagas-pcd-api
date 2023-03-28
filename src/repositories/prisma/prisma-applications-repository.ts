@@ -3,6 +3,31 @@ import { Prisma } from '@prisma/client'
 import { ApplicationsRepository } from '../applications-repository'
 
 export class PrismaApplicationsRepository implements ApplicationsRepository {
+  async findManyByCompanyAndJobId(
+    companyId: string,
+    jobId: string,
+    page: number,
+  ) {
+    return await prisma.application.findMany({
+      where: {
+        job_id: jobId,
+        job: {
+          company_id: companyId,
+          closed_at: null,
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+      include: {
+        candidate: true,
+        job: true,
+      },
+    })
+  }
+
   async findManyOpenByCandidateId(candidateId: string, page: number) {
     return await prisma.application.findMany({
       where: {
@@ -16,6 +41,10 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
       },
       take: 20,
       skip: (page - 1) * 20,
+      include: {
+        candidate: true,
+        job: true,
+      },
     })
   }
 
@@ -27,6 +56,10 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
       },
       take: 20,
       skip: (page - 1) * 20,
+      include: {
+        candidate: true,
+        job: true,
+      },
     })
   }
 
