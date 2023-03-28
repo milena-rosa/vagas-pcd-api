@@ -14,7 +14,7 @@ LinkedIn Jobs like API.
 - [x] Deve ser possível buscar vagas por localidade;
 - [x] Deve ser possível buscar vagas por tipo de deficiência;
 - [x] Deve ser possível ver o perfil de uma empresa;
-- [ ] Deve ser possível se candidatar para uma vaga;
+- [x] Deve ser possível se candidatar para uma vaga;
 - [ ] Deve ser possível listar todas as vagas de um candidato;
 - [ ] Deve ser possível enviar CV para uma vaga para o e-mail cadastrado da empresa;
 
@@ -38,7 +38,7 @@ LinkedIn Jobs like API.
 ## RNs (Regras de negócio)
 
 - [x] O usuário não pode se cadastrar com um e-mail duplicado;
-- [ ] O usuário não pode se candidatar para uma vaga fechada;
+- [x] O usuário não pode se candidatar para uma vaga fechada;
 - [ ] As vagas só podem ser cadastradas por empresas;
 - [ ] As vagas só podem ser fechadas por empresas;
 - [ ] Lista com nome, CNPJ, endereço, telefone de contato, vagas divulgadas por empresa e número de CVs enviados para cada empresa e vaga somente pode ser visualizada por INSS e MTE;
