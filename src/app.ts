@@ -1,12 +1,19 @@
 import { AppError } from '@/use-cases/errors/app-error'
+import fastifyJwt from '@fastify/jwt'
 import fastify from 'fastify'
 import { ZodError } from 'zod'
 import { env } from './env'
+import { candidatesRoutes } from './http/controllers/candidates/routes'
 import { companiesRoutes } from './http/controllers/companies/routes'
 import { jobsRoutes } from './http/controllers/jobs/routes'
 
 export const app = fastify()
 
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+})
+
+app.register(candidatesRoutes)
 app.register(companiesRoutes)
 app.register(jobsRoutes)
 

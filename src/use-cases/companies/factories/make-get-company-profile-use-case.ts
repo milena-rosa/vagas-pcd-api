@@ -1,7 +1,7 @@
 import { PrismaCompaniesRepository } from '@/repositories/prisma/prisma-companies-repository'
-import { FetchCompanyProfileUseCase } from '../fetch-profile'
+import { GetCompanyProfileUseCase } from '../get-profile'
 
 export function makeGetCompanyProfileUseCase() {
   const companiesRepository = new PrismaCompaniesRepository()
-  return new FetchCompanyProfileUseCase(companiesRepository)
+  return new GetCompanyProfileUseCase(companiesRepository)
 }
