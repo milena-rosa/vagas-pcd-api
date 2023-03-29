@@ -21,7 +21,7 @@ export async function registerCandidate(
 
   const registerUseCase = makeRegisterCandidateUseCase()
 
-  await registerUseCase.execute({
+  const { candidate } = await registerUseCase.execute({
     name,
     email,
     password,
@@ -29,5 +29,8 @@ export async function registerCandidate(
     resume: resume ?? '',
   })
 
-  return reply.status(CREATED).send()
+  return reply.status(CREATED).send({
+    ...candidate,
+    password_hash: undefined,
+  })
 }

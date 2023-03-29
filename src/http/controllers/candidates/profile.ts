@@ -1,6 +1,6 @@
 import { makeGetCandidateProfileUseCase } from '@/use-cases/candidates/factories/make-get-candidate-profile-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { CREATED } from 'http-status'
+import { OK } from 'http-status'
 
 export async function candidateProfile(
   request: FastifyRequest,
@@ -12,7 +12,7 @@ export async function candidateProfile(
     candidateId: request.user.sub,
   })
 
-  return reply.status(CREATED).send({
+  return reply.status(OK).send({
     ...candidate,
     password_hash: undefined,
   })
