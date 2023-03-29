@@ -2,20 +2,20 @@ import { CompaniesRepository } from '@/repositories/companies-repository'
 import { Company } from '@prisma/client'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
-interface FetchCompanyProfileUseCaseRequest {
+interface GetCompanyProfileUseCaseRequest {
   cnpj: string
 }
 
-interface FetchCompanyProfileUseCaseResponse {
+interface GetCompanyProfileUseCaseResponse {
   company: Company
 }
 
-export class FetchCompanyProfileUseCase {
+export class GetCompanyProfileUseCase {
   constructor(private companiesRepository: CompaniesRepository) {}
 
   async execute({
     cnpj,
-  }: FetchCompanyProfileUseCaseRequest): Promise<FetchCompanyProfileUseCaseResponse> {
+  }: GetCompanyProfileUseCaseRequest): Promise<GetCompanyProfileUseCaseResponse> {
     const foundCompany = await this.companiesRepository.findByCNPJ(cnpj)
     if (!foundCompany || !foundCompany.email) {
       throw new ResourceNotFoundError()

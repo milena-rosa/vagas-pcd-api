@@ -5,17 +5,17 @@ import { Company } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { FetchCompanyProfileUseCase } from './fetch-profile'
+import { GetCompanyProfileUseCase } from './get-profile'
 
 let companiesRepository: CompaniesRepository
-let sut: FetchCompanyProfileUseCase
+let sut: GetCompanyProfileUseCase
 
 vi.mock('@/libs/prisma')
 
-describe('fetch company profile use case', () => {
+describe('get company profile use case', () => {
   beforeEach(() => {
     companiesRepository = new PrismaCompaniesRepository()
-    sut = new FetchCompanyProfileUseCase(companiesRepository)
+    sut = new GetCompanyProfileUseCase(companiesRepository)
   })
 
   afterEach(() => {

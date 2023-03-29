@@ -12,6 +12,21 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return await prisma.company.findUnique({ where: { email } })
   }
 
+  async findAll() {
+    return (await prisma.company.findMany({
+      select: {
+        jobs: {
+          include: {
+            _count: true,
+            applications: {
+              distinct: ['candidate_id'],
+            },
+          },
+        },
+      },
+    })) as any
+  }
+
   async create({
     cnpj,
     email,
