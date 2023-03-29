@@ -1,5 +1,8 @@
-import { GovernmentUsersRepository } from '@/repositories/government-users-repository'
-import { GovernmentUser } from '@prisma/client'
+import {
+  GovernmentUser,
+  GovernmentUsersRepository,
+} from '@/repositories/government-users-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 
@@ -13,15 +16,16 @@ interface RegisterGovernmentUserUseCaseResponse {
 }
 
 export class RegisterGovernmentUserUseCase {
-  constructor(private governmentUsersRepository: GovernmentUsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private governmentUsersRepository: GovernmentUsersRepository,
+  ) {}
 
   async execute({
     email,
     password,
   }: RegisterGovernmentUserUseCaseRequest): Promise<RegisterGovernmentUserUseCaseResponse> {
-    const userWithSameEmail = await this.governmentUsersRepository.findByEmail(
-      email,
-    )
+    const userWithSameEmail = await this.usersRepository.findByEmail(email)
     if (userWithSameEmail) {
       throw new EmailAlreadyRegisteredError()
     }
@@ -29,8 +33,7 @@ export class RegisterGovernmentUserUseCase {
     const password_hash = await hash(password, 6)
 
     const governmentUser = await this.governmentUsersRepository.create({
-      email,
-      password_hash,
+      user: { create: { email, password_hash } },
     })
 
     return { governmentUser }

@@ -11,6 +11,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  COMPANY
+  CANDIDATE
+  GOVERNMENT
+}
+
 enum DisabilityType {
   PHYSICAL
   HEARING
@@ -26,26 +32,38 @@ enum Location {
   ON_SITE
 }
 
-model Candidate {
+model User {
   id            String   @id @default(uuid())
-  name          String
   email         String   @unique
-  phone         String?
-  resume        String
   password_hash String
+  role          Role     @default(CANDIDATE)
   created_at    DateTime @default(now())
 
+  candidate      Candidate?
+  company        Company?
+  governmentUser GovernmentUser?
+
+  @@map("users")
+}
+
+model Candidate {
+  id      String  @id @default(uuid())
+  user_id String  @unique
+  name    String
+  phone   String?
+  resume  String
+
+  user         User          @relation(fields: [user_id], references: [id])
   applications Application[]
 
   @@map("candidates")
 }
 
 model Company {
-  id            String @id @default(uuid())
-  cnpj          String @unique
-  email         String @unique
-  password_hash String
+  id      String @id @default(uuid())
+  user_id String @unique
 
+  cnpj       String  @unique
   name       String?
   phone      String?
   street     String?
@@ -56,8 +74,18 @@ model Company {
   state      String?
 
   jobs Job[]
+  user User  @relation(fields: [user_id], references: [id])
 
   @@map("companies")
+}
+
+model GovernmentUser {
+  id      String @id @default(uuid())
+  user_id String @unique
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("government_users")
 }
 
 model Job {
@@ -90,13 +118,4 @@ model Application {
   job    Job    @relation(fields: [job_id], references: [id])
 
   @@map("applications")
-}
-
-model GovernmentUser {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password_hash String
-  created_at    DateTime @default(now())
-
-  @@map("government_users")
 }

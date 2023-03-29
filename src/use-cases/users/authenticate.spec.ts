@@ -1,44 +1,44 @@
 import { prisma } from '@/libs/__mocks__/prisma'
-import { GovernmentUsersRepository } from '@/repositories/government-users-repository'
-import { PrismaGovernmentUsersRepository } from '@/repositories/prisma/prisma-government-users-repository'
-import { GovernmentUser } from '@prisma/client'
+import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
+import { UsersRepository } from '@/repositories/users-repository'
+import { User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
-import { AuthenticateGovernmentUserUseCase } from './authenticate'
+import { AuthenticateUserUseCase } from './authenticate'
 
-let governmentUsersRepository: GovernmentUsersRepository
-let sut: AuthenticateGovernmentUserUseCase
+let usersRepository: UsersRepository
+let sut: AuthenticateUserUseCase
 
 vi.mock('@/libs/prisma')
 
-describe('authenticate government user use case', () => {
+describe('authenticate user use case', () => {
   beforeEach(() => {
-    governmentUsersRepository = new PrismaGovernmentUsersRepository()
-    sut = new AuthenticateGovernmentUserUseCase(governmentUsersRepository)
+    usersRepository = new PrismaUsersRepository()
+    sut = new AuthenticateUserUseCase(usersRepository)
   })
 
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
-  // TODO: test jwt
-  it('should be able to authenticate a government user', async () => {
-    const mockUser: GovernmentUser = {
+  it('should be able to authenticate an user', async () => {
+    const mockUser: User = {
       id: '123',
       email: 'janedoe@example.com',
+      role: 'CANDIDATE',
       password_hash: await hash('123456', 6),
       created_at: new Date(),
     }
 
-    prisma.governmentUser.findUnique.mockResolvedValueOnce(mockUser)
+    prisma.user.findUnique.mockResolvedValueOnce(mockUser)
 
-    const { governmentUser } = await sut.execute({
+    const { user } = await sut.execute({
       email: mockUser.email,
       password: '123456',
     })
 
-    expect(governmentUser.id).toEqual(expect.any(String))
+    expect(user).toStrictEqual(mockUser)
   })
 
   it('should not be able to authenticate with a wrong email', async () => {
@@ -51,14 +51,15 @@ describe('authenticate government user use case', () => {
   })
 
   it('should not be able to authenticate with a wrong password', async () => {
-    const mockUser: GovernmentUser = {
+    const mockUser: User = {
       id: '123',
       email: 'janedoe@example.com',
+      role: 'CANDIDATE',
       password_hash: await hash('123456', 6),
       created_at: new Date(),
     }
 
-    prisma.governmentUser.findUnique.mockResolvedValueOnce(mockUser)
+    prisma.user.findUnique.mockResolvedValueOnce(mockUser)
 
     await expect(() =>
       sut.execute({

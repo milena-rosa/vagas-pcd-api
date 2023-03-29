@@ -1,4 +1,4 @@
-import { Company, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 export interface SummaryReport {
   name: string
@@ -15,9 +15,14 @@ export interface SummaryReport {
   countApplications: number
 }
 
+const companyUser = Prisma.validator<Prisma.CompanyArgs>()({
+  include: { user: true },
+})
+
+export type CompanyUser = Prisma.CompanyGetPayload<typeof companyUser>
+
 export interface CompaniesRepository {
-  findByCNPJ(cnpj: string): Promise<Company | null>
-  findByEmail(email: string): Promise<Company | null>
-  findAll(): Promise<Company>
-  create(data: Prisma.CompanyUncheckedCreateInput): Promise<any>
+  findByCNPJ(cnpj: string): Promise<CompanyUser | null>
+  findAll(): Promise<CompanyUser>
+  create(data: Prisma.CompanyCreateInput): Promise<CompanyUser>
 }

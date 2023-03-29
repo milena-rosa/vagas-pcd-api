@@ -1,5 +1,8 @@
-import { CompaniesRepository } from '@/repositories/companies-repository'
-import { Company } from '@prisma/client'
+import {
+  CompaniesRepository,
+  CompanyUser,
+} from '@/repositories/companies-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
 import { CNPJAlreadyRegisteredError } from '../errors/cnpj-already-registered-error'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
@@ -11,21 +14,22 @@ interface RegisterCompanyUseCaseRequest {
 }
 
 interface RegisterCompanyUseCaseResponse {
-  company: Company
+  company: CompanyUser
 }
 
 export class RegisterCompanyUseCase {
-  constructor(private companiesRepository: CompaniesRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private companiesRepository: CompaniesRepository,
+  ) {}
 
   async execute({
     cnpj,
     email,
     password,
   }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
-    const companyWithSameEmail = await this.companiesRepository.findByEmail(
-      email,
-    )
-    if (companyWithSameEmail) {
+    const userWithSameEmail = await this.usersRepository.findByEmail(email)
+    if (userWithSameEmail) {
       throw new EmailAlreadyRegisteredError()
     }
 
@@ -38,8 +42,13 @@ export class RegisterCompanyUseCase {
 
     const company = await this.companiesRepository.create({
       cnpj,
-      email,
-      password_hash,
+      user: {
+        create: {
+          email,
+          role: 'COMPANY',
+          password_hash,
+        },
+      },
     })
 
     return { company }

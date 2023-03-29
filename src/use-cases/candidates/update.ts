@@ -1,5 +1,7 @@
-import { CandidatesRepository } from '@/repositories/candidates-repository'
-import { Candidate } from '@prisma/client'
+import {
+  CandidateUser,
+  CandidatesRepository,
+} from '@/repositories/candidates-repository'
 import { compare, hash } from 'bcryptjs'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
@@ -15,7 +17,7 @@ interface UpdateCandidateUseCaseRequest {
 }
 
 interface UpdateCandidateUseCaseResponse {
-  candidate: Candidate
+  candidate: CandidateUser
 }
 
 export class UpdateCandidateUseCase {
@@ -42,7 +44,7 @@ export class UpdateCandidateUseCase {
 
       const isOldPasswordCorrect = await compare(
         oldPassword,
-        foundCandidate.password_hash,
+        foundCandidate.user.password_hash,
       )
       if (!isOldPasswordCorrect) {
         throw new InvalidCredentialsError()
@@ -51,11 +53,15 @@ export class UpdateCandidateUseCase {
     const password_hash = password ? await hash(password, 6) : undefined
 
     const candidate = await this.candidatesRepository.update(id, {
-      email,
       name,
-      password_hash,
       phone,
       resume,
+      user: {
+        update: {
+          email,
+          password_hash,
+        },
+      },
     })
 
     return { candidate }

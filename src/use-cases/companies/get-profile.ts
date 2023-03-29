@@ -1,5 +1,7 @@
-import { CompaniesRepository } from '@/repositories/companies-repository'
-import { Company } from '@prisma/client'
+import {
+  CompaniesRepository,
+  CompanyUser,
+} from '@/repositories/companies-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface GetCompanyProfileUseCaseRequest {
@@ -7,7 +9,7 @@ interface GetCompanyProfileUseCaseRequest {
 }
 
 interface GetCompanyProfileUseCaseResponse {
-  company: Company
+  company: CompanyUser
 }
 
 export class GetCompanyProfileUseCase {
@@ -17,7 +19,7 @@ export class GetCompanyProfileUseCase {
     cnpj,
   }: GetCompanyProfileUseCaseRequest): Promise<GetCompanyProfileUseCaseResponse> {
     const foundCompany = await this.companiesRepository.findByCNPJ(cnpj)
-    if (!foundCompany || !foundCompany.email) {
+    if (!foundCompany) {
       throw new ResourceNotFoundError()
     }
 

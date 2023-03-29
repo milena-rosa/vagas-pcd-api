@@ -5,12 +5,18 @@ import { CompaniesRepository } from '../companies-repository'
 
 export class PrismaCompaniesRepository implements CompaniesRepository {
   async findByCNPJ(cnpj: string) {
-    return await prisma.company.findUnique({ where: { cnpj } })
+    return await prisma.company.findUnique({
+      where: { cnpj },
+      include: { user: true },
+    })
   }
 
-  async findByEmail(email: string) {
-    return await prisma.company.findUnique({ where: { email } })
-  }
+  // async findByEmail(email: string) {
+  //   return await prisma.company.findFirst({
+  //     where: { user: { email } },
+  //     include: { user: true },
+  //   })
+  // }
 
   async findAll() {
     return (await prisma.company.findMany({
@@ -27,18 +33,12 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     })) as any
   }
 
-  async create({
-    cnpj,
-    email,
-    password_hash,
-  }: Prisma.CompanyUncheckedCreateInput) {
+  async create({ cnpj, user }: Prisma.CompanyCreateInput) {
     const { data } = await cnpjApi.get<CompanyApiData>(cnpj)
 
     return await prisma.company.create({
       data: {
         cnpj,
-        email,
-        password_hash,
         name: data.razao_social,
         zipCode: data.cep,
         state: data.uf,
@@ -47,7 +47,9 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
         number: data.numero,
         complement: data.complemento,
         phone: data.ddd_telefone_1,
+        user,
       },
+      include: { user: true },
     })
   }
 }

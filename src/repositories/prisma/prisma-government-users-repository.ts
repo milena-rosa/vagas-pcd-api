@@ -6,14 +6,13 @@ export class PrismaGovernmentUsersRepository
   implements GovernmentUsersRepository
 {
   async findById(id: string) {
-    return await prisma.governmentUser.findUnique({ where: { id } })
-  }
-
-  async findByEmail(email: string) {
-    return await prisma.governmentUser.findUnique({ where: { email } })
+    return await prisma.governmentUser.findUnique({
+      where: { id },
+      include: { user: true },
+    })
   }
 
   async create(data: Prisma.GovernmentUserCreateInput) {
-    return await prisma.governmentUser.create({ data })
+    return await prisma.governmentUser.create({ data, include: { user: true } })
   }
 }

@@ -1,5 +1,8 @@
-import { CandidatesRepository } from '@/repositories/candidates-repository'
-import { Candidate } from '@prisma/client'
+import {
+  CandidateUser,
+  CandidatesRepository,
+} from '@/repositories/candidates-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
 
@@ -12,11 +15,14 @@ interface RegisterCandidateUseCaseRequest {
 }
 
 interface RegisterCandidateUseCaseResponse {
-  candidate: Candidate
+  candidate: CandidateUser
 }
 
 export class RegisterCandidateUseCase {
-  constructor(private candidatesRepository: CandidatesRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private candidatesRepository: CandidatesRepository,
+  ) {}
 
   async execute({
     email,
@@ -25,10 +31,8 @@ export class RegisterCandidateUseCase {
     phone,
     resume,
   }: RegisterCandidateUseCaseRequest): Promise<RegisterCandidateUseCaseResponse> {
-    const candidateWithSameEmail = await this.candidatesRepository.findByEmail(
-      email,
-    )
-    if (candidateWithSameEmail) {
+    const userWithSameEmail = await this.usersRepository.findByEmail(email)
+    if (userWithSameEmail) {
       throw new EmailAlreadyRegisteredError()
     }
 
@@ -36,12 +40,19 @@ export class RegisterCandidateUseCase {
 
     const candidate = await this.candidatesRepository.create({
       name,
-      email,
       phone,
       resume,
-      password_hash,
+      user: {
+        create: {
+          email,
+          password_hash,
+          role: 'CANDIDATE',
+        },
+      },
     })
 
-    return { candidate }
+    return {
+      candidate,
+    }
   }
 }
