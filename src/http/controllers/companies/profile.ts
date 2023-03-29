@@ -1,6 +1,7 @@
 import { makeGetCompanyProfileUseCase } from '@/use-cases/companies/factories/make-get-company-profile-use-case'
 import { validateCNPJ } from '@/utils/validate-cnpj'
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { OK } from 'http-status'
 import { z } from 'zod'
 
 export async function companyProfile(
@@ -16,5 +17,8 @@ export async function companyProfile(
   const getCompanyProfile = makeGetCompanyProfileUseCase()
   const { company } = await getCompanyProfile.execute({ cnpj })
 
-  return reply.status(200).send(company)
+  return reply.status(OK).send({
+    ...company,
+    password_hash: undefined,
+  })
 }

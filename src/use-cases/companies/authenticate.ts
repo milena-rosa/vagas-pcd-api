@@ -22,7 +22,7 @@ export class AuthenticateCompanyUseCase {
     const foundCompanyByEmail = await this.companiesRepository.findByEmail(
       emailOrCnpj,
     )
-    const foundCompanyByCNPJ = await this.companiesRepository.findByEmail(
+    const foundCompanyByCNPJ = await this.companiesRepository.findByCNPJ(
       emailOrCnpj,
     )
 

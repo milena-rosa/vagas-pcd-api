@@ -54,6 +54,6 @@ LinkedIn Jobs like API.
 
 - [x] A senha do usuário precisa ser criptografada;
 - [x] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL;
-- [ ] Todas as listas de dados precisam estar paginadas com 20 itens por página;
-- [ ] O usuário deve ser identificado por um JWT (JSON Web Token);
+- [x] Todas as listas de dados precisam estar paginadas com 20 itens por página;
+- [x] O usuário deve ser identificado por um JWT (JSON Web Token);
 - [ ] O controle de acessos deve ser organizado com o método RBAC (Role-based access control).
