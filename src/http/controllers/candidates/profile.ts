@@ -1,6 +1,6 @@
 import { makeGetCandidateProfileUseCase } from '@/use-cases/candidates/factories/make-get-candidate-profile-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { OK } from 'http-status'
+import httpStatus, { NOT_FOUND, OK } from 'http-status'
 
 export async function candidateProfile(
   request: FastifyRequest,
@@ -8,12 +8,20 @@ export async function candidateProfile(
 ) {
   const getCandidateProfile = makeGetCandidateProfileUseCase()
 
+  if (!request.user.sub) {
+    return reply.status(NOT_FOUND).send({ message: httpStatus['404_CLASS'] })
+  }
+
   const { candidate } = await getCandidateProfile.execute({
-    candidateId: request.user.sub,
+    userId: request.user.sub,
   })
 
   return reply.status(OK).send({
-    ...candidate,
-    password_hash: undefined,
+    user_id: candidate.user_id,
+    email: candidate.user.email,
+    name: candidate.name,
+    phone: candidate.phone,
+    resume: candidate.resume,
+    created_at: candidate.user.created_at,
   })
 }

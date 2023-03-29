@@ -33,7 +33,7 @@ enum Location {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  user_id       String   @id @default(uuid())
   email         String   @unique
   password_hash String
   role          Role     @default(CANDIDATE)
@@ -53,7 +53,7 @@ model Candidate {
   phone   String?
   resume  String
 
-  user         User          @relation(fields: [user_id], references: [id])
+  user         User          @relation(fields: [user_id], references: [user_id])
   applications Application[]
 
   @@map("candidates")
@@ -74,7 +74,7 @@ model Company {
   state      String?
 
   jobs Job[]
-  user User  @relation(fields: [user_id], references: [id])
+  user User  @relation(fields: [user_id], references: [user_id])
 
   @@map("companies")
 }
@@ -83,7 +83,7 @@ model GovernmentUser {
   id      String @id @default(uuid())
   user_id String @unique
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [user_id])
 
   @@map("government_users")
 }

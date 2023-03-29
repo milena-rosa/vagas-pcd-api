@@ -1,22 +1,24 @@
-import { CandidatesRepository } from '@/repositories/candidates-repository'
-import { Candidate } from '@prisma/client'
+import {
+  CandidateUser,
+  CandidatesRepository,
+} from '@/repositories/candidates-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface GetCandidateProfileUseCaseRequest {
-  candidateId: string
+  userId: string
 }
 
 interface GetCandidateProfileUseCaseResponse {
-  candidate: Candidate
+  candidate: CandidateUser
 }
 
 export class GetCandidateProfileUseCase {
   constructor(private candidatesRepository: CandidatesRepository) {}
 
   async execute({
-    candidateId,
+    userId,
   }: GetCandidateProfileUseCaseRequest): Promise<GetCandidateProfileUseCaseResponse> {
-    const foundCandidate = await this.candidatesRepository.findById(candidateId)
+    const foundCandidate = await this.candidatesRepository.findByUserId(userId)
     if (!foundCandidate) {
       throw new ResourceNotFoundError()
     }

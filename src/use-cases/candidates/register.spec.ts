@@ -32,7 +32,7 @@ describe('register candidate use case', () => {
 
   it('should be able to register a candidate', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
       password_hash: await hash('123456', 6),
@@ -44,7 +44,7 @@ describe('register candidate use case', () => {
       name: 'Jane Doe',
       phone: null,
       resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 
@@ -63,7 +63,7 @@ describe('register candidate use case', () => {
 
   it('should hash candidate password on registry', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
       password_hash: await hash('123456', 6),
@@ -75,7 +75,7 @@ describe('register candidate use case', () => {
       name: 'Jane Doe',
       phone: null,
       resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 
@@ -98,7 +98,7 @@ describe('register candidate use case', () => {
 
   it('should not be able to register with an email twice', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
       password_hash: await hash('123456', 6),
@@ -110,7 +110,7 @@ describe('register candidate use case', () => {
       name: 'Jane Doe',
       phone: null,
       resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 

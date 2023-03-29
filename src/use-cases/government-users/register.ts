@@ -33,7 +33,7 @@ export class RegisterGovernmentUserUseCase {
     const password_hash = await hash(password, 6)
 
     const governmentUser = await this.governmentUsersRepository.create({
-      user: { create: { email, password_hash } },
+      user: { create: { email, password_hash, role: 'GOVERNMENT' } },
     })
 
     return { governmentUser }

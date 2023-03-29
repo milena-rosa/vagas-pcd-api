@@ -1,9 +1,9 @@
-import { makeAuthenticateCandidateUseCase } from '@/use-cases/candidates/factories/make-authenticate-candidate-use-case'
+import { makeAuthenticateUserUseCase } from '@/use-cases/users/factories/make-authenticate-user-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { OK } from 'http-status'
 import { z } from 'zod'
 
-export async function authenticateCandidate(
+export async function authenticate(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -14,14 +14,13 @@ export async function authenticateCandidate(
 
   const { email, password } = authenticateBodySchema.parse(request.body)
 
-  const authenticateUseCase = makeAuthenticateCandidateUseCase()
+  const authenticateUseCase = makeAuthenticateUserUseCase()
 
-  const { candidate } = await authenticateUseCase.execute({ email, password })
+  const { user } = await authenticateUseCase.execute({ email, password })
 
   const token = await reply.jwtSign(
-    // { role: candidate.role },
-    {},
-    { sign: { sub: candidate.id } },
+    { role: user.role },
+    { sign: { sub: user.user_id } },
   )
   // const refreshToken = await reply.jwtSign(
   //   // { role: user.role },

@@ -10,12 +10,12 @@ export class PrismaCandidatesRepository implements CandidatesRepository {
     })
   }
 
-  // async findByEmail(email: string) {
-  //   return await prisma.candidate.findFirst({
-  //     where: { user: { email } },
-  //     include: { user: true },
-  //   })
-  // }
+  async findByUserId(userId: string) {
+    return await prisma.candidate.findFirst({
+      where: { user: { user_id: userId } },
+      include: { user: true },
+    })
+  }
 
   async create(data: Prisma.CandidateCreateInput) {
     return await prisma.candidate.create({ data, include: { user: true } })

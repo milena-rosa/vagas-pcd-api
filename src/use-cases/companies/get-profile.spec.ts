@@ -28,7 +28,7 @@ describe('get company profile use case', () => {
 
   it('should be able to fetch a company profile with cnpj', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'lojasponei@example.com',
       role: 'COMPANY',
       password_hash: await hash('123456', 6),
@@ -46,7 +46,7 @@ describe('get company profile use case', () => {
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 

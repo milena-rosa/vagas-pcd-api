@@ -33,7 +33,7 @@ describe('register company use case', () => {
 
   it('should be able to register a company', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'lojasponei@example.com',
       role: 'COMPANY',
       password_hash: await hash('123456', 6),
@@ -51,7 +51,7 @@ describe('register company use case', () => {
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 
@@ -68,7 +68,7 @@ describe('register company use case', () => {
 
   it('should hash company password on registry', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'lojasponei@example.com',
       role: 'COMPANY',
       password_hash: await hash('123456', 6),
@@ -86,7 +86,7 @@ describe('register company use case', () => {
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 
@@ -107,7 +107,7 @@ describe('register company use case', () => {
 
   it('should not be able to register a company with an email twice', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'lojasponei@example.com',
       role: 'COMPANY',
       password_hash: await hash('123456', 6),
@@ -127,7 +127,7 @@ describe('register company use case', () => {
 
   it('should not be able to register a company with a cnpj twice', async () => {
     const mockUser: User = {
-      id: randomUUID(),
+      user_id: randomUUID(),
       email: 'lojasponei@example.com',
       role: 'COMPANY',
       password_hash: await hash('123456', 6),
@@ -145,7 +145,7 @@ describe('register company use case', () => {
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.id,
+      user_id: mockUser.user_id,
       user: mockUser,
     }
 

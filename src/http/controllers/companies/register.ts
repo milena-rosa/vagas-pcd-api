@@ -24,7 +24,17 @@ export async function registerCompany(
   })
 
   return reply.status(CREATED).send({
-    ...company,
-    password_hash: undefined,
+    user_id: company.user_id,
+    cnpj: company.cnpj,
+    name: company.name,
+    email: company.user.email,
+    phone: company.phone,
+    street: company.street,
+    number: company.number,
+    complement: company.complement,
+    city: company.city,
+    state: company.state,
+    zipCode: company.zipCode,
+    created_at: company.user.created_at,
   })
 }

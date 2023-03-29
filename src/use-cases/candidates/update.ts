@@ -7,7 +7,7 @@ import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface UpdateCandidateUseCaseRequest {
-  id: string
+  userId: string
   name?: string
   email?: string
   password?: string
@@ -24,7 +24,7 @@ export class UpdateCandidateUseCase {
   constructor(private candidatesRepository: CandidatesRepository) {}
 
   async execute({
-    id,
+    userId,
     email,
     name,
     phone,
@@ -32,7 +32,7 @@ export class UpdateCandidateUseCase {
     password,
     oldPassword,
   }: UpdateCandidateUseCaseRequest): Promise<UpdateCandidateUseCaseResponse> {
-    const foundCandidate = await this.candidatesRepository.findById(id)
+    const foundCandidate = await this.candidatesRepository.findByUserId(userId)
     if (!foundCandidate) {
       throw new ResourceNotFoundError()
     }
@@ -52,17 +52,20 @@ export class UpdateCandidateUseCase {
     }
     const password_hash = password ? await hash(password, 6) : undefined
 
-    const candidate = await this.candidatesRepository.update(id, {
-      name,
-      phone,
-      resume,
-      user: {
-        update: {
-          email,
-          password_hash,
+    const candidate = await this.candidatesRepository.update(
+      foundCandidate.id,
+      {
+        name,
+        phone,
+        resume,
+        user: {
+          update: {
+            email,
+            password_hash,
+          },
         },
       },
-    })
+    )
 
     return { candidate }
   }

@@ -51,8 +51,6 @@ export class RegisterCandidateUseCase {
       },
     })
 
-    return {
-      candidate,
-    }
+    return { candidate }
   }
 }

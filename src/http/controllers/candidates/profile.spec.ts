@@ -14,7 +14,7 @@ describe('candidate profile (e2e)', () => {
   })
 
   it('should be able to get candidate profile', async () => {
-    const { token } = await createAndAuthenticateCandidate(app)
+    const { userId, token } = await createAndAuthenticateCandidate(app)
 
     const profileResponse = await request(app.server)
       .get('/candidates')
@@ -22,10 +22,6 @@ describe('candidate profile (e2e)', () => {
       .send()
 
     expect(profileResponse.statusCode).toEqual(OK)
-    expect(profileResponse.body).toEqual(
-      expect.objectContaining({
-        email: 'janedoe@example.com',
-      }),
-    )
+    expect(profileResponse.body.user_id).toEqual(userId)
   })
 })
