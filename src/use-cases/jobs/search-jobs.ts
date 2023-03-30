@@ -19,7 +19,6 @@ export class SearchJobsUseCase {
     page = 1,
   }: SearchJobsUseCaseRequest): Promise<SearchJobsUseCaseResponse> {
     const jobs = await this.jobsRepository.findMany(query, page)
-
     return { jobs, page }
   }
 }

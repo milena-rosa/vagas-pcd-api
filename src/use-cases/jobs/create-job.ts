@@ -1,12 +1,15 @@
+import { CompaniesRepository } from '@/repositories/companies-repository'
 import { JobsRepository } from '@/repositories/jobs-repository'
-import { DisabilityType, Job } from '@prisma/client'
+import { DisabilityType, Job, Location } from '@prisma/client'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface CreateJobUseCaseRequest {
   title: string
   description: string
   role: string
   salary: number
-  disability_type: DisabilityType
+  location: Location
+  disabilityType: DisabilityType
   companyId: string
 }
 
@@ -15,23 +18,33 @@ interface CreateJobUseCaseResponse {
 }
 
 export class CreateJobUseCase {
-  constructor(private jobsRepository: JobsRepository) {}
+  constructor(
+    private jobsRepository: JobsRepository,
+    private companiesRepository: CompaniesRepository,
+  ) {}
 
   async execute({
     companyId,
+    title,
     description,
-    disability_type,
     role,
     salary,
-    title,
+    location,
+    disabilityType,
   }: CreateJobUseCaseRequest): Promise<CreateJobUseCaseResponse> {
+    const company = await this.companiesRepository.findByUserId(companyId)
+    if (!company) {
+      throw new ResourceNotFoundError()
+    }
+
     const job = await this.jobsRepository.create({
       company_id: companyId,
+      title,
       description,
-      disability_type,
       role,
       salary,
-      title,
+      location,
+      disability_type: disabilityType,
     })
 
     return { job }

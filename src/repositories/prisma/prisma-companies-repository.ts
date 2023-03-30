@@ -11,12 +11,12 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     })
   }
 
-  // async findByEmail(email: string) {
-  //   return await prisma.company.findFirst({
-  //     where: { user: { email } },
-  //     include: { user: true },
-  //   })
-  // }
+  async findByUserId(userId: string) {
+    return await prisma.company.findFirst({
+      where: { user: { user_id: userId } },
+      include: { user: true },
+    })
+  }
 
   async findAll() {
     return (await prisma.company.findMany({

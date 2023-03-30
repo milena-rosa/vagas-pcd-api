@@ -22,6 +22,7 @@ const companyUser = Prisma.validator<Prisma.CompanyArgs>()({
 export type CompanyUser = Prisma.CompanyGetPayload<typeof companyUser>
 
 export interface CompaniesRepository {
+  findByUserId(userId: string): Promise<CompanyUser | null>
   findByCNPJ(cnpj: string): Promise<CompanyUser | null>
   findAll(): Promise<CompanyUser>
   create(data: Prisma.CompanyCreateInput): Promise<CompanyUser>

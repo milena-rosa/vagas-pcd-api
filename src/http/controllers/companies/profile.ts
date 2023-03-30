@@ -14,8 +14,8 @@ export async function companyProfile(
 
   const { cnpj } = companyProfileQuerySchema.parse(request.query)
 
-  const getCompanyProfile = makeGetCompanyProfileUseCase()
-  const { company } = await getCompanyProfile.execute({ cnpj })
+  const getCompanyProfileUseCase = makeGetCompanyProfileUseCase()
+  const { company } = await getCompanyProfileUseCase.execute({ cnpj })
 
   return reply.status(OK).send({
     user_id: company.user_id,

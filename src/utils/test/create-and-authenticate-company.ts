@@ -8,19 +8,17 @@ export async function createAndAuthenticateCompany(app: FastifyInstance) {
     password: '123456',
   })
 
-  const { id } = registerResponse.body
+  const { user_id } = registerResponse.body
 
-  const authResponse = await request(app.server)
-    .post('/companies/sessions')
-    .send({
-      email: 'janedoe@example.com',
-      password: '123456',
-    })
+  const authResponse = await request(app.server).post('/sessions').send({
+    email: 'lojasponei@example.com',
+    password: '123456',
+  })
 
   const { token } = authResponse.body
 
   return {
-    id,
+    userId: user_id,
     token,
   }
 }

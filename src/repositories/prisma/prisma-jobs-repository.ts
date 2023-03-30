@@ -26,6 +26,7 @@ export class PrismaJobsRepository implements JobsRepository {
 
     return await prisma.job.findMany({
       where: {
+        AND: [{ closed_at: null }],
         OR: [
           { title: { contains: query, mode: 'insensitive' } },
           { disability_type: { equals: disability_type } },
@@ -44,14 +45,20 @@ export class PrismaJobsRepository implements JobsRepository {
       take: 20,
       skip: (page - 1) * 20,
       include: {
-        company: true,
+        company: {
+          include: {
+            user: true,
+          },
+        },
       },
     })
   }
 
   async findManyOpenByCompanyId(companyId: string, page: number) {
     return await prisma.job.findMany({
-      where: { company_id: companyId, closed_at: null },
+      where: {
+        AND: [{ company: { user_id: companyId } }, { closed_at: null }],
+      },
       orderBy: {
         created_at: 'desc',
       },
@@ -62,7 +69,9 @@ export class PrismaJobsRepository implements JobsRepository {
 
   async findManyByCompanyId(companyId: string, page = 1) {
     return await prisma.job.findMany({
-      where: { company_id: companyId },
+      where: {
+        company: { user_id: companyId },
+      },
       orderBy: {
         created_at: 'desc',
       },
@@ -72,7 +81,19 @@ export class PrismaJobsRepository implements JobsRepository {
   }
 
   async create(data: Prisma.JobUncheckedCreateInput) {
-    return await prisma.job.create({ data })
+    return await prisma.job.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        role: data.role,
+        salary: data.salary,
+        location: data.location,
+        disability_type: data.disability_type,
+        company: {
+          connect: { user_id: data.company_id },
+        },
+      },
+    })
   }
 
   async update(id: string, data: Prisma.JobUncheckedUpdateInput) {

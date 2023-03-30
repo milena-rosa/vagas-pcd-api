@@ -1,8 +1,9 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import { JobsRepository } from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
-import { DisabilityType, Location } from '@prisma/client'
+import { DisabilityType, Location, User } from '@prisma/client'
 import { hash } from 'bcryptjs'
+import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SearchJobsUseCase } from './search-jobs'
 
@@ -22,8 +23,8 @@ describe('search jobs use case', () => {
   })
 
   it('should be able to search for jobs by company name', async () => {
-    const newJob = {
-      id: '123',
+    const mockJob = {
+      id: randomUUID(),
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
@@ -35,29 +36,22 @@ describe('search jobs use case', () => {
       closed_at: null,
     }
 
-    const newCompany = {
-      id: '123',
-      cnpj: '23.243.199/0001-84',
+    const mockUser: User = {
+      user_id: randomUUID(),
       email: 'lojasponei@example.com',
-      name: 'Lojas Pônei',
+      role: 'COMPANY',
       password_hash: await hash('123456', 6),
-      city: 'Pirassununga',
-      state: 'SP',
-      street: 'Rua dos Bobos',
-      number: '0',
-      phone: '11999222333',
-      zipCode: '13636085',
-      complement: null,
+      created_at: new Date(),
     }
 
-    prisma.company.findUnique.mockResolvedValueOnce(newCompany)
-    prisma.job.findMany.mockResolvedValueOnce([newJob])
+    prisma.user.findUnique.mockResolvedValueOnce(mockUser)
+    prisma.job.findMany.mockResolvedValueOnce([mockJob])
 
     const { jobs } = await sut.execute({ query: 'Lojas Pônei' })
 
     expect(prisma.job.findMany).toHaveBeenCalledOnce()
     expect(jobs).toHaveLength(1)
-    expect(jobs).toStrictEqual([newJob])
+    expect(jobs).toStrictEqual([mockJob])
   })
 
   it('should be able to search for jobs by title', async () => {

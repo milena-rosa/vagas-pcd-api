@@ -1,4 +1,5 @@
 import { DisabilityType, Job, Location, Prisma } from '@prisma/client'
+import { CompanyUser } from './companies-repository'
 
 export const DisabilityTypeDictionary = {
   [DisabilityType.ANY]: 'qualquer',
@@ -14,6 +15,14 @@ export const LocationDictionary = {
   [Location.ON_SITE]: 'presencial',
   [Location.REMOTE]: 'remoto',
 }
+
+const jobCompany = Prisma.validator<Prisma.JobArgs>()({
+  include: { company: true },
+})
+
+export type JobWithCompany = Prisma.JobGetPayload<
+  typeof jobCompany & CompanyUser
+>
 
 export interface JobsRepository {
   findById(id: string): Promise<Job | null>

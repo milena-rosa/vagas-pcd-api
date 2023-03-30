@@ -1,5 +1,7 @@
 import { makeSearchJobsUseCase } from '@/use-cases/jobs/factories/make-search-jobs-use-case'
+import { formatJobWithCompany } from '@/utils/format-job-with-company'
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { OK } from 'http-status'
 import { z } from 'zod'
 
 export async function searchJobs(request: FastifyRequest, reply: FastifyReply) {
@@ -13,5 +15,5 @@ export async function searchJobs(request: FastifyRequest, reply: FastifyReply) {
   const searchJobsUseCase = makeSearchJobsUseCase()
   const { jobs } = await searchJobsUseCase.execute({ query, page })
 
-  return reply.status(200).send(jobs)
+  return reply.status(OK).send(formatJobWithCompany(jobs))
 }

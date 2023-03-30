@@ -2,6 +2,7 @@ import { prisma } from '@/libs/__mocks__/prisma'
 import { JobsRepository } from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
 import { DisabilityType, Location } from '@prisma/client'
+import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { JobClosedError } from '../errors/job-closed-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
@@ -27,8 +28,8 @@ describe('close job use case', () => {
   it('should be able to close job given a correct id', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const newJob = {
-      id: '123',
+    const mockJob = {
+      id: randomUUID(),
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
@@ -40,16 +41,16 @@ describe('close job use case', () => {
       closed_at: null,
     }
 
-    prisma.job.findUnique.mockResolvedValueOnce(newJob)
+    prisma.job.findUnique.mockResolvedValueOnce(mockJob)
     prisma.job.update.mockResolvedValueOnce({
-      ...newJob,
+      ...mockJob,
       closed_at: new Date(),
     })
 
-    const { job } = await sut.execute({ jobId: newJob.id })
+    const { job } = await sut.execute({ jobId: mockJob.id })
 
     expect(job).toStrictEqual({
-      ...newJob,
+      ...mockJob,
       closed_at: new Date(),
     })
   })
@@ -65,8 +66,8 @@ describe('close job use case', () => {
   it('should not be able to close an already closed job', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const newJob = {
-      id: '123',
+    const mockJob = {
+      id: randomUUID(),
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
@@ -78,12 +79,12 @@ describe('close job use case', () => {
       closed_at: new Date(2023, 1, 1),
     }
 
-    prisma.job.update.mockResolvedValueOnce(newJob)
-    prisma.job.findUnique.mockResolvedValue(newJob)
+    prisma.job.update.mockResolvedValueOnce(mockJob)
+    prisma.job.findUnique.mockResolvedValue(mockJob)
 
     await expect(() =>
       sut.execute({
-        jobId: '123',
+        jobId: mockJob.id,
       }),
     ).rejects.toBeInstanceOf(JobClosedError)
   })

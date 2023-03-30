@@ -45,8 +45,8 @@ LinkedIn Jobs like API.
 
 - [x] O usuário não pode se cadastrar com um e-mail duplicado;
 - [x] O usuário não pode se candidatar para uma vaga fechada;
-- [ ] As vagas só podem ser cadastradas por empresas;
-- [ ] As vagas só podem ser fechadas por empresas;
+- [x] As vagas só podem ser cadastradas por empresas;
+- [x] As vagas só podem ser fechadas por empresas;
 - [ ] Lista com nome, CNPJ, endereço, telefone de contato, vagas divulgadas por empresa e número de CVs enviados para cada empresa e vaga somente pode ser visualizada por INSS e MTE;
 - [ ] Somente empresas podem acessar lista de e-mails da equipe RP das superintendências.
 
@@ -56,4 +56,4 @@ LinkedIn Jobs like API.
 - [x] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL;
 - [x] Todas as listas de dados precisam estar paginadas com 20 itens por página;
 - [x] O usuário deve ser identificado por um JWT (JSON Web Token);
-- [ ] O controle de acessos deve ser organizado com o método RBAC (Role-based access control).
+- [x] O controle de acessos deve ser organizado com o método RBAC (Role-based access control).

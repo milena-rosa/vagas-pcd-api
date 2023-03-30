@@ -6,13 +6,13 @@ export async function candidateProfile(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const getCandidateProfile = makeGetCandidateProfileUseCase()
+  const getCandidateProfileUseCase = makeGetCandidateProfileUseCase()
 
   if (!request.user.sub) {
     return reply.status(NOT_FOUND).send({ message: httpStatus['404_CLASS'] })
   }
 
-  const { candidate } = await getCandidateProfile.execute({
+  const { candidate } = await getCandidateProfileUseCase.execute({
     userId: request.user.sub,
   })
 

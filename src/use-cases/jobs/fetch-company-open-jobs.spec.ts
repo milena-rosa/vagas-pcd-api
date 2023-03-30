@@ -26,25 +26,25 @@ describe('fetch company open jobs use case', () => {
   it('should be able to fetch company jobs history use case', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const newJob = {
+    const mockJob = {
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       company_id: '123',
       salary: 10000,
-      created_at: new Date(),
+      created_at: new Date(2023, 0, 1),
       closed_at: null,
     }
 
     prisma.job.findMany.mockResolvedValueOnce([
       {
-        ...newJob,
+        ...mockJob,
         id: randomUUID(),
         title: 'Engenheiro de software',
       },
       {
-        ...newJob,
+        ...mockJob,
         id: randomUUID(),
         title: 'Engenheiro de computação',
       },
@@ -62,27 +62,27 @@ describe('fetch company open jobs use case', () => {
   it('should be able to fetch paginated company jobs history', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const newJob = {
+    const mockJob = {
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       company_id: '123',
       salary: 10000,
-      created_at: new Date(),
+      created_at: new Date(2023, 0, 1),
       closed_at: null,
     }
 
-    const newJobs = []
+    const mockJobs = []
     for (let i = 21; i <= 22; i++) {
-      newJobs.push({
-        ...newJob,
+      mockJobs.push({
+        ...mockJob,
         id: randomUUID(),
         title: `Engenheiro ${i}`,
       })
     }
 
-    prisma.job.findMany.mockResolvedValueOnce(newJobs)
+    prisma.job.findMany.mockResolvedValueOnce(mockJobs)
 
     const { jobs, page } = await sut.execute({
       companyId: '123',
