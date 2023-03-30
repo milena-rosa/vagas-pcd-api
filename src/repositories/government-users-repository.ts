@@ -9,6 +9,6 @@ export type GovernmentUser = Prisma.GovernmentUserGetPayload<
 >
 
 export interface GovernmentUsersRepository {
-  findById(id: string): Promise<GovernmentUser | null>
+  findById(userId: string): Promise<GovernmentUser | null>
   create(data: Prisma.GovernmentUserCreateInput): Promise<GovernmentUser>
 }

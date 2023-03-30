@@ -36,7 +36,7 @@ export class RegisterCandidateUseCase {
       throw new EmailAlreadyRegisteredError()
     }
 
-    const password_hash = await hash(password, 6)
+    const passwordHash = await hash(password, 6)
 
     const candidate = await this.candidatesRepository.create({
       name,
@@ -45,7 +45,7 @@ export class RegisterCandidateUseCase {
       user: {
         create: {
           email,
-          password_hash,
+          password_hash: passwordHash,
           role: 'CANDIDATE',
         },
       },

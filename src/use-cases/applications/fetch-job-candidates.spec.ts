@@ -30,6 +30,7 @@ describe('fetch job candidates use case', () => {
       { id: '2', candidate_id: '124', job_id: '123', created_at: new Date() },
       { id: '3', candidate_id: '125', job_id: '123', created_at: new Date() },
     ]
+
     prisma.application.findMany.mockResolvedValue(mockApplications)
 
     const { applications } = await sut.execute({

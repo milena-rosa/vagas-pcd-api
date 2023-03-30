@@ -7,8 +7,8 @@ import {
 } from '../jobs-repository'
 
 export class PrismaJobsRepository implements JobsRepository {
-  async findById(id: string) {
-    return await prisma.job.findUnique({ where: { id } })
+  async findById(jobId: string) {
+    return await prisma.job.findUnique({ where: { id: jobId } })
   }
 
   async findMany(query: string, page: number) {
@@ -57,7 +57,7 @@ export class PrismaJobsRepository implements JobsRepository {
   async findManyOpenByCompanyId(companyId: string, page: number) {
     return await prisma.job.findMany({
       where: {
-        AND: [{ company: { user_id: companyId } }, { closed_at: null }],
+        AND: [{ company: { company_id: companyId } }, { closed_at: null }],
       },
       orderBy: {
         created_at: 'desc',
@@ -70,7 +70,7 @@ export class PrismaJobsRepository implements JobsRepository {
   async findManyByCompanyId(companyId: string, page = 1) {
     return await prisma.job.findMany({
       where: {
-        company: { user_id: companyId },
+        company: { company_id: companyId },
       },
       orderBy: {
         created_at: 'desc',
@@ -90,15 +90,15 @@ export class PrismaJobsRepository implements JobsRepository {
         location: data.location,
         disability_type: data.disability_type,
         company: {
-          connect: { user_id: data.company_id },
+          connect: { company_id: data.company_id },
         },
       },
     })
   }
 
-  async update(id: string, data: Prisma.JobUncheckedUpdateInput) {
+  async update(userId: string, data: Prisma.JobUncheckedUpdateInput) {
     return await prisma.job.update({
-      where: { id },
+      where: { id: userId },
       data,
     })
   }

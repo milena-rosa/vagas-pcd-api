@@ -41,17 +41,16 @@ describe('register company use case', () => {
     }
 
     const mockCompany: CompanyUser = {
-      id: randomUUID(),
+      company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
       name: 'Lojas Pônei',
-      city: 'Pirassununga',
+      city: 'Poneilandia',
       state: 'SP',
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.user_id,
       user: mockUser,
     }
 
@@ -76,17 +75,16 @@ describe('register company use case', () => {
     }
 
     const mockCompany: CompanyUser = {
-      id: randomUUID(),
+      company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
       name: 'Lojas Pônei',
-      city: 'Pirassununga',
+      city: 'Poneilandia',
       state: 'SP',
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.user_id,
       user: mockUser,
     }
 
@@ -135,17 +133,16 @@ describe('register company use case', () => {
     }
 
     const mockCompany: CompanyUser = {
-      id: randomUUID(),
+      company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
       name: 'Lojas Pônei',
-      city: 'Pirassununga',
+      city: 'Poneilandia',
       state: 'SP',
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.user_id,
       user: mockUser,
     }
 

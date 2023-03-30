@@ -32,9 +32,7 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
     return await prisma.application.findMany({
       where: {
         candidate_id: candidateId,
-        job: {
-          closed_at: null,
-        },
+        job: { closed_at: null },
       },
       orderBy: {
         created_at: 'desc',
@@ -50,7 +48,9 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
 
   async findManyByCandidateId(candidateId: string, page: number) {
     return await prisma.application.findMany({
-      where: { candidate_id: candidateId },
+      where: {
+        candidate: { candidate_id: candidateId },
+      },
       orderBy: {
         created_at: 'desc',
       },
@@ -63,7 +63,15 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
     })
   }
 
-  async create(data: Prisma.ApplicationUncheckedCreateInput) {
-    return await prisma.application.create({ data })
+  async create({
+    candidate_id,
+    job_id,
+  }: Prisma.ApplicationUncheckedCreateInput) {
+    return await prisma.application.create({
+      data: {
+        candidate: { connect: { candidate_id } },
+        job: { connect: { id: job_id } },
+      },
+    })
   }
 }

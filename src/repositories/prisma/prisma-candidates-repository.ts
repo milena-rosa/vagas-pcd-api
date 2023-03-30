@@ -3,16 +3,9 @@ import { Prisma } from '@prisma/client'
 import { CandidatesRepository } from '../candidates-repository'
 
 export class PrismaCandidatesRepository implements CandidatesRepository {
-  async findById(id: string) {
+  async findById(candidateId: string) {
     return await prisma.candidate.findUnique({
-      where: { id },
-      include: { user: true },
-    })
-  }
-
-  async findByUserId(userId: string) {
-    return await prisma.candidate.findFirst({
-      where: { user: { user_id: userId } },
+      where: { candidate_id: candidateId },
       include: { user: true },
     })
   }
@@ -21,9 +14,9 @@ export class PrismaCandidatesRepository implements CandidatesRepository {
     return await prisma.candidate.create({ data, include: { user: true } })
   }
 
-  async update(id: string, data: Prisma.CandidateUpdateInput) {
+  async update(candidateId: string, data: Prisma.CandidateUpdateInput) {
     return await prisma.candidate.update({
-      where: { id },
+      where: { candidate_id: candidateId },
       data,
       include: { user: true },
     })

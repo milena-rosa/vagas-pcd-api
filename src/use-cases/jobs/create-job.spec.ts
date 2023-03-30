@@ -40,34 +40,33 @@ describe('register company use case', () => {
     }
 
     const mockCompany: CompanyUser = {
-      id: randomUUID(),
+      company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
       name: 'Lojas Pônei',
-      city: 'Pirassununga',
+      city: 'Poneilandia',
       state: 'SP',
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.user_id,
       user: mockUser,
     }
 
     const mockJob = {
       id: randomUUID(),
+      company_id: mockCompany.company_id,
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
-      company_id: '123',
       salary: 10000,
       created_at: new Date(),
       closed_at: null,
     }
 
-    prisma.company.findFirst.mockResolvedValue(mockCompany)
+    prisma.company.findUnique.mockResolvedValue(mockCompany)
     prisma.job.create.mockResolvedValueOnce(mockJob)
 
     const { job } = await sut.execute({
@@ -82,12 +81,12 @@ describe('register company use case', () => {
   it('should not be able to create a job with a wrong company id', async () => {
     const mockJob = {
       id: randomUUID(),
+      company_id: 'inexistent-company-id',
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
-      company_id: '123',
       salary: 10000,
       created_at: new Date(),
       closed_at: null,

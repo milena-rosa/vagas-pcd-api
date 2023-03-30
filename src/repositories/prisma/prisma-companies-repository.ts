@@ -4,16 +4,16 @@ import { Prisma } from '@prisma/client'
 import { CompaniesRepository } from '../companies-repository'
 
 export class PrismaCompaniesRepository implements CompaniesRepository {
-  async findByCNPJ(cnpj: string) {
+  async findById(companyId: string) {
     return await prisma.company.findUnique({
-      where: { cnpj },
+      where: { company_id: companyId },
       include: { user: true },
     })
   }
 
-  async findByUserId(userId: string) {
-    return await prisma.company.findFirst({
-      where: { user: { user_id: userId } },
+  async findByCNPJ(cnpj: string) {
+    return await prisma.company.findUnique({
+      where: { cnpj },
       include: { user: true },
     })
   }

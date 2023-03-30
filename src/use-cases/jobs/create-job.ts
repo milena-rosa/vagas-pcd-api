@@ -32,7 +32,7 @@ export class CreateJobUseCase {
     location,
     disabilityType,
   }: CreateJobUseCaseRequest): Promise<CreateJobUseCaseResponse> {
-    const company = await this.companiesRepository.findByUserId(companyId)
+    const company = await this.companiesRepository.findById(companyId)
     if (!company) {
       throw new ResourceNotFoundError()
     }

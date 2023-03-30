@@ -30,10 +30,12 @@ export class RegisterGovernmentUserUseCase {
       throw new EmailAlreadyRegisteredError()
     }
 
-    const password_hash = await hash(password, 6)
+    const passwordHash = await hash(password, 6)
 
     const governmentUser = await this.governmentUsersRepository.create({
-      user: { create: { email, password_hash, role: 'GOVERNMENT' } },
+      user: {
+        create: { email, password_hash: passwordHash, role: 'GOVERNMENT' },
+      },
     })
 
     return { governmentUser }

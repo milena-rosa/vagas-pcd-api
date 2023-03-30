@@ -29,7 +29,7 @@ describe.skip('fetch summary report use case', () => {
       email: 'lojasponei@example.com',
       name: 'Lojas Pônei',
       password_hash: await hash('123456', 6),
-      city: 'Pirassununga',
+      city: 'Poneilandia',
       state: 'SP',
       street: 'Rua dos Bobos',
       number: '0',

@@ -3,6 +3,7 @@ import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-reposi
 import { UsersRepository } from '@/repositories/users-repository'
 import { User } from '@prisma/client'
 import { hash } from 'bcryptjs'
+import { randomUUID } from 'node:crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
 import { AuthenticateUserUseCase } from './authenticate'
@@ -24,7 +25,7 @@ describe('authenticate user use case', () => {
 
   it('should be able to authenticate an user', async () => {
     const mockUser: User = {
-      id: '123',
+      user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
       password_hash: await hash('123456', 6),
@@ -52,7 +53,7 @@ describe('authenticate user use case', () => {
 
   it('should not be able to authenticate with a wrong password', async () => {
     const mockUser: User = {
-      id: '123',
+      user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
       password_hash: await hash('123456', 6),

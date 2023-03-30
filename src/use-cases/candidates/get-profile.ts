@@ -5,7 +5,7 @@ import {
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface GetCandidateProfileUseCaseRequest {
-  userId: string
+  candidateId: string
 }
 
 interface GetCandidateProfileUseCaseResponse {
@@ -16,9 +16,9 @@ export class GetCandidateProfileUseCase {
   constructor(private candidatesRepository: CandidatesRepository) {}
 
   async execute({
-    userId,
+    candidateId,
   }: GetCandidateProfileUseCaseRequest): Promise<GetCandidateProfileUseCaseResponse> {
-    const foundCandidate = await this.candidatesRepository.findByUserId(userId)
+    const foundCandidate = await this.candidatesRepository.findById(candidateId)
     if (!foundCandidate) {
       throw new ResourceNotFoundError()
     }

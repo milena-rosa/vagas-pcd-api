@@ -43,7 +43,6 @@ describe('register candidate use case', () => {
     }
 
     const mockGovernmentUser: GovernmentUser = {
-      id: randomUUID(),
       user_id: mockUser.user_id,
       user: mockUser,
     }
@@ -68,7 +67,6 @@ describe('register candidate use case', () => {
     }
 
     const mockGovernmentUser: GovernmentUser = {
-      id: randomUUID(),
       user_id: mockUser.user_id,
       user: mockUser,
     }

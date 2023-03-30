@@ -23,13 +23,12 @@ describe('fetch candidate open applications use case', () => {
   })
 
   it('should be able to fetch the candidate open applications list', async () => {
-    vi.setSystemTime(new Date(2023, 2, 1))
-
     const mockApplications = [
       { id: '1', candidate_id: '123', job_id: '123', created_at: new Date() },
       { id: '2', candidate_id: '123', job_id: '124', created_at: new Date() },
       { id: '3', candidate_id: '123', job_id: '125', created_at: new Date() },
     ]
+
     prisma.application.findMany.mockResolvedValue(mockApplications)
 
     const { applications } = await sut.execute({ candidateId: '123' })
@@ -38,7 +37,7 @@ describe('fetch candidate open applications use case', () => {
     expect(applications).toStrictEqual(mockApplications)
   })
 
-  it('should be able to fetch paginated candidate applications history', async () => {
+  it('should be able to fetch paginated open applications list', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
     const mockApplication = {

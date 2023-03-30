@@ -36,18 +36,17 @@ describe('get candidate profile use case', () => {
     }
 
     const mockCandidate: CandidateUser = {
-      id: randomUUID(),
+      candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
-      resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.user_id,
+      resume: 'https://linkedin.com/in/jane-doe',
       user: mockUser,
     }
 
-    prisma.candidate.findFirst.mockResolvedValueOnce(mockCandidate)
+    prisma.candidate.findUnique.mockResolvedValueOnce(mockCandidate)
 
     const { candidate } = await sut.execute({
-      userId: mockUser.user_id,
+      candidateId: mockCandidate.candidate_id,
     })
 
     expect(candidate).toStrictEqual(mockCandidate)
@@ -56,7 +55,7 @@ describe('get candidate profile use case', () => {
   it('should not be able to get a candidate profile with a wrong id', async () => {
     await expect(() =>
       sut.execute({
-        userId: 'non-existent-id',
+        candidateId: 'non-existent-id',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })

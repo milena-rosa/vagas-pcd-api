@@ -40,11 +40,10 @@ describe('register candidate use case', () => {
     }
 
     const mockCandidate: CandidateUser = {
-      id: randomUUID(),
+      candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
-      resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.user_id,
+      resume: 'https://linkedin.com/in/jane-doe',
       user: mockUser,
     }
 
@@ -71,11 +70,10 @@ describe('register candidate use case', () => {
     }
 
     const mockCandidate: CandidateUser = {
-      id: randomUUID(),
+      candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
-      resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.user_id,
+      resume: 'https://linkedin.com/in/jane-doe',
       user: mockUser,
     }
 
@@ -106,11 +104,10 @@ describe('register candidate use case', () => {
     }
 
     const mockCandidate: CandidateUser = {
-      id: randomUUID(),
+      candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
-      resume: 'https://linkedin.com/in/milena-rosa',
-      user_id: mockUser.user_id,
+      resume: 'https://linkedin.com/in/jane-doe',
       user: mockUser,
     }
 

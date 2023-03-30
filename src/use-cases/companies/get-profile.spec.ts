@@ -36,32 +36,29 @@ describe('get company profile use case', () => {
     }
 
     const mockCompany: CompanyUser = {
-      id: randomUUID(),
+      company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
       name: 'Lojas Pônei',
-      city: 'Pirassununga',
+      city: 'Poneilandia',
       state: 'SP',
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
       zipCode: '13636085',
       complement: null,
-      user_id: mockUser.user_id,
       user: mockUser,
     }
 
     prisma.company.findUnique.mockResolvedValueOnce(mockCompany)
 
-    const { company } = await sut.execute({ cnpj: mockCompany.cnpj })
+    const { company } = await sut.execute({ companyId: mockCompany.company_id })
 
     expect(company).toStrictEqual(mockCompany)
   })
 
   it('should not be able to fetch a company profile with an inexistent cnpj', async () => {
     await expect(() =>
-      sut.execute({
-        cnpj: 'inexistent-cnpj',
-      }),
+      sut.execute({ companyId: 'inexistent-id' }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

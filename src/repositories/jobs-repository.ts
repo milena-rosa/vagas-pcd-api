@@ -25,10 +25,10 @@ export type JobWithCompany = Prisma.JobGetPayload<
 >
 
 export interface JobsRepository {
-  findById(id: string): Promise<Job | null>
+  findById(jobId: string): Promise<Job | null>
   findMany(query: string, page: number): Promise<Job[]>
   findManyByCompanyId(companyId: string, page: number): Promise<Job[]>
   findManyOpenByCompanyId(companyId: string, page: number): Promise<Job[]>
   create(data: Prisma.JobUncheckedCreateInput): Promise<Job>
-  update(id: string, data: Prisma.JobUncheckedUpdateInput): Promise<Job>
+  update(jobId: string, data: Prisma.JobUncheckedUpdateInput): Promise<Job>
 }

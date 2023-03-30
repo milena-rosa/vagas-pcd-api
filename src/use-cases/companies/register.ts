@@ -28,8 +28,8 @@ export class RegisterCompanyUseCase {
     email,
     password,
   }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
-    const userWithSameEmail = await this.usersRepository.findByEmail(email)
-    if (userWithSameEmail) {
+    const companyWithSameEmail = await this.usersRepository.findByEmail(email)
+    if (companyWithSameEmail) {
       throw new EmailAlreadyRegisteredError()
     }
 
@@ -38,7 +38,7 @@ export class RegisterCompanyUseCase {
       throw new CNPJAlreadyRegisteredError()
     }
 
-    const password_hash = await hash(password, 6)
+    const passwordHash = await hash(password, 6)
 
     const company = await this.companiesRepository.create({
       cnpj,
@@ -46,7 +46,7 @@ export class RegisterCompanyUseCase {
         create: {
           email,
           role: 'COMPANY',
-          password_hash,
+          password_hash: passwordHash,
         },
       },
     })

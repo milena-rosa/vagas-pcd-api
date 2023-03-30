@@ -1,4 +1,5 @@
 import { prisma } from '@/libs/__mocks__/prisma'
+import { CompanyUser } from '@/repositories/companies-repository'
 import { JobsRepository } from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
 import { DisabilityType, Location, User } from '@prisma/client'
@@ -23,19 +24,6 @@ describe('search jobs use case', () => {
   })
 
   it('should be able to search for jobs by company name', async () => {
-    const mockJob = {
-      id: randomUUID(),
-      title: 'Engenheiro(a) de software',
-      description: 'Vaga massinha com uma descrição legal.',
-      role: 'Analista',
-      disability_type: DisabilityType.ANY,
-      location: Location.ON_SITE,
-      company_id: '123',
-      salary: 10000,
-      created_at: new Date(),
-      closed_at: null,
-    }
-
     const mockUser: User = {
       user_id: randomUUID(),
       email: 'lojasponei@example.com',
@@ -44,7 +32,34 @@ describe('search jobs use case', () => {
       created_at: new Date(),
     }
 
-    prisma.user.findUnique.mockResolvedValueOnce(mockUser)
+    const mockCompany: CompanyUser = {
+      company_id: mockUser.user_id,
+      cnpj: '23.243.199/0001-84',
+      name: 'Lojas Pônei',
+      city: 'Poneilandia',
+      state: 'SP',
+      street: 'Rua dos Bobos',
+      number: '0',
+      phone: '11999222333',
+      zipCode: '13636085',
+      complement: null,
+      user: mockUser,
+    }
+
+    const mockJob = {
+      id: randomUUID(),
+      company_id: mockCompany.company_id,
+      title: 'Engenheiro(a) de software',
+      description: 'Vaga massinha com uma descrição legal.',
+      role: 'Analista',
+      disability_type: DisabilityType.ANY,
+      location: Location.ON_SITE,
+      salary: 10000,
+      created_at: new Date(),
+      closed_at: null,
+    }
+
+    prisma.company.findUnique.mockResolvedValueOnce(mockCompany)
     prisma.job.findMany.mockResolvedValueOnce([mockJob])
 
     const { jobs } = await sut.execute({ query: 'Lojas Pônei' })
@@ -56,13 +71,13 @@ describe('search jobs use case', () => {
 
   it('should be able to search for jobs by title', async () => {
     const mockJob = {
-      id: '123',
+      id: randomUUID(),
+      company_id: '123',
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
-      company_id: '123',
       salary: 10000,
       created_at: new Date(),
       closed_at: null,
@@ -85,17 +100,18 @@ describe('search jobs use case', () => {
 
   it('should be able to search for jobs by type of disability', async () => {
     const mockJob = {
-      id: '123',
+      id: randomUUID(),
+      company_id: '123',
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.HEARING,
       location: Location.ON_SITE,
-      company_id: '123',
       salary: 10000,
       created_at: new Date(),
       closed_at: null,
     }
+
     prisma.job.findMany.mockResolvedValueOnce([mockJob])
 
     const { jobs } = await sut.execute({
@@ -113,17 +129,18 @@ describe('search jobs use case', () => {
 
   it('should be able to search for jobs by type of locale', async () => {
     const mockJob = {
-      id: '123',
+      id: randomUUID(),
+      company_id: '123',
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.HEARING,
       location: Location.REMOTE,
-      company_id: '123',
       salary: 10000,
       created_at: new Date(),
       closed_at: null,
     }
+
     prisma.job.findMany.mockResolvedValueOnce([mockJob])
 
     const { jobs } = await sut.execute({

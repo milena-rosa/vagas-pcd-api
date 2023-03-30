@@ -47,21 +47,19 @@ model User {
 }
 
 model Candidate {
-  id      String  @id @default(uuid())
-  user_id String  @unique
-  name    String
-  phone   String?
-  resume  String
+  candidate_id String  @unique
+  name         String
+  phone        String?
+  resume       String
 
-  user         User          @relation(fields: [user_id], references: [user_id])
+  user         User          @relation(fields: [candidate_id], references: [user_id])
   applications Application[]
 
   @@map("candidates")
 }
 
 model Company {
-  id      String @id @default(uuid())
-  user_id String @unique
+  company_id String @unique
 
   cnpj       String  @unique
   name       String?
@@ -74,13 +72,12 @@ model Company {
   state      String?
 
   jobs Job[]
-  user User  @relation(fields: [user_id], references: [user_id])
+  user User  @relation(fields: [company_id], references: [user_id])
 
   @@map("companies")
 }
 
 model GovernmentUser {
-  id      String @id @default(uuid())
   user_id String @unique
 
   user User @relation(fields: [user_id], references: [user_id])
@@ -100,7 +97,7 @@ model Job {
   closed_at       DateTime?
 
   company_id String
-  company    Company @relation(fields: [company_id], references: [id])
+  company    Company @relation(fields: [company_id], references: [company_id])
 
   applications Application[]
 
@@ -112,7 +109,7 @@ model Application {
   created_at DateTime @default(now())
 
   candidate_id String
-  candidate    Candidate @relation(fields: [candidate_id], references: [id])
+  candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
 
   job_id String
   job    Job    @relation(fields: [job_id], references: [id])

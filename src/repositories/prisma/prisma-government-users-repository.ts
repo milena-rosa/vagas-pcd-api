@@ -5,9 +5,9 @@ import { GovernmentUsersRepository } from '../government-users-repository'
 export class PrismaGovernmentUsersRepository
   implements GovernmentUsersRepository
 {
-  async findById(id: string) {
+  async findById(userId: string) {
     return await prisma.governmentUser.findUnique({
-      where: { id },
+      where: { user_id: userId },
       include: { user: true },
     })
   }

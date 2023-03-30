@@ -7,8 +7,10 @@ const candidateUser = Prisma.validator<Prisma.CandidateArgs>()({
 export type CandidateUser = Prisma.CandidateGetPayload<typeof candidateUser>
 
 export interface CandidatesRepository {
-  findById(id: string): Promise<CandidateUser | null>
-  findByUserId(userId: string): Promise<CandidateUser | null>
+  findById(candidateId: string): Promise<CandidateUser | null>
   create(data: Prisma.CandidateCreateInput): Promise<CandidateUser>
-  update(id: string, data: Prisma.CandidateUpdateInput): Promise<CandidateUser>
+  update(
+    candidateId: string,
+    data: Prisma.CandidateUpdateInput,
+  ): Promise<CandidateUser>
 }
