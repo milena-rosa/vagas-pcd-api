@@ -1,5 +1,7 @@
-import { ApplicationsRepository } from '@/repositories/applications-repository'
-import { Application } from '@prisma/client'
+import {
+  ApplicationWithJobAndCompany,
+  ApplicationsRepository,
+} from '@/repositories/applications-repository'
 
 interface FetchCandidateApplicationsHistoryUseCaseRequest {
   candidateId: string
@@ -7,7 +9,7 @@ interface FetchCandidateApplicationsHistoryUseCaseRequest {
 }
 
 interface FetchCandidateApplicationsHistoryUseCaseResponse {
-  applications: Application[]
+  applications: ApplicationWithJobAndCompany[]
   page: number
 }
 

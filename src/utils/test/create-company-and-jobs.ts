@@ -1,20 +1,10 @@
 import { DisabilityType, Location } from '@prisma/client'
 import { FastifyInstance } from 'fastify'
 import request from 'supertest'
+import { createAndAuthenticateCompany } from './create-and-authenticate-company'
 
 export async function createCompanyAndJobs(app: FastifyInstance) {
-  await request(app.server).post('/companies').send({
-    cnpj: '23.243.199/0001-84',
-    email: 'lojasponei@example.com',
-    password: '123456',
-  })
-
-  const authResponse = await request(app.server).post('/sessions').send({
-    email: 'lojasponei@example.com',
-    password: '123456',
-  })
-
-  const { token } = authResponse.body
+  const { token, companyId } = await createAndAuthenticateCompany(app)
 
   const createJobResponse = await request(app.server)
     .post('/jobs')
@@ -31,6 +21,8 @@ export async function createCompanyAndJobs(app: FastifyInstance) {
   const { id } = createJobResponse.body
 
   return {
+    companyId,
+    companyToken: token,
     jobId: id,
   }
 }

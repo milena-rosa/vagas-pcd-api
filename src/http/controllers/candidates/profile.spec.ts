@@ -13,8 +13,8 @@ describe('candidate profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get candidate profile', async () => {
-    const { userId, token } = await createAndAuthenticateCandidate(app)
+  it('should be able to get the profile of logged candidate', async () => {
+    const { candidateId, token } = await createAndAuthenticateCandidate(app)
 
     const profileResponse = await request(app.server)
       .get('/candidates')
@@ -22,6 +22,6 @@ describe('candidate profile (e2e)', () => {
       .send()
 
     expect(profileResponse.statusCode).toEqual(OK)
-    expect(profileResponse.body.user_id).toEqual(userId)
+    expect(profileResponse.body.candidate_id).toEqual(candidateId)
   })
 })

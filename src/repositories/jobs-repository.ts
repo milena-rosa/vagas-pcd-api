@@ -24,8 +24,19 @@ export type JobWithCompany = Prisma.JobGetPayload<
   typeof jobCompany & CompanyUser
 >
 
+const jobCandidate = Prisma.validator<Prisma.JobArgs>()({
+  include: {
+    applications: {
+      include: { candidate: { include: { user: true } } },
+    },
+  },
+})
+
+export type JobWithCandidates = Prisma.JobGetPayload<typeof jobCandidate>
+
 export interface JobsRepository {
   findById(jobId: string): Promise<Job | null>
+  // findCandidatesByJobId(jobId: string): Promise<JobWithCandidates>
   findMany(query: string, page: number): Promise<Job[]>
   findManyByCompanyId(companyId: string, page: number): Promise<Job[]>
   findManyOpenByCompanyId(companyId: string, page: number): Promise<Job[]>

@@ -8,16 +8,16 @@ export async function applyForJob(
   reply: FastifyReply,
 ) {
   const applyForJobParamsSchema = z.object({
-    jobId: z.string().uuid(),
+    job_id: z.string().uuid(),
   })
 
-  const { jobId } = applyForJobParamsSchema.parse(request.params)
+  const { job_id } = applyForJobParamsSchema.parse(request.params)
 
   const applyForJobUseCase = makeApplyForJobUseCase()
 
   await applyForJobUseCase.execute({
     candidateId: request.user.sub,
-    jobId,
+    jobId: job_id,
   })
 
   return reply.status(CREATED).send()

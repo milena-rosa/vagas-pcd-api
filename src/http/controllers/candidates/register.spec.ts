@@ -22,5 +22,10 @@ describe('register candidate (e2e)', () => {
     })
 
     expect(response.statusCode).toEqual(CREATED)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        candidate_id: expect.any(String),
+      }),
+    )
   })
 })

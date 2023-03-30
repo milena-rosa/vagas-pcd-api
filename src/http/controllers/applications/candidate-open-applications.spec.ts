@@ -5,7 +5,7 @@ import { OK } from 'http-status'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('candidate applications history (e2e)', () => {
+describe('candidate open applications (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -14,7 +14,7 @@ describe('candidate applications history (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to fetch the applications history of the logged candidate', async () => {
+  it('should be able to fetch the open applications of the logged candidate', async () => {
     const { jobId } = await createCompanyAndJobs(app)
     const { token: candidateToken } = await createAndAuthenticateCandidate(app)
 
@@ -23,15 +23,15 @@ describe('candidate applications history (e2e)', () => {
       .set('Authorization', `Bearer ${candidateToken}`)
       .send()
 
-    const candidateApplicationsHistoryResponse = await request(app.server)
-      .get('/candidates/jobs/history')
+    const candidateOpenApplicationsResponse = await request(app.server)
+      .get('/candidates/jobs/open')
       .set('Authorization', `Bearer ${candidateToken}`)
       .query({
         page: 1,
       })
       .send()
 
-    expect(candidateApplicationsHistoryResponse.statusCode).toEqual(OK)
-    expect(candidateApplicationsHistoryResponse.body.jobs).toHaveLength(1)
+    expect(candidateOpenApplicationsResponse.statusCode).toEqual(OK)
+    expect(candidateOpenApplicationsResponse.body.jobs).toHaveLength(1)
   })
 })

@@ -5,16 +5,14 @@ import { z } from 'zod'
 
 export async function closeJob(request: FastifyRequest, reply: FastifyReply) {
   const closeJobParamsSchema = z.object({
-    jobId: z.string(),
+    job_id: z.string(),
   })
 
-  const { jobId } = closeJobParamsSchema.parse(request.params)
+  const { job_id } = closeJobParamsSchema.parse(request.params)
 
   const closeJobUseCase = makeCloseJobUseCase()
 
-  const { job } = await closeJobUseCase.execute({
-    jobId,
-  })
+  const { job } = await closeJobUseCase.execute({ jobId: job_id })
 
-  return reply.status(OK).send({ ...job })
+  return reply.status(OK).send(job)
 }

@@ -10,6 +10,15 @@ export class PrismaCandidatesRepository implements CandidatesRepository {
     })
   }
 
+  async findManyByJobId(jobId: string, page: number) {
+    return await prisma.candidate.findMany({
+      where: { applications: { every: { job_id: jobId } } },
+      include: { user: true },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+  }
+
   async create(data: Prisma.CandidateCreateInput) {
     return await prisma.candidate.create({ data, include: { user: true } })
   }

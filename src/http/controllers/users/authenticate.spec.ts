@@ -17,8 +17,8 @@ describe('authenticate user (e2e)', () => {
       name: 'Jane Doe',
       email: 'janedoe@example.com',
       phone: '11999222333',
-      password: '123456',
       resume: 'https://linkedin.com/in/jane-doe',
+      password: '123456',
     })
 
     const response = await request(app.server).post('/sessions').send({
@@ -26,8 +26,8 @@ describe('authenticate user (e2e)', () => {
       password: '123456',
     })
 
-    expect(response.statusCode).toEqual(OK)
-    expect(response.body).toEqual({
+    expect(response.statusCode).toStrictEqual(OK)
+    expect(response.body).toStrictEqual({
       token: expect.any(String),
     })
   })
@@ -44,8 +44,8 @@ describe('authenticate user (e2e)', () => {
       password: '123456',
     })
 
-    expect(response.statusCode).toEqual(OK)
-    expect(response.body).toEqual({
+    expect(response.statusCode).toStrictEqual(OK)
+    expect(response.body).toStrictEqual({
       token: expect.any(String),
     })
   })
@@ -61,8 +61,8 @@ describe('authenticate user (e2e)', () => {
       password: '123456',
     })
 
-    expect(response.statusCode).toEqual(OK)
-    expect(response.body).toEqual({
+    expect(response.statusCode).toStrictEqual(OK)
+    expect(response.body).toStrictEqual({
       token: expect.any(String),
     })
   })

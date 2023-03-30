@@ -8,6 +8,8 @@ import { createJob } from './create'
 import { searchJobs } from './search-jobs'
 
 export async function jobsRoutes(app: FastifyInstance) {
+  app.get('/jobs/search', searchJobs)
+
   app.post(
     '/jobs',
     { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
@@ -15,7 +17,7 @@ export async function jobsRoutes(app: FastifyInstance) {
   )
 
   app.patch(
-    '/jobs/close/:jobId',
+    '/jobs/close/:job_id',
     { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
     closeJob,
   )
@@ -31,6 +33,4 @@ export async function jobsRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
     companyOpenJobs,
   )
-
-  app.get('/jobs/search', searchJobs)
 }

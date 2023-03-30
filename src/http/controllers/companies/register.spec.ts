@@ -20,5 +20,10 @@ describe('register company (e2e)', () => {
     })
 
     expect(response.statusCode).toEqual(CREATED)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        company_id: expect.any(String),
+      }),
+    )
   })
 })

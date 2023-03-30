@@ -29,7 +29,5 @@ export async function createJob(request: FastifyRequest, reply: FastifyReply) {
     disabilityType,
   })
 
-  return reply.status(CREATED).send({
-    ...job,
-  })
+  return reply.status(CREATED).send(job)
 }

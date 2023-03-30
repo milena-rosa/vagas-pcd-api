@@ -10,7 +10,7 @@ export async function createAndAuthenticateCandidate(app: FastifyInstance) {
     resume: 'https://linkedin.com/in/jane-doe',
   })
 
-  const { user_id } = registerResponse.body
+  const { candidate_id } = registerResponse.body
 
   const authResponse = await request(app.server).post('/sessions').send({
     email: 'janedoe@example.com',
@@ -20,7 +20,7 @@ export async function createAndAuthenticateCandidate(app: FastifyInstance) {
   const { token } = authResponse.body
 
   return {
-    userId: user_id,
+    candidateId: candidate_id,
     token,
   }
 }

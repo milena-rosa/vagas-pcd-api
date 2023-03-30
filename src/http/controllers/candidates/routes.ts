@@ -14,7 +14,7 @@ export async function candidatesRoutes(app: FastifyInstance) {
     candidateProfile,
   )
   app.patch(
-    '/candidates/:user_id',
+    '/candidates/:candidate_id',
     { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
     updateCandidate,
   )

@@ -19,11 +19,11 @@ describe('company profile (e2e)', () => {
       password: '123456',
     })
 
+    const { company_id } = registerResponse.body
+
     const profileResponse = await request(app.server)
       .get(`/companies/profile`)
-      .query({
-        cnpj: registerResponse.body.cnpj,
-      })
+      .query({ company_id })
       .send()
 
     expect(profileResponse.statusCode).toEqual(OK)

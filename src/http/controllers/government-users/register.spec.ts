@@ -19,5 +19,10 @@ describe('register government user (e2e)', () => {
     })
 
     expect(response.statusCode).toEqual(CREATED)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        user_id: expect.any(String),
+      }),
+    )
   })
 })

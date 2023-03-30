@@ -1,5 +1,4 @@
 import { makeGetCompanyProfileUseCase } from '@/use-cases/companies/factories/make-get-company-profile-use-case'
-import { validateCNPJ } from '@/utils/validate-cnpj'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { OK } from 'http-status'
 import { z } from 'zod'
@@ -9,16 +8,18 @@ export async function companyProfile(
   reply: FastifyReply,
 ) {
   const companyProfileQuerySchema = z.object({
-    cnpj: z.string().refine((value) => validateCNPJ(value)),
+    company_id: z.string().uuid(),
   })
 
-  const { cnpj } = companyProfileQuerySchema.parse(request.query)
+  const { company_id } = companyProfileQuerySchema.parse(request.query)
 
   const getCompanyProfileUseCase = makeGetCompanyProfileUseCase()
-  const { company } = await getCompanyProfileUseCase.execute({ cnpj })
+  const { company } = await getCompanyProfileUseCase.execute({
+    companyId: company_id,
+  })
 
   return reply.status(OK).send({
-    user_id: company.user_id,
+    company_id: company.company_id,
     cnpj: company.cnpj,
     name: company.name,
     email: company.user.email,

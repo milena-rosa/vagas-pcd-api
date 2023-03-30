@@ -14,7 +14,7 @@ describe('update candidate info (e2e)', () => {
   })
 
   it('should be able to update candidate info', async () => {
-    const { userId, token } = await createAndAuthenticateCandidate(app)
+    const { candidateId, token } = await createAndAuthenticateCandidate(app)
 
     const newData = {
       password: '654321',
@@ -26,7 +26,7 @@ describe('update candidate info (e2e)', () => {
     }
 
     const response = await request(app.server)
-      .patch(`/candidates/${userId}`)
+      .patch(`/candidates/${candidateId}`)
       .set('Authorization', `Bearer ${token}`)
       .send(newData)
 

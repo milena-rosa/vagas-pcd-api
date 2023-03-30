@@ -13,6 +13,7 @@ export async function searchJobs(request: FastifyRequest, reply: FastifyReply) {
   const { query, page } = companyProfileQuerySchema.parse(request.query)
 
   const searchJobsUseCase = makeSearchJobsUseCase()
+
   const { jobs } = await searchJobsUseCase.execute({ query, page })
 
   return reply.status(OK).send(formatJobWithCompany(jobs))

@@ -8,7 +8,7 @@ export async function updateCandidate(
   reply: FastifyReply,
 ) {
   const updateParamsSchema = z.object({
-    user_id: z.string(),
+    candidate_id: z.string(),
   })
 
   const updateBodySchema = z
@@ -24,14 +24,14 @@ export async function updateCandidate(
       message: 'The old password must be sent.',
     })
 
-  const { user_id } = updateParamsSchema.parse(request.params)
+  const { candidate_id } = updateParamsSchema.parse(request.params)
   const { name, email, phone, resume, password, oldPassword } =
     updateBodySchema.parse(request.body)
 
   const updateUseCase = makeUpdateCandidateUseCase()
 
   const { candidate } = await updateUseCase.execute({
-    userId: user_id,
+    candidateId: candidate_id,
     name,
     email,
     phone,
@@ -41,7 +41,11 @@ export async function updateCandidate(
   })
 
   return reply.status(OK).send({
-    ...candidate,
-    password_hash: undefined,
+    candidate_id: candidate.candidate_id,
+    name: candidate.name,
+    email: candidate.user.email,
+    phone: candidate.phone,
+    resume: candidate.resume,
+    created_at: candidate.user.created_at,
   })
 }

@@ -24,7 +24,7 @@ export async function registerCompany(
   })
 
   return reply.status(CREATED).send({
-    user_id: company.user_id,
+    company_id: company.company_id,
     cnpj: company.cnpj,
     name: company.name,
     email: company.user.email,

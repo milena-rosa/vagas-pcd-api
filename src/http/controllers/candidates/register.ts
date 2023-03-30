@@ -30,7 +30,7 @@ export async function registerCandidate(
   })
 
   return reply.status(CREATED).send({
-    user_id: candidate.user_id,
+    candidate_id: candidate.candidate_id,
     email: candidate.user.email,
     name: candidate.name,
     phone: candidate.phone,

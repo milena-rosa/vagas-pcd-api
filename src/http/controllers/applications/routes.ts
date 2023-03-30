@@ -3,37 +3,30 @@ import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 import { FastifyInstance } from 'fastify'
 import { applyForJob } from './apply-for-job'
 import { candidateApplicationsHistory } from './candidate-applications-history'
+import { candidateOpenApplications } from './candidate-open-applications'
+import { jobCandidates } from './job-candidates'
 
 export async function applicationsRoutes(app: FastifyInstance) {
   app.post(
-    '/jobs/:jobId/apply',
+    '/jobs/:job_id/apply',
     { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
     applyForJob,
   )
-  app.post(
+  app.get(
     '/candidates/jobs/history',
     { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
     candidateApplicationsHistory,
   )
-  // app.post(
-  //   '/jobs',
-  //   { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
-  //   createJob,
-  // )
-  // app.patch(
-  //   '/jobs/close/:jobId',
-  //   { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
-  //   closeJob,
-  // )
-  // app.get(
-  //   '/jobs/history',
-  //   { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
-  //   companyJobsHistory,
-  // )
-  // app.get(
-  //   '/jobs/open',
-  //   { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
-  //   companyOpenJobs,
-  // )
-  // app.get('/jobs/search', searchJobs)
+
+  app.get(
+    '/candidates/jobs/open',
+    { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
+    candidateOpenApplications,
+  )
+
+  app.get(
+    '/companies/jobs/:job_id/candidates',
+    { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
+    jobCandidates,
+  )
 }

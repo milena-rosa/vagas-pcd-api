@@ -15,7 +15,7 @@ describe('create job (e2e)', () => {
   })
 
   it('should be able to create a job', async () => {
-    const { token } = await createAndAuthenticateCompany(app)
+    const { token, companyId } = await createAndAuthenticateCompany(app)
 
     const response = await request(app.server)
       .post('/jobs')
@@ -25,10 +25,12 @@ describe('create job (e2e)', () => {
         description: 'Vaga massinha com uma descrição legal.',
         role: 'Analista',
         salary: 10000,
-        disabilityType: DisabilityType.ANY,
         location: Location.ON_SITE,
+        disabilityType: DisabilityType.ANY,
       })
 
     expect(response.statusCode).toEqual(CREATED)
+    expect(response.body.id).toEqual(expect.any(String))
+    expect(response.body.company_id).toEqual(companyId)
   })
 })

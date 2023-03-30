@@ -1,18 +1,33 @@
-import { Application, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
+
+const applicationWithJobAndCandidate =
+  Prisma.validator<Prisma.ApplicationArgs>()({
+    include: { job: true, candidate: true },
+  })
+
+export type ApplicationWithJobAndCandidate = Prisma.ApplicationGetPayload<
+  typeof applicationWithJobAndCandidate
+>
+
+const applicationWithJobAndCompany = Prisma.validator<Prisma.ApplicationArgs>()(
+  { include: { job: { include: { company: true } } } },
+)
+
+export type ApplicationWithJobAndCompany = Prisma.ApplicationGetPayload<
+  typeof applicationWithJobAndCompany
+>
 
 export interface ApplicationsRepository {
   findManyOpenByCandidateId(
     candidateId: string,
     page: number,
-  ): Promise<Application[]>
+  ): Promise<ApplicationWithJobAndCompany[]>
   findManyByCandidateId(
     candidateId: string,
     page: number,
-  ): Promise<Application[]>
-  findManyByCompanyAndJobId(
-    companyId: string,
-    jobId: string,
-    page: number,
-  ): Promise<Application[]>
-  create(data: Prisma.ApplicationUncheckedCreateInput): Promise<Application>
+  ): Promise<ApplicationWithJobAndCompany[]>
+  // findManyByJobId(jobId: string, page: number): Promise<any[]>
+  create(
+    data: Prisma.ApplicationUncheckedCreateInput,
+  ): Promise<ApplicationWithJobAndCandidate>
 }

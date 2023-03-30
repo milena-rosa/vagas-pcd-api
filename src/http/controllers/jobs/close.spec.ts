@@ -28,6 +28,7 @@ describe('close job (e2e)', () => {
         disabilityType: DisabilityType.ANY,
         location: Location.ON_SITE,
       })
+
     const { id: jobId } = createJobResponse.body
 
     const response = await request(app.server)
