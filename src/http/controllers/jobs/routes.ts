@@ -5,6 +5,7 @@ import { closeJob } from './close'
 import { companyJobsHistory } from './company-job-history'
 import { companyOpenJobs } from './company-open-jobs'
 import { createJob } from './create'
+import { jobCandidates } from './job-candidates'
 import { searchJobs } from './search-jobs'
 
 export async function jobsRoutes(app: FastifyInstance) {
@@ -17,20 +18,26 @@ export async function jobsRoutes(app: FastifyInstance) {
   )
 
   app.patch(
-    '/jobs/close/:job_id',
+    '/jobs/:job_id/close',
     { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
     closeJob,
   )
 
   app.get(
-    '/jobs/history',
+    '/companies/jobs/history',
     { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
     companyJobsHistory,
   )
 
   app.get(
-    '/jobs/open',
+    '/companies/jobs/open',
     { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
     companyOpenJobs,
+  )
+
+  app.get(
+    '/companies/jobs/:job_id/candidates',
+    { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
+    jobCandidates,
   )
 }

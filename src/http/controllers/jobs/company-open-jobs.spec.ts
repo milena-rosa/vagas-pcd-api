@@ -45,12 +45,12 @@ describe('company open jobs (e2e)', () => {
     // close 1 job
     const { id: jobId } = createJobResponse.body
     await request(app.server)
-      .patch(`/jobs/close/${jobId}`)
+      .patch(`/jobs/${jobId}/close`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 
     const companyOpenJobsResponse = await request(app.server)
-      .get('/jobs/open')
+      .get('/companies/jobs/open')
       .set('Authorization', `Bearer ${token}`)
       .query({
         page: 1,

@@ -1,5 +1,4 @@
-import { JobsRepository } from '@/repositories/jobs-repository'
-import { Job } from '@prisma/client'
+import { JobWithCompany, JobsRepository } from '@/repositories/jobs-repository'
 
 interface SearchJobsUseCaseRequest {
   query: string
@@ -7,7 +6,7 @@ interface SearchJobsUseCaseRequest {
 }
 
 interface SearchJobsUseCaseResponse {
-  jobs: Job[]
+  jobs: JobWithCompany[]
   page: number
 }
 

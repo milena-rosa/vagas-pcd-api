@@ -4,7 +4,6 @@ import { FastifyInstance } from 'fastify'
 import { applyForJob } from './apply-for-job'
 import { candidateApplicationsHistory } from './candidate-applications-history'
 import { candidateOpenApplications } from './candidate-open-applications'
-import { jobCandidates } from './job-candidates'
 
 export async function applicationsRoutes(app: FastifyInstance) {
   app.post(
@@ -13,20 +12,14 @@ export async function applicationsRoutes(app: FastifyInstance) {
     applyForJob,
   )
   app.get(
-    '/candidates/jobs/history',
+    '/candidates/applications/history',
     { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
     candidateApplicationsHistory,
   )
 
   app.get(
-    '/candidates/jobs/open',
+    '/candidates/applications/open',
     { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
     candidateOpenApplications,
-  )
-
-  app.get(
-    '/companies/jobs/:job_id/candidates',
-    { onRequest: [verifyJWT, verifyUserRole('COMPANY')] },
-    jobCandidates,
   )
 }

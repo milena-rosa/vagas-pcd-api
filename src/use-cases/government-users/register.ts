@@ -5,6 +5,7 @@ import {
 import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
+import { NotAllowedEmailError } from '../errors/not-allowed-email-error'
 
 interface RegisterGovernmentUserUseCaseRequest {
   email: string
@@ -25,6 +26,10 @@ export class RegisterGovernmentUserUseCase {
     email,
     password,
   }: RegisterGovernmentUserUseCaseRequest): Promise<RegisterGovernmentUserUseCaseResponse> {
+    if (!email.endsWith('gov.br')) {
+      throw new NotAllowedEmailError()
+    }
+
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
     if (userWithSameEmail) {
       throw new EmailAlreadyRegisteredError()

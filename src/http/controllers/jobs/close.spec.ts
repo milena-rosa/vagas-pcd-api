@@ -32,7 +32,7 @@ describe('close job (e2e)', () => {
     const { id: jobId } = createJobResponse.body
 
     const response = await request(app.server)
-      .patch(`/jobs/close/${jobId}`)
+      .patch(`/jobs/${jobId}/close`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

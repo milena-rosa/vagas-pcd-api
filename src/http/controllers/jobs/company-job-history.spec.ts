@@ -42,7 +42,7 @@ describe('company job history (e2e)', () => {
       })
 
     const companyJobsHistoryResponse = await request(app.server)
-      .get('/jobs/history')
+      .get('/companies/jobs/history')
       .set('Authorization', `Bearer ${token}`)
       .query({
         page: 1,

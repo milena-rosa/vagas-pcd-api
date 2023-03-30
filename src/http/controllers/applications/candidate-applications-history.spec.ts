@@ -24,7 +24,7 @@ describe('candidate applications history (e2e)', () => {
       .send()
 
     const candidateApplicationsHistoryResponse = await request(app.server)
-      .get('/candidates/jobs/history')
+      .get('/candidates/applications/history')
       .set('Authorization', `Bearer ${candidateToken}`)
       .query({
         page: 1,

@@ -9,7 +9,7 @@ export async function candidatesRoutes(app: FastifyInstance) {
   app.post('/candidates', registerCandidate)
 
   app.get(
-    '/candidates',
+    '/candidates/me',
     { onRequest: [verifyJWT, verifyUserRole('CANDIDATE')] },
     candidateProfile,
   )

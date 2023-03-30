@@ -11,6 +11,7 @@ import { compare, hash } from 'bcryptjs'
 import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { EmailAlreadyRegisteredError } from '../errors/email-already-registered-error'
+import { NotAllowedEmailError } from '../errors/not-allowed-email-error'
 import { RegisterGovernmentUserUseCase } from './register'
 
 let governmentUsersRepository: GovernmentUsersRepository
@@ -102,5 +103,24 @@ describe('register candidate use case', () => {
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(EmailAlreadyRegisteredError)
+  })
+
+  it('should not be able to register with a non governamental email', async () => {
+    const mockUser: User = {
+      user_id: randomUUID(),
+      email: 'inss@gmail.com',
+      role: 'GOVERNMENT',
+      password_hash: await hash('123456', 6),
+      created_at: new Date(),
+    }
+
+    prisma.user.findUnique.mockResolvedValueOnce(mockUser)
+
+    await expect(() =>
+      sut.execute({
+        email: mockUser.email,
+        password: '123456',
+      }),
+    ).rejects.toBeInstanceOf(NotAllowedEmailError)
   })
 })

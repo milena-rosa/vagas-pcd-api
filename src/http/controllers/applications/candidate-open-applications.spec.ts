@@ -24,7 +24,7 @@ describe('candidate open applications (e2e)', () => {
       .send()
 
     const candidateOpenApplicationsResponse = await request(app.server)
-      .get('/candidates/jobs/open')
+      .get('/candidates/applications/open')
       .set('Authorization', `Bearer ${candidateToken}`)
       .query({
         page: 1,
