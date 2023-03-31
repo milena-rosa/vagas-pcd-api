@@ -22,20 +22,19 @@ export async function authenticate(
     { role: user.role },
     { sign: { sub: user.user_id } },
   )
-  // const refreshToken = await reply.jwtSign(
-  //   // { role: user.role },
-  //   { sign: { sub: candidate.id, expiresIn: '7d' } },
-  // )
 
-  return (
-    reply
-      // .setCookie('refreshToken', refreshToken, {
-      //   path: '/',
-      //   secure: true,
-      //   sameSite: true,
-      //   httpOnly: true,
-      // })
-      .status(OK)
-      .send({ token })
+  const refreshToken = await reply.jwtSign(
+    { role: user.role },
+    { sign: { sub: user.user_id, expiresIn: '7d' } },
   )
+
+  return reply
+    .setCookie('refreshToken', refreshToken, {
+      path: '/',
+      secure: true,
+      sameSite: true,
+      httpOnly: true,
+    })
+    .status(OK)
+    .send({ token })
 }
