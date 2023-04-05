@@ -1,16 +1,16 @@
 import { FastifyInstance } from 'fastify'
-import { applicationsRoutes } from './applications/routes'
 import { candidatesRoutes } from './candidates/routes'
 import { companiesRoutes } from './companies/routes'
 import { governmentUsersRoutes } from './government-users/routes'
+import { healthRoutes } from './health/routes'
 import { jobsRoutes } from './jobs/routes'
-import { usersRoutes } from './users/routes'
+import { sessionsRoutes } from './sessions/routes'
 
 export async function appRoutes(app: FastifyInstance) {
-  app.register(candidatesRoutes)
-  app.register(companiesRoutes)
-  app.register(governmentUsersRoutes)
-  app.register(jobsRoutes)
-  app.register(usersRoutes)
-  app.register(applicationsRoutes)
+  app.register(candidatesRoutes, { prefix: 'candidates' })
+  app.register(companiesRoutes, { prefix: 'companies' })
+  app.register(governmentUsersRoutes, { prefix: 'government-users' })
+  app.register(jobsRoutes, { prefix: 'jobs' })
+  app.register(sessionsRoutes)
+  app.register(healthRoutes)
 }

@@ -17,7 +17,7 @@ describe('job candidates (e2e)', () => {
     const { companyToken, jobId } = await createApplications(app)
 
     const response = await request(app.server)
-      .get(`/companies/jobs/${jobId}/candidates`)
+      .get(`/jobs/${jobId}/candidates`)
       .set('Authorization', `Bearer ${companyToken}`)
       .send()
 

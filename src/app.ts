@@ -1,9 +1,12 @@
 import { AppError } from '@/use-cases/errors/app-error'
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 import fastify from 'fastify'
 import httpStatus, { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status'
 import { ZodError } from 'zod'
+import { version } from '../package.json'
 import { env } from './env'
 import { appRoutes } from './http/controllers/routes'
 
@@ -21,6 +24,49 @@ app.register(fastifyJwt, {
 })
 
 app.register(fastifyCookie)
+
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'vagaspcd API',
+      description: 'API massinha',
+      version,
+    },
+    externalDocs: {
+      url: 'https://swagger.io',
+      description: 'bla',
+    },
+    servers: [{ url: `http://localhost:${env.PORT}` }],
+    components: {
+      securitySchemes: {
+        apiKey: {
+          type: 'apiKey',
+          name: 'apiKey',
+          in: 'header',
+        },
+      },
+    },
+    security: [{ apiKey: [env.SWAGGER_API_KEY] }],
+  },
+})
+
+app.register(fastifySwaggerUi, {
+  routePrefix: '/docs',
+  uiConfig: {
+    docExpansion: 'full',
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (_, __, next) {
+      next()
+    },
+    preHandler: function (_, __, next) {
+      next()
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+})
 
 app.register(appRoutes)
 
