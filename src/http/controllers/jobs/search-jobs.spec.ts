@@ -1,4 +1,4 @@
-import { app } from '@/app'
+import { server } from '@/app'
 import { DisabilityTypeDictionary } from '@/repositories/jobs-repository'
 import { createAndAuthenticateCompany } from '@/utils/test/create-and-authenticate-company'
 import { DisabilityType, Location } from '@prisma/client'
@@ -8,18 +8,18 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('search jobs (e2e)', () => {
   beforeAll(async () => {
-    await app.ready()
+    await server.ready()
   })
 
   afterAll(async () => {
-    await app.close()
+    await server.close()
   })
 
   it('should be able to search for jobs', async () => {
-    const { token: companyToken } = await createAndAuthenticateCompany(app)
+    const { token: companyToken } = await createAndAuthenticateCompany(server)
 
     // create 2 jobs
-    await request(app.server)
+    await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${companyToken}`)
       .send({
@@ -31,7 +31,7 @@ describe('search jobs (e2e)', () => {
         location: Location.ON_SITE,
       })
 
-    await request(app.server)
+    await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${companyToken}`)
       .send({
@@ -43,7 +43,7 @@ describe('search jobs (e2e)', () => {
         location: Location.ON_SITE,
       })
 
-    let searchResponse = await request(app.server)
+    let searchResponse = await request(server.server)
       .get('/jobs/search')
       .query({
         query: 'desenvolvedor',
@@ -59,7 +59,7 @@ describe('search jobs (e2e)', () => {
       }),
     ])
 
-    searchResponse = await request(app.server)
+    searchResponse = await request(server.server)
       .get('/jobs/search')
       .query({
         query: 'audição',

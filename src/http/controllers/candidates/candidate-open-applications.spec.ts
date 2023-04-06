@@ -1,4 +1,4 @@
-import { app } from '@/app'
+import { server } from '@/app'
 import { createAndAuthenticateCandidate } from '@/utils/test/create-and-authenticate-candidate'
 import { createCompanyAndJobs } from '@/utils/test/create-company-and-jobs'
 import { OK } from 'http-status'
@@ -7,23 +7,25 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('candidate open applications (e2e)', () => {
   beforeAll(async () => {
-    await app.ready()
+    await server.ready()
   })
 
   afterAll(async () => {
-    await app.close()
+    await server.close()
   })
 
   it('should be able to fetch the open applications of the logged candidate', async () => {
-    const { jobId } = await createCompanyAndJobs(app)
-    const { token: candidateToken } = await createAndAuthenticateCandidate(app)
+    const { jobId } = await createCompanyAndJobs(server)
+    const { token: candidateToken } = await createAndAuthenticateCandidate(
+      server,
+    )
 
-    await request(app.server)
+    await request(server.server)
       .post(`/jobs/${jobId}/apply`)
       .set('Authorization', `Bearer ${candidateToken}`)
       .send()
 
-    const candidateOpenApplicationsResponse = await request(app.server)
+    const candidateOpenApplicationsResponse = await request(server.server)
       .get('/candidates/applications/open')
       .set('Authorization', `Bearer ${candidateToken}`)
       .query({

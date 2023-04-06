@@ -1,7 +1,7 @@
-import { app } from './app'
+import { server } from './app'
 import { env } from './env'
 
-app
+server
   .listen({
     host: '0.0.0.0',
     port: env.PORT,

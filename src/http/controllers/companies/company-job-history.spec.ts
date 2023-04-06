@@ -1,4 +1,4 @@
-import { app } from '@/app'
+import { server } from '@/app'
 import { createAndAuthenticateCompany } from '@/utils/test/create-and-authenticate-company'
 import { DisabilityType, Location } from '@prisma/client'
 import { OK } from 'http-status'
@@ -7,17 +7,17 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('company job history (e2e)', () => {
   beforeAll(async () => {
-    await app.ready()
+    await server.ready()
   })
 
   afterAll(async () => {
-    await app.close()
+    await server.close()
   })
 
   it('should be able to fetch the jobs history of the logged company', async () => {
-    const { token } = await createAndAuthenticateCompany(app)
+    const { token } = await createAndAuthenticateCompany(server)
 
-    await request(app.server)
+    await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -29,7 +29,7 @@ describe('company job history (e2e)', () => {
         location: Location.ON_SITE,
       })
 
-    await request(app.server)
+    await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -41,7 +41,7 @@ describe('company job history (e2e)', () => {
         location: Location.ON_SITE,
       })
 
-    const companyJobsHistoryResponse = await request(app.server)
+    const companyJobsHistoryResponse = await request(server.server)
       .get('/companies/jobs/history')
       .set('Authorization', `Bearer ${token}`)
       .query({

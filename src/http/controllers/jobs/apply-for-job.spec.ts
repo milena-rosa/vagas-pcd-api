@@ -1,4 +1,4 @@
-import { app } from '@/app'
+import { server } from '@/app'
 import { createAndAuthenticateCandidate } from '@/utils/test/create-and-authenticate-candidate'
 import { createAndAuthenticateCompany } from '@/utils/test/create-and-authenticate-company'
 import { DisabilityType, Location } from '@prisma/client'
@@ -8,19 +8,21 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('apply for job (e2e)', () => {
   beforeAll(async () => {
-    await app.ready()
+    await server.ready()
   })
 
   afterAll(async () => {
-    await app.close()
+    await server.close()
   })
 
   it('should be able to apply for a job', async () => {
-    const { token: companyToken } = await createAndAuthenticateCompany(app)
-    const { token: candidateToken } = await createAndAuthenticateCandidate(app)
+    const { token: companyToken } = await createAndAuthenticateCompany(server)
+    const { token: candidateToken } = await createAndAuthenticateCandidate(
+      server,
+    )
 
     // create job
-    const jobResponse = await request(app.server)
+    const jobResponse = await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${companyToken}`)
       .send({
@@ -34,7 +36,7 @@ describe('apply for job (e2e)', () => {
 
     const { id: jobId } = jobResponse.body
 
-    const response = await request(app.server)
+    const response = await request(server.server)
       .post(`/jobs/${jobId}/apply`)
       .set('Authorization', `Bearer ${candidateToken}`)
       .send()

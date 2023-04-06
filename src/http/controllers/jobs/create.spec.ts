@@ -1,4 +1,4 @@
-import { app } from '@/app'
+import { server } from '@/app'
 import { createAndAuthenticateCompany } from '@/utils/test/create-and-authenticate-company'
 import { DisabilityType, Location } from '@prisma/client'
 import { CREATED } from 'http-status'
@@ -7,17 +7,17 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('create job (e2e)', () => {
   beforeAll(async () => {
-    await app.ready()
+    await server.ready()
   })
 
   afterAll(async () => {
-    await app.close()
+    await server.close()
   })
 
   it('should be able to create a job', async () => {
-    const { token, companyId } = await createAndAuthenticateCompany(app)
+    const { token, companyId } = await createAndAuthenticateCompany(server)
 
-    const response = await request(app.server)
+    const response = await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${token}`)
       .send({

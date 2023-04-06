@@ -1,4 +1,4 @@
-import { app } from '@/app'
+import { server } from '@/app'
 import { createAndAuthenticateCompany } from '@/utils/test/create-and-authenticate-company'
 import { DisabilityType, Location } from '@prisma/client'
 import { OK } from 'http-status'
@@ -7,18 +7,18 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('company open jobs (e2e)', () => {
   beforeAll(async () => {
-    await app.ready()
+    await server.ready()
   })
 
   afterAll(async () => {
-    await app.close()
+    await server.close()
   })
 
   it('should be able to fetch the open jobs of the logged company', async () => {
-    const { token } = await createAndAuthenticateCompany(app)
+    const { token } = await createAndAuthenticateCompany(server)
 
     // create 2 jobs
-    await request(app.server)
+    await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -30,7 +30,7 @@ describe('company open jobs (e2e)', () => {
         location: Location.ON_SITE,
       })
 
-    const createJobResponse = await request(app.server)
+    const createJobResponse = await request(server.server)
       .post('/jobs')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -44,12 +44,12 @@ describe('company open jobs (e2e)', () => {
 
     // close 1 job
     const { id: jobId } = createJobResponse.body
-    await request(app.server)
+    await request(server.server)
       .patch(`/jobs/${jobId}/close`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 
-    const companyOpenJobsResponse = await request(app.server)
+    const companyOpenJobsResponse = await request(server.server)
       .get('/companies/jobs/open')
       .set('Authorization', `Bearer ${token}`)
       .query({
