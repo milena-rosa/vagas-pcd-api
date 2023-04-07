@@ -76,7 +76,7 @@ export async function listAllCandidateApplications(
 export async function summary(request: FastifyRequest, reply: FastifyReply) {
   const summaryUseCase = makeSummaryUseCase()
 
-  const { teste } = await summaryUseCase.execute()
+  const { summary } = await summaryUseCase.execute()
 
-  return reply.status(OK).send(teste)
+  return reply.status(OK).send(summary)
 }
