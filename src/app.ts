@@ -53,53 +53,31 @@ server.register(
     openapi: {
       info: {
         title: 'vagaspcd API',
-        description: 'API massinha',
+        description:
+          'API desenvolvida para o trabalho de conclusão de curso de Engenharia de Computação da Univesp - turma 2018.2',
         version,
       },
+      servers: [{ url: `http://localhost:${env.PORT}` }],
     },
   }),
 )
-// server.register(fastifySwagger, {
-//   openapi: {
-//     info: {
-//       title: 'vagaspcd API',
-//       description: 'API massinha',
-//       version,
-//     },
-//     externalDocs: {
-//       url: 'https://swagger.io',
-//       description: 'bla',
-//     },
-//     servers: [{ url: `http://localhost:${env.PORT}` }],
-//     components: {
-//       securitySchemes: {
-//         apiKey: {
-//           type: 'apiKey',
-//           name: 'apiKey',
-//           in: 'header',
-//         },
-//       },
-//     },
-//     security: [{ apiKey: [env.SWAGGER_API_KEY] }],
-//   },
-// })
 
 server.register(fastifySwaggerUi, {
   routePrefix: '/docs',
-  //   uiConfig: {
-  //     docExpansion: 'full',
-  //     deepLinking: false,
-  //   },
-  //   uiHooks: {
-  //     onRequest: function (_, __, next) {
-  //       next()
-  //     },
-  //     preHandler: function (_, __, next) {
-  //       next()
-  //     },
-  //   },
-  //   staticCSP: true,
-  //   transformStaticCSP: (header) => header,
+  uiConfig: {
+    docExpansion: 'list',
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (_, __, next) {
+      next()
+    },
+    preHandler: function (_, __, next) {
+      next()
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
 })
 
 // routes

@@ -31,6 +31,7 @@ export async function applicationRoutes(server: FastifyInstance) {
         params: $ref('listJobApplicationsParamsSchema'),
         querystring: $ref('listJobApplicationsQuerystringSchema'),
         response: { [OK]: $ref('listJobApplicationsReplySchema') },
+        tags: ['application'],
       },
     },
     listJobApplications,
@@ -43,6 +44,7 @@ export async function applicationRoutes(server: FastifyInstance) {
       schema: {
         querystring: $ref('listCandidateApplicationsQuerystringSchema'),
         response: { [OK]: $ref('listCandidateApplicationsReplySchema') },
+        tags: ['application'],
       },
     },
     listAllCandidateApplications,
@@ -55,6 +57,7 @@ export async function applicationRoutes(server: FastifyInstance) {
       schema: {
         querystring: $ref('listCandidateApplicationsQuerystringSchema'),
         response: { [OK]: $ref('listCandidateApplicationsReplySchema') },
+        tags: ['application'],
       },
     },
     listAllCandidateApplications,
@@ -66,6 +69,7 @@ export async function applicationRoutes(server: FastifyInstance) {
       preHandler: [server.authenticate, verifyUserRole('GOVERNMENT')],
       schema: {
         response: { [OK]: $ref('summarySchema') },
+        tags: ['application'],
       },
     },
     summary,
