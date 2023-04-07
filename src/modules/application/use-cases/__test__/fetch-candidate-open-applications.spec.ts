@@ -42,7 +42,7 @@ describe('fetch candidate open applications use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: '',
       user: mockCompanyUser,
     }
@@ -124,7 +124,7 @@ describe('fetch candidate open applications use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: '',
       user: mockCompanyUser,
     }

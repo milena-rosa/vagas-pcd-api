@@ -8,6 +8,7 @@ import {
 import { makeCreateApplicationUseCase } from './use-cases/factories/make-create-application-use-case'
 import { makeFetchCandidateApplicationsHistoryUseCase } from './use-cases/factories/make-fetch-candidate-applications-history-use-case'
 import { makeListApplicationsUseCase } from './use-cases/factories/make-list-applications-use-case'
+import { makeSummaryUseCase } from './use-cases/factories/make-summary-use-case'
 
 export async function createApplication(
   request: FastifyRequest<{ Params: CreateApplicationParams }>,
@@ -70,4 +71,12 @@ export async function listAllCandidateApplications(
     jobs,
     page: pageResponse,
   })
+}
+
+export async function summary(request: FastifyRequest, reply: FastifyReply) {
+  const summaryUseCase = makeSummaryUseCase()
+
+  const { teste } = await summaryUseCase.execute()
+
+  return reply.status(OK).send(teste)
 }

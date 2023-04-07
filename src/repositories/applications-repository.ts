@@ -1,3 +1,4 @@
+import { Summary } from '@/modules/application/application.schema'
 import { Prisma } from '@prisma/client'
 
 const applicationWithJobAndCandidate =
@@ -18,6 +19,7 @@ export type ApplicationWithJobAndCompany = Prisma.ApplicationGetPayload<
 >
 
 export interface ApplicationsRepository {
+  countJobsAndApplications(): Promise<Summary>
   findManyOpenByCandidateId(
     candidateId: string,
     page: number,

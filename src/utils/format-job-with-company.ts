@@ -12,7 +12,7 @@ export function formatJobWithCompany(job: JobWithCompany) {
     email: job.company.user.email,
     phone: job.company.phone ?? '',
     street: job.company.street ?? '',
-    zipCode: job.company.zipCode ?? '',
+    zip_code: job.company.zip_code ?? '',
     number: job.company.number ?? '',
     complement: job.company.complement ?? '',
     city: job.company.city ?? '',

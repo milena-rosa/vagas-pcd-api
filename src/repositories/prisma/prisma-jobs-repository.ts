@@ -101,19 +101,6 @@ export class PrismaJobsRepository implements JobsRepository {
     })
   }
 
-  // async findCandidatesByJobId(jobId: string) {
-  //   return await prisma.job.findUnique({
-  //     where: { id: jobId },
-  //     include: {
-  //       applications: {
-  //         include: {
-  //           candidate: { include: { user: true } },
-  //         },
-  //       },
-  //     },
-  //   })
-  // }
-
   async bla(jobId: string) {
     const bla = await prisma.job.findMany({
       where: {

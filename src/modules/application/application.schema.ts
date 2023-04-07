@@ -1,3 +1,4 @@
+import { validateCNPJ } from '@/utils/validate-cnpj'
 import { buildJsonSchemas } from 'fastify-zod'
 import { z } from 'zod'
 import { candidateSchema } from '../candidate/candidate.schema'
@@ -72,10 +73,22 @@ const listCandidateApplicationsReplySchema = z.object({
   page: z.number(),
 })
 
-// const bla = z.object({
-//   candidate_id: z.string().uuid(),
-//   applications: z.array(),
-// })
+const summarySchema = z.array(
+  z.object({
+    company_id: z.string().uuid(),
+    company_name: z.string(),
+    company_cnpj: z.string().refine((value) => validateCNPJ(value)),
+    company_phone: z.string(),
+    company_street: z.string(),
+    company_number: z.string(),
+    company_complement: z.string(),
+    company_city: z.string(),
+    company_state: z.string(),
+    company_zip_code: z.string(),
+    n_jobs: z.number(),
+    n_applications: z.number(),
+  }),
+)
 
 export type CreateApplicationParams = z.infer<typeof createApplicationSchema>
 export type CreateApplicationInput = z.infer<
@@ -108,6 +121,8 @@ export type ListCandidateApplicationsReply = z.infer<
   typeof listCandidateApplicationsReplySchema
 >
 
+export type Summary = z.infer<typeof summarySchema>
+
 export const { schemas: applicationSchemas, $ref } = buildJsonSchemas(
   {
     createApplicationSchema,
@@ -120,6 +135,7 @@ export const { schemas: applicationSchemas, $ref } = buildJsonSchemas(
     listCandidateApplicationsQuerystringSchema,
     listCandidateApplicationsReplySchema,
     listCandidateApplicationsInputSchema,
+    summarySchema,
   },
   { $id: 'application' },
 )

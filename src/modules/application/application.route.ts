@@ -5,6 +5,7 @@ import {
   createApplication,
   listAllCandidateApplications,
   listJobApplications,
+  summary,
 } from './application.controller'
 import { $ref } from './application.schema'
 
@@ -57,5 +58,16 @@ export async function applicationRoutes(server: FastifyInstance) {
       },
     },
     listAllCandidateApplications,
+  )
+
+  server.get(
+    '/summary',
+    {
+      preHandler: [server.authenticate, verifyUserRole('GOVERNMENT')],
+      schema: {
+        response: { [OK]: $ref('summarySchema') },
+      },
+    },
+    summary,
   )
 }

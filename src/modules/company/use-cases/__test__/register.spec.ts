@@ -49,7 +49,7 @@ describe('register company use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: '',
       user: mockUser,
     }
@@ -73,7 +73,7 @@ describe('register company use case', () => {
       complement: mockCompany.complement,
       city: mockCompany.city,
       state: mockCompany.state,
-      zipCode: mockCompany.zipCode,
+      zip_code: mockCompany.zip_code,
       password_hash: mockCompany.user.password_hash,
       created_at: mockCompany.user.created_at,
     })
@@ -97,7 +97,7 @@ describe('register company use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: '',
       user: mockUser,
     }
@@ -155,7 +155,7 @@ describe('register company use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: null,
       user: mockUser,
     }

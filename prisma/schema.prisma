@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearch", "filteredRelationCount"]
 }
 
 datasource db {
@@ -65,7 +65,7 @@ model Company {
   name       String?
   phone      String?
   street     String?
-  zipCode    String?
+  zip_code   String?
   number     String?
   complement String?
   city       String?

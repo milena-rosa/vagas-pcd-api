@@ -53,7 +53,7 @@ export class RegisterCompanyUseCase {
           complement: company.complement ?? '',
           city: company.city ?? '',
           state: company.state ?? '',
-          zipCode: company.zipCode ?? '',
+          zip_code: company.zip_code ?? '',
           password_hash: company.user.password_hash,
           created_at: company.user.created_at,
         },

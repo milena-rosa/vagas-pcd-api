@@ -42,7 +42,7 @@ describe('search jobs use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: null,
       user: mockUser,
     }
@@ -89,7 +89,7 @@ describe('search jobs use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: null,
       user: mockUser,
     }
@@ -141,7 +141,7 @@ describe('search jobs use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: null,
       user: mockUser,
     }
@@ -193,7 +193,7 @@ describe('search jobs use case', () => {
       street: 'Rua dos Bobos',
       number: '0',
       phone: '11999222333',
-      zipCode: '13636085',
+      zip_code: '13636085',
       complement: null,
       user: mockUser,
     }

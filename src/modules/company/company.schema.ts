@@ -20,7 +20,7 @@ const companyGenerated = {
   complement: z.string(),
   city: z.string(),
   state: z.string(),
-  zipCode: z.string(),
+  zip_code: z.string(),
   created_at: z.date(),
 }
 

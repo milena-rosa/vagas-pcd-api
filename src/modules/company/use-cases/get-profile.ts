@@ -25,7 +25,7 @@ export class GetCompanyProfileUseCase {
         complement: foundCompany.complement ?? '',
         city: foundCompany.city ?? '',
         state: foundCompany.state ?? '',
-        zipCode: foundCompany.zipCode ?? '',
+        zip_code: foundCompany.zip_code ?? '',
         password_hash: foundCompany.user.password_hash,
         created_at: foundCompany.user.created_at,
       },
