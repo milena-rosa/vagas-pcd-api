@@ -8,7 +8,7 @@ import {
 
 export class PrismaJobsRepository implements JobsRepository {
   async findById(jobId: string) {
-    return await prisma.job.findUnique({ where: { id: jobId } })
+    return await prisma.job.findUnique({ where: { job_id: jobId } })
   }
 
   async findMany(query: string, page: number) {
@@ -42,15 +42,13 @@ export class PrismaJobsRepository implements JobsRepository {
           },
         ],
       },
-      take: 20,
-      skip: (page - 1) * 20,
       include: {
         company: {
-          include: {
-            user: true,
-          },
+          include: { user: true },
         },
       },
+      take: 20,
+      skip: (page - 1) * 20,
     })
   }
 
@@ -98,28 +96,15 @@ export class PrismaJobsRepository implements JobsRepository {
 
   async update(userId: string, data: Prisma.JobUncheckedUpdateInput) {
     return await prisma.job.update({
-      where: { id: userId },
+      where: { job_id: userId },
       data,
     })
   }
 
-  // async findCandidatesByJobId(jobId: string) {
-  //   return await prisma.job.findUnique({
-  //     where: { id: jobId },
-  //     include: {
-  //       applications: {
-  //         include: {
-  //           candidate: { include: { user: true } },
-  //         },
-  //       },
-  //     },
-  //   })
-  // }
-
   async bla(jobId: string) {
     const bla = await prisma.job.findMany({
       where: {
-        id: jobId,
+        job_id: jobId,
       },
       include: {
         applications: {

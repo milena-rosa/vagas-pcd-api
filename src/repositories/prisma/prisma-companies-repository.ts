@@ -40,7 +40,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       data: {
         cnpj,
         name: data.razao_social,
-        zipCode: data.cep,
+        zip_code: data.cep,
         state: data.uf,
         city: data.municipio,
         street: data.logradouro,

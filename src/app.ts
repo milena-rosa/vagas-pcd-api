@@ -1,15 +1,26 @@
-import { AppError } from '@/use-cases/errors/app-error'
+import { AppError } from '@/errors/app-error'
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 import fastify from 'fastify'
+import { withRefResolver } from 'fastify-zod'
 import httpStatus, { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status'
 import { ZodError } from 'zod'
+import { version } from '../package.json'
 import { env } from './env'
-import { appRoutes } from './http/controllers/routes'
+import { verifyJWT } from './middlewares/verify-jwt'
+import { applicationSchemas } from './modules/application/application.schema'
+import { candidateSchemas } from './modules/candidate/candidate.schema'
+import { companySchemas } from './modules/company/company.schema'
+import { governmentUserSchemas } from './modules/government-user/government-user.schema'
+import { jobSchemas } from './modules/job/job.schema'
+import { userSchemas } from './modules/user/user.schema'
+import { appRoutes } from './routes'
 
-export const app = fastify()
+export const server = fastify()
 
-app.register(fastifyJwt, {
+server.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
     cookieName: 'refreshToken',
@@ -19,12 +30,62 @@ app.register(fastifyJwt, {
     expiresIn: '10m',
   },
 })
+server.decorate('authenticate', verifyJWT)
 
-app.register(fastifyCookie)
+server.register(fastifyCookie)
 
-app.register(appRoutes)
+for (const schema of [
+  ...userSchemas,
+  ...candidateSchemas,
+  ...companySchemas,
+  ...governmentUserSchemas,
+  ...jobSchemas,
+  ...applicationSchemas,
+]) {
+  server.addSchema(schema)
+}
 
-app.setErrorHandler((error, _, reply) => {
+server.register(
+  fastifySwagger,
+  withRefResolver({
+    routePrefix: '/docs',
+    exposeRoute: true,
+    staticCSP: true,
+    openapi: {
+      info: {
+        title: 'vagaspcd API',
+        description:
+          'API desenvolvida para o trabalho de conclusão de curso de Engenharia de Computação da Univesp - turma 2018.2',
+        version,
+      },
+      servers: [{ url: `http://localhost:${env.PORT}` }],
+    },
+  }),
+)
+
+server.register(fastifySwaggerUi, {
+  routePrefix: '/docs',
+  uiConfig: {
+    docExpansion: 'list',
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (_, __, next) {
+      next()
+    },
+    preHandler: function (_, __, next) {
+      next()
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+})
+
+// routes
+server.register(appRoutes)
+
+// errors
+server.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
     return reply
       .status(BAD_REQUEST)

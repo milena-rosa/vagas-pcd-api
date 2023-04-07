@@ -20,7 +20,7 @@ export async function createAndAuthenticateCandidate(app: FastifyInstance) {
   const { token } = authResponse.body
 
   return {
-    candidateId: candidate_id,
+    candidate_id,
     token,
   }
 }

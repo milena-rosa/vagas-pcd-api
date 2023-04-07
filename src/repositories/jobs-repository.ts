@@ -33,7 +33,6 @@ export type JobWithCandidates = Prisma.JobGetPayload<typeof jobCandidate>
 
 export interface JobsRepository {
   findById(jobId: string): Promise<Job | null>
-  // findCandidatesByJobId(jobId: string): Promise<JobWithCandidates>
   findMany(query: string, page: number): Promise<JobWithCompany[]>
   findManyByCompanyId(companyId: string, page: number): Promise<Job[]>
   findManyOpenByCompanyId(companyId: string, page: number): Promise<Job[]>

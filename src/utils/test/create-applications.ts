@@ -3,7 +3,7 @@ import request from 'supertest'
 import { createCompanyAndJobs } from './create-company-and-jobs'
 
 export async function createApplications(app: FastifyInstance) {
-  const { jobId, companyId, companyToken } = await createCompanyAndJobs(app)
+  const { job_id, company_id, companyToken } = await createCompanyAndJobs(app)
 
   await request(app.server).post('/candidates').send({
     name: 'Jane Doe',
@@ -21,7 +21,7 @@ export async function createApplications(app: FastifyInstance) {
   })
 
   await request(app.server)
-    .post(`/jobs/${jobId}/apply`)
+    .post(`/applications/${job_id}`)
     .set('Authorization', `Bearer ${candidateToken1}`)
     .send()
 
@@ -41,7 +41,7 @@ export async function createApplications(app: FastifyInstance) {
   })
 
   await request(app.server)
-    .post(`/jobs/${jobId}/apply`)
+    .post(`/applications/${job_id}`)
     .set('Authorization', `Bearer ${candidateToken2}`)
     .send()
 
@@ -61,9 +61,9 @@ export async function createApplications(app: FastifyInstance) {
   })
 
   await request(app.server)
-    .post(`/jobs/${jobId}/apply`)
+    .post(`/applications/${job_id}`)
     .set('Authorization', `Bearer ${candidateToken3}`)
     .send()
 
-  return { jobId, companyId, companyToken }
+  return { job_id, company_id, companyToken }
 }
