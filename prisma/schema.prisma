@@ -86,7 +86,7 @@ model GovernmentUser {
 }
 
 model Job {
-  id              String         @id @default(uuid())
+  job_id          String         @id @default(uuid())
   title           String
   description     String
   role            String
@@ -112,7 +112,7 @@ model Application {
   candidate    Candidate @relation(fields: [candidate_id], references: [candidate_id])
 
   job_id String
-  job    Job    @relation(fields: [job_id], references: [id])
+  job    Job    @relation(fields: [job_id], references: [job_id])
 
   @@map("applications")
 }

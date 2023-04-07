@@ -21,7 +21,7 @@ const companyGenerated = {
   city: z.string(),
   state: z.string(),
   zipCode: z.string(),
-  created_at: z.string(),
+  created_at: z.date(),
 }
 
 const createCompanySchema = z.object({
@@ -35,6 +35,7 @@ const createCompanySchema = z.object({
 const createCompanyReplySchema = z.object({
   ...companyInput,
   ...companyGenerated,
+  password_hash: z.string(),
 })
 
 const companyReplySchema = z.object({
@@ -47,8 +48,10 @@ const companyProfileSchema = z.object({
 })
 
 export type CreateCompanyInput = z.infer<typeof createCompanySchema>
+export type CreateCompanyReply = z.infer<typeof createCompanyReplySchema>
 
 export type CompanyProfileParams = z.infer<typeof companyProfileSchema>
+export type CompanyProfileReply = z.infer<typeof companyReplySchema>
 
 export const { schemas: companySchemas, $ref } = buildJsonSchemas(
   {
@@ -57,5 +60,5 @@ export const { schemas: companySchemas, $ref } = buildJsonSchemas(
     companyProfileSchema,
     companyReplySchema,
   },
-  { $id: 'Company' },
+  { $id: 'company' },
 )

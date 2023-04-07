@@ -1,11 +1,7 @@
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 import { prisma } from '@/libs/__mocks__/prisma'
-import {
-  CandidateUser,
-  CandidatesRepository,
-} from '@/repositories/candidates-repository'
+import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
-import { User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -27,7 +23,7 @@ describe('get candidate profile use case', () => {
   })
 
   it('should be able to get a candidate profile', async () => {
-    const mockUser: User = {
+    const mockUser = {
       user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
@@ -35,7 +31,7 @@ describe('get candidate profile use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
@@ -46,16 +42,24 @@ describe('get candidate profile use case', () => {
     prisma.candidate.findUnique.mockResolvedValueOnce(mockCandidate)
 
     const { candidate } = await sut.execute({
-      candidateId: mockCandidate.candidate_id,
+      candidate_id: mockCandidate.candidate_id,
     })
 
-    expect(candidate).toStrictEqual(mockCandidate)
+    expect(candidate).toStrictEqual({
+      candidate_id: mockCandidate.candidate_id,
+      name: mockCandidate.name,
+      phone: mockCandidate.phone,
+      resume: mockCandidate.resume,
+      email: mockCandidate.user.email,
+      created_at: mockCandidate.user.created_at,
+      password_hash: mockCandidate.user.password_hash,
+    })
   })
 
   it('should not be able to get a candidate profile with a wrong id', async () => {
     await expect(() =>
       sut.execute({
-        candidateId: 'non-existent-id',
+        candidate_id: 'non-existent-id',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })

@@ -18,20 +18,7 @@ export async function registerCompany(
     password,
   })
 
-  return reply.status(CREATED).send({
-    company_id: company.company_id,
-    cnpj: company.cnpj,
-    email: company.user.email,
-    name: company.name,
-    phone: company.phone,
-    street: company.street,
-    number: company.number,
-    complement: company.complement,
-    city: company.city,
-    state: company.state,
-    zipCode: company.zipCode,
-    created_at: company.user.created_at,
-  })
+  return reply.status(CREATED).send(company)
 }
 
 export async function companyProfile(
@@ -42,21 +29,8 @@ export async function companyProfile(
 
   const getCompanyProfileUseCase = makeGetCompanyProfileUseCase()
   const { company } = await getCompanyProfileUseCase.execute({
-    companyId: company_id,
+    company_id,
   })
 
-  return reply.status(OK).send({
-    company_id: company.company_id,
-    cnpj: company.cnpj,
-    email: company.user.email,
-    name: company.name,
-    phone: company.phone,
-    street: company.street,
-    number: company.number,
-    complement: company.complement,
-    city: company.city,
-    state: company.state,
-    zipCode: company.zipCode,
-    created_at: company.user.created_at,
-  })
+  return reply.status(OK).send(company)
 }

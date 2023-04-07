@@ -1,9 +1,6 @@
 import { EmailAlreadyRegisteredError } from '@/errors/email-already-registered-error'
 import { prisma } from '@/libs/__mocks__/prisma'
-import {
-  CandidateUser,
-  CandidatesRepository,
-} from '@/repositories/candidates-repository'
+import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 import { UsersRepository } from '@/repositories/users-repository'
@@ -31,7 +28,7 @@ describe('register candidate use case', () => {
   })
 
   it('should be able to register a candidate', async () => {
-    const mockUser: User = {
+    const mockUser = {
       user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
@@ -39,7 +36,7 @@ describe('register candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
@@ -57,11 +54,19 @@ describe('register candidate use case', () => {
       resume: mockCandidate.resume,
     })
 
-    expect(candidate).toStrictEqual(mockCandidate)
+    expect(candidate).toStrictEqual({
+      candidate_id: mockCandidate.candidate_id,
+      name: mockCandidate.name,
+      phone: mockCandidate.phone,
+      resume: mockCandidate.resume,
+      email: mockCandidate.user.email,
+      created_at: mockCandidate.user.created_at,
+      password_hash: mockCandidate.user.password_hash,
+    })
   })
 
   it('should hash candidate password on registry', async () => {
-    const mockUser: User = {
+    const mockUser = {
       user_id: randomUUID(),
       email: 'janedoe@example.com',
       role: 'CANDIDATE',
@@ -69,7 +74,7 @@ describe('register candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,
@@ -89,7 +94,7 @@ describe('register candidate use case', () => {
 
     const isPasswordCorrectlyHashed = await compare(
       '123456',
-      candidate.user.password_hash,
+      candidate.password_hash,
     )
     expect(isPasswordCorrectlyHashed).toBe(true)
   })
@@ -103,7 +108,7 @@ describe('register candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
       phone: null,

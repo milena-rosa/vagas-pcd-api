@@ -51,11 +51,19 @@ describe('update candidate use case', () => {
     })
 
     const { candidate } = await sut.execute({
-      candidateId: mockCandidate.candidate_id,
+      candidate_id: mockCandidate.candidate_id,
       name: 'Joana Doe',
     })
 
-    expect(candidate).toStrictEqual({ ...mockCandidate, name: 'Joana Doe' })
+    expect(candidate).toStrictEqual({
+      candidate_id: mockCandidate.candidate_id,
+      phone: mockCandidate.phone,
+      resume: mockCandidate.resume,
+      email: mockCandidate.user.email,
+      created_at: mockCandidate.user.created_at,
+      password_hash: mockCandidate.user.password_hash,
+      name: 'Joana Doe',
+    })
   })
 
   it('should not be able to change the password if the old password is not correct', async () => {
@@ -79,7 +87,7 @@ describe('update candidate use case', () => {
 
     await expect(() =>
       sut.execute({
-        candidateId: mockCandidate.candidate_id,
+        candidate_id: mockCandidate.candidate_id,
         oldPassword: 'wrong-password',
         password: '654321',
       }),
@@ -107,7 +115,7 @@ describe('update candidate use case', () => {
 
     await expect(() =>
       sut.execute({
-        candidateId: mockCandidate.candidate_id,
+        candidate_id: mockCandidate.candidate_id,
         password: 'new-password',
       }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError)
@@ -147,12 +155,20 @@ describe('update candidate use case', () => {
     prisma.candidate.update.mockResolvedValueOnce(mockCandidateUpdated)
 
     const { candidate } = await sut.execute({
-      candidateId: mockCandidate.candidate_id,
+      candidate_id: mockCandidate.candidate_id,
       oldPassword: '123456',
       password: '654321',
     })
 
-    expect(candidate.user).toStrictEqual(mockUpdatedUser)
+    expect(candidate).toStrictEqual({
+      candidate_id: mockCandidateUpdated.candidate_id,
+      name: mockCandidateUpdated.name,
+      phone: mockCandidateUpdated.phone,
+      resume: mockCandidateUpdated.resume,
+      email: mockCandidateUpdated.user.email,
+      created_at: mockCandidateUpdated.user.created_at,
+      password_hash: mockCandidateUpdated.user.password_hash,
+    })
   })
 
   it('should not be able to update the name of a candidate given a correct id if the name is undefined', async () => {
@@ -176,11 +192,19 @@ describe('update candidate use case', () => {
     prisma.candidate.update.mockResolvedValueOnce(mockCandidate)
 
     const { candidate } = await sut.execute({
-      candidateId: mockCandidate.candidate_id,
+      candidate_id: mockCandidate.candidate_id,
       name: undefined,
     })
 
-    expect(candidate).toStrictEqual(mockCandidate)
+    expect(candidate).toStrictEqual({
+      candidate_id: mockCandidate.candidate_id,
+      name: mockCandidate.name,
+      phone: mockCandidate.phone,
+      resume: mockCandidate.resume,
+      email: mockCandidate.user.email,
+      created_at: mockCandidate.user.created_at,
+      password_hash: mockCandidate.user.password_hash,
+    })
   })
 
   it('should not be able to update the name of a candidate given an incorrect id', async () => {
@@ -188,7 +212,7 @@ describe('update candidate use case', () => {
 
     await expect(() =>
       sut.execute({
-        candidateId: 'non-existent-user-id',
+        candidate_id: 'non-existent-user-id',
         name: 'Joana Doe',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)

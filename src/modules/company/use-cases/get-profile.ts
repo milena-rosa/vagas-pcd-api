@@ -1,30 +1,34 @@
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
-import {
-  CompaniesRepository,
-  CompanyUser,
-} from '@/repositories/companies-repository'
-
-interface GetCompanyProfileUseCaseRequest {
-  companyId: string
-}
-
-interface GetCompanyProfileUseCaseResponse {
-  company: CompanyUser
-}
+import { CompaniesRepository } from '@/repositories/companies-repository'
+import { CompanyProfileParams, CompanyProfileReply } from '../company.schema'
 
 export class GetCompanyProfileUseCase {
   constructor(private companiesRepository: CompaniesRepository) {}
 
   async execute({
-    companyId,
-  }: GetCompanyProfileUseCaseRequest): Promise<GetCompanyProfileUseCaseResponse> {
-    const foundCompany = await this.companiesRepository.findById(companyId)
+    company_id,
+  }: CompanyProfileParams): Promise<{ company: CompanyProfileReply }> {
+    const foundCompany = await this.companiesRepository.findById(company_id)
     if (!foundCompany) {
       throw new ResourceNotFoundError()
     }
 
     return {
-      company: foundCompany,
+      company: {
+        company_id: foundCompany.company_id,
+        cnpj: foundCompany.cnpj,
+        name: foundCompany.name ?? '',
+        email: foundCompany.user.email,
+        phone: foundCompany.phone ?? '',
+        street: foundCompany.street ?? '',
+        number: foundCompany.number ?? '',
+        complement: foundCompany.complement ?? '',
+        city: foundCompany.city ?? '',
+        state: foundCompany.state ?? '',
+        zipCode: foundCompany.zipCode ?? '',
+        password_hash: foundCompany.user.password_hash,
+        created_at: foundCompany.user.created_at,
+      },
     }
   }
 }

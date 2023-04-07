@@ -1,38 +1,24 @@
 import { InvalidCredentialsError } from '@/errors/invalid-credentials-error'
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
-import {
-  CandidateUser,
-  CandidatesRepository,
-} from '@/repositories/candidates-repository'
+import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { compare, hash } from 'bcryptjs'
-
-interface UpdateCandidateUseCaseRequest {
-  candidateId: string
-  name?: string
-  email?: string
-  password?: string
-  oldPassword?: string
-  phone?: string | null
-  resume?: string
-}
-
-interface UpdateCandidateUseCaseResponse {
-  candidate: CandidateUser
-}
+import { UpdateCandidateInput, UpdateCandidateReply } from '../candidate.schema'
 
 export class UpdateCandidateUseCase {
   constructor(private candidatesRepository: CandidatesRepository) {}
 
   async execute({
-    candidateId,
+    candidate_id,
     email,
     name,
     phone,
     resume,
     password,
     oldPassword,
-  }: UpdateCandidateUseCaseRequest): Promise<UpdateCandidateUseCaseResponse> {
-    const foundCandidate = await this.candidatesRepository.findById(candidateId)
+  }: UpdateCandidateInput): Promise<{ candidate: UpdateCandidateReply }> {
+    const foundCandidate = await this.candidatesRepository.findById(
+      candidate_id,
+    )
     if (!foundCandidate) {
       throw new ResourceNotFoundError()
     }
@@ -57,7 +43,7 @@ export class UpdateCandidateUseCase {
       {
         name,
         phone,
-        resume,
+        resume: resume ?? '',
         user: {
           update: {
             email,
@@ -67,6 +53,16 @@ export class UpdateCandidateUseCase {
       },
     )
 
-    return { candidate }
+    return {
+      candidate: {
+        candidate_id: candidate.candidate_id,
+        name: candidate.name,
+        phone: candidate.phone,
+        resume: candidate.resume,
+        email: candidate.user.email,
+        created_at: candidate.user.created_at,
+        password_hash: candidate.user.password_hash,
+      },
+    }
   }
 }

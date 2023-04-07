@@ -1,22 +1,8 @@
 import { EmailAlreadyRegisteredError } from '@/errors/email-already-registered-error'
-import {
-  CandidateUser,
-  CandidatesRepository,
-} from '@/repositories/candidates-repository'
+import { CandidatesRepository } from '@/repositories/candidates-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
-
-interface RegisterCandidateUseCaseRequest {
-  name: string
-  email: string
-  password: string
-  phone: string | null
-  resume: string
-}
-
-interface RegisterCandidateUseCaseResponse {
-  candidate: CandidateUser
-}
+import { CreateCandidateInput, CreateCandidateReply } from '../candidate.schema'
 
 export class RegisterCandidateUseCase {
   constructor(
@@ -30,7 +16,7 @@ export class RegisterCandidateUseCase {
     password,
     phone,
     resume,
-  }: RegisterCandidateUseCaseRequest): Promise<RegisterCandidateUseCaseResponse> {
+  }: CreateCandidateInput): Promise<{ candidate: CreateCandidateReply }> {
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
     if (userWithSameEmail) {
       throw new EmailAlreadyRegisteredError()
@@ -41,7 +27,7 @@ export class RegisterCandidateUseCase {
     const candidate = await this.candidatesRepository.create({
       name,
       phone,
-      resume,
+      resume: resume ?? '',
       user: {
         create: {
           email,
@@ -51,6 +37,16 @@ export class RegisterCandidateUseCase {
       },
     })
 
-    return { candidate }
+    return {
+      candidate: {
+        candidate_id: candidate.candidate_id,
+        name: candidate.name,
+        phone: candidate.phone,
+        resume: candidate.resume,
+        email: candidate.user.email,
+        created_at: candidate.user.created_at,
+        password_hash: candidate.user.password_hash,
+      },
+    }
   }
 }

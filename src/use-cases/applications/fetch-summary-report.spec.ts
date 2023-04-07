@@ -24,7 +24,7 @@ describe.skip('fetch summary report use case', () => {
 
   it('should be able to fetch the summary report', async () => {
     const mockCompany: Company = {
-      id: '123',
+      company_id: '123',
       cnpj: '23.243.199/0001-84',
       email: 'lojasponei@example.com',
       name: 'Lojas Pônei',

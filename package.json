@@ -7,19 +7,20 @@
     "node": "18"
   },
   "scripts": {
-    "start:dev": "tsx watch src/app.ts",
-    "start": "node build/app.js",
+    "start:dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
     "build": "tsup src --out-dir build",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
     "test:unit": "vitest run --dir src/modules",
     "test:unit:watch": "vitest --dir src/modules",
     "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
-    "test:e2e": "vitest run --dir src/http",
-    "test:e2e:watch": "vitest --dir src/http",
+    "test:e2e": "vitest run --dir src/__test__/e2e",
+    "test:e2e:watch": "vitest --dir src/__test__/e2e",
     "test:coverage": "vitest run --coverage",
     "pretest:ui": "run-s test:create-prisma-environment test:install-prisma-environment",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "lint": "eslint --ext .ts --fix src/"
   },
   "keywords": [],
   "author": "",

@@ -19,16 +19,8 @@ export async function registerCandidate(
     phone,
     resume: resume ?? '',
   })
-  console.log(candidate)
 
-  return reply.status(CREATED).send({
-    candidate_id: candidate.candidate_id,
-    name: candidate.name,
-    phone: candidate.phone,
-    resume: candidate.resume,
-    email: candidate.user.email,
-    created_at: candidate.user.created_at,
-  })
+  return reply.status(CREATED).send(candidate)
 }
 
 export async function updateCandidate(
@@ -39,8 +31,8 @@ export async function updateCandidate(
 
   const updateUseCase = makeUpdateCandidateUseCase()
 
-  const { candidate } = await updateUseCase.execute({
-    candidateId: request.user.sub,
+  const candidate = await updateUseCase.execute({
+    candidate_id: request.user.sub,
     name,
     email,
     phone,
@@ -49,14 +41,7 @@ export async function updateCandidate(
     oldPassword,
   })
 
-  return reply.status(OK).send({
-    candidate_id: candidate.candidate_id,
-    name: candidate.name,
-    phone: candidate.phone,
-    resume: candidate.resume,
-    email: candidate.user.email,
-    created_at: candidate.user.created_at,
-  })
+  return reply.status(OK).send(candidate)
 }
 
 export async function candidateProfile(
@@ -65,16 +50,9 @@ export async function candidateProfile(
 ) {
   const getCandidateProfileUseCase = makeGetCandidateProfileUseCase()
 
-  const { candidate } = await getCandidateProfileUseCase.execute({
-    candidateId: request.user.sub,
+  const candidate = await getCandidateProfileUseCase.execute({
+    candidate_id: request.user.sub,
   })
 
-  return reply.status(OK).send({
-    candidate_id: candidate.candidate_id,
-    name: candidate.name,
-    phone: candidate.phone,
-    resume: candidate.resume,
-    email: candidate.user.email,
-    created_at: candidate.user.created_at,
-  })
+  return reply.status(OK).send(candidate)
 }

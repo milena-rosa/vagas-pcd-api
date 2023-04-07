@@ -1,22 +1,10 @@
 import { CNPJAlreadyRegisteredError } from '@/errors/cnpj-already-registered-error'
 import { EmailAlreadyRegisteredError } from '@/errors/email-already-registered-error'
 import { InvalidCNPJError } from '@/errors/invalid-cnpj-error'
-import {
-  CompaniesRepository,
-  CompanyUser,
-} from '@/repositories/companies-repository'
+import { CompaniesRepository } from '@/repositories/companies-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
-
-interface RegisterCompanyUseCaseRequest {
-  cnpj: string
-  email: string
-  password: string
-}
-
-interface RegisterCompanyUseCaseResponse {
-  company: CompanyUser
-}
+import { CreateCompanyInput, CreateCompanyReply } from '../company.schema'
 
 export class RegisterCompanyUseCase {
   constructor(
@@ -28,7 +16,7 @@ export class RegisterCompanyUseCase {
     cnpj,
     email,
     password,
-  }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
+  }: CreateCompanyInput): Promise<{ company: CreateCompanyReply }> {
     const companyWithSameEmail = await this.usersRepository.findByEmail(email)
     if (companyWithSameEmail) {
       throw new EmailAlreadyRegisteredError()
@@ -52,7 +40,24 @@ export class RegisterCompanyUseCase {
           },
         },
       })
-      return { company }
+
+      return {
+        company: {
+          company_id: company.company_id,
+          cnpj: company.cnpj,
+          name: company.name ?? '',
+          email: company.user.email,
+          phone: company.phone ?? '',
+          street: company.street ?? '',
+          number: company.number ?? '',
+          complement: company.complement ?? '',
+          city: company.city ?? '',
+          state: company.state ?? '',
+          zipCode: company.zipCode ?? '',
+          password_hash: company.user.password_hash,
+          created_at: company.user.created_at,
+        },
+      }
     } catch (error) {
       throw new InvalidCNPJError()
     }

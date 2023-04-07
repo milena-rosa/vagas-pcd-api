@@ -14,7 +14,7 @@ export async function createCompanyAndJobs(app: FastifyInstance) {
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       salary: 10000,
-      disabilityType: DisabilityType.ANY,
+      disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
     })
 
