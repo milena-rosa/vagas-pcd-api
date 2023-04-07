@@ -21,10 +21,12 @@ docker compose up -d
 npx prisma migrate dev
 ```
 
-4. Rodar a aplicação.
+4. Copiar o arquivo `.env.example`, renomear para `.env` e inserir as informações necessárias (#chamanoprobleminha).
+
+5. Rodar a aplicação.
 
 ```bash
 npm run start:dev
 ```
 
-5. A documentação com a descrição dos _endpoints_ pode ser acessada em `http://localhost:3333/docs`
+6. A documentação com a descrição dos _endpoints_ pode ser acessada em `http://localhost:3333/docs`
