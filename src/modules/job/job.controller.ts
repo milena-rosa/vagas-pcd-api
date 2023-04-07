@@ -44,7 +44,7 @@ export async function closeJob(
 
   const { job } = await closeJobUseCase.execute({ job_id })
 
-  return reply.status(CREATED).send(job)
+  return reply.status(OK).send(job)
 }
 
 export async function searchJobs(

@@ -82,7 +82,7 @@ describe('fetch job candidates use case', () => {
       mockCandidate3,
     ])
 
-    const { candidates } = await sut.execute({ jobId: '123' })
+    const { candidates } = await sut.execute({ job_id: '123' })
 
     expect(candidates).toHaveLength(3)
   })
@@ -143,7 +143,7 @@ describe('fetch job candidates use case', () => {
     ])
 
     const { candidates } = await sut.execute({
-      jobId: '123',
+      job_id: '123',
       page: 2,
     })
 

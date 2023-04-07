@@ -49,7 +49,7 @@ describe('apply for job use case', () => {
     }
 
     const mockJob = {
-      id: randomUUID(),
+      job_id: randomUUID(),
       company_id: '123',
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
@@ -64,7 +64,7 @@ describe('apply for job use case', () => {
     const mockApplication = {
       id: randomUUID(),
       candidate_id: mockCandidate.candidate_id,
-      job_id: mockJob.id,
+      job_id: mockJob.job_id,
       created_at: new Date(),
     }
 
@@ -72,8 +72,8 @@ describe('apply for job use case', () => {
     prisma.application.create.mockResolvedValueOnce(mockApplication)
 
     const { application } = await sut.execute({
-      candidateId: mockCandidate.candidate_id,
-      jobId: mockJob.id,
+      candidate_id: mockCandidate.candidate_id,
+      job_id: mockJob.job_id,
     })
 
     expect(prisma.application.create).toHaveBeenCalledOnce()
@@ -83,8 +83,8 @@ describe('apply for job use case', () => {
   it('should not be able to apply for a job with wrong job id', async () => {
     await expect(() =>
       sut.execute({
-        candidateId: randomUUID(),
-        jobId: 'non-existent-id',
+        candidate_id: randomUUID(),
+        job_id: 'non-existent-id',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
@@ -93,7 +93,7 @@ describe('apply for job use case', () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
     const mockJob = {
-      id: randomUUID(),
+      job_id: randomUUID(),
       company_id: '123',
       title: 'Engenheiro(a) de software',
       description: 'Vaga massinha com uma descrição legal.',
@@ -109,8 +109,8 @@ describe('apply for job use case', () => {
 
     await expect(() =>
       sut.execute({
-        candidateId: '123',
-        jobId: mockJob.id,
+        candidate_id: '123',
+        job_id: mockJob.job_id,
       }),
     ).rejects.toBeInstanceOf(JobClosedError)
   })

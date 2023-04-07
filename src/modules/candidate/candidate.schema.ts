@@ -37,32 +37,39 @@ const createCandidateReplySchema = z.object({
   ...candidateGenerated,
 })
 
-const updateCandidateSchema = z
-  .object({
-    candidate_id: z.string().uuid(),
-    name: z.string().optional(),
-    email: z
-      .string({
-        required_error: 'Email is required',
-        invalid_type_error: 'Email must be a string',
-      })
-      .email()
-      .optional(),
-    phone: z.string().nullable().optional(),
-    resume: z.string().nullable().optional(),
-    password: z
-      .string({
-        required_error: 'Password is required',
-        invalid_type_error: 'Password must be a string',
-      })
-      .optional(),
-    oldPassword: z
-      .string({
-        required_error: 'Password is required',
-        invalid_type_error: 'Password must be a string',
-      })
-      .optional(),
+const candidateUpdateInput = {
+  name: z.string().optional(),
+  email: z
+    .string({
+      required_error: 'Email is required',
+      invalid_type_error: 'Email must be a string',
+    })
+    .email()
+    .optional(),
+  phone: z.string().nullable().optional(),
+  resume: z.string().nullable().optional(),
+  password: z
+    .string({
+      required_error: 'Password is required',
+      invalid_type_error: 'Password must be a string',
+    })
+    .optional(),
+  oldPassword: z
+    .string({
+      required_error: 'Password is required',
+      invalid_type_error: 'Password must be a string',
+    })
+    .optional(),
+}
+
+const updateCandidateBodySchema = z
+  .object(candidateUpdateInput)
+  .refine((schema) => (schema.password ? !!schema.oldPassword : true), {
+    message: 'The old password must be sent.',
   })
+
+const updateCandidateSchema = z
+  .object({ ...candidateUpdateInput, candidate_id: z.string().uuid() })
   .refine((schema) => (schema.password ? !!schema.oldPassword : true), {
     message: 'The old password must be sent.',
   })
@@ -85,6 +92,7 @@ export type CreateCandidateInput = z.infer<typeof createCandidateSchema>
 export type CreateCandidateReply = z.infer<typeof createCandidateReplySchema>
 
 export type UpdateCandidateInput = z.infer<typeof updateCandidateSchema>
+export type UpdateCandidateBody = z.infer<typeof updateCandidateBodySchema>
 export type UpdateCandidateReply = z.infer<typeof updateCandidateReplySchema>
 
 export type GetCandidateProfileInput = z.infer<typeof getCandidateProfileSchema>
@@ -96,6 +104,7 @@ export const { schemas: candidateSchemas, $ref } = buildJsonSchemas(
     createCandidateSchema,
     createCandidateReplySchema,
     updateCandidateSchema,
+    updateCandidateBodySchema,
     updateCandidateReplySchema,
     candidateReplySchema,
   },

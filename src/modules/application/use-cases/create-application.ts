@@ -2,16 +2,10 @@ import { JobClosedError } from '@/errors/job-closed-error'
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 import { ApplicationsRepository } from '@/repositories/applications-repository'
 import { JobsRepository } from '@/repositories/jobs-repository'
-import { Application } from '@prisma/client'
-
-interface CreateApplicationUseCaseRequest {
-  candidateId: string
-  jobId: string
-}
-
-interface CreateApplicationUseCaseResponse {
-  application: Application
-}
+import {
+  CreateApplicationInput,
+  CreateApplicationReply,
+} from '../application.schema'
 
 export class CreateApplicationUseCase {
   constructor(
@@ -19,11 +13,10 @@ export class CreateApplicationUseCase {
     private jobsRepository: JobsRepository,
   ) {}
 
-  async execute({
-    candidateId,
-    jobId,
-  }: CreateApplicationUseCaseRequest): Promise<CreateApplicationUseCaseResponse> {
-    const foundJob = await this.jobsRepository.findById(jobId)
+  async execute({ candidate_id, job_id }: CreateApplicationInput): Promise<{
+    application: CreateApplicationReply
+  }> {
+    const foundJob = await this.jobsRepository.findById(job_id)
     if (!foundJob) {
       throw new ResourceNotFoundError()
     }
@@ -33,8 +26,8 @@ export class CreateApplicationUseCase {
     }
 
     const application = await this.applicationsRepository.create({
-      candidate_id: candidateId,
-      job_id: jobId,
+      candidate_id,
+      job_id,
     })
 
     return { application }

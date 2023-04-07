@@ -3,7 +3,6 @@ import { buildJsonSchemas } from 'fastify-zod'
 import { z } from 'zod'
 
 const jobInput = {
-  company_id: z.string().uuid(),
   title: z.string(),
   description: z.string(),
   role: z.string(),
@@ -13,18 +12,30 @@ const jobInput = {
 }
 
 const jobGenerated = {
+  // company_id: z.string().uuid(),
   job_id: z.string().uuid(),
   created_at: z.date(),
   closed_at: z.date().nullable(),
 }
 
+export const jobSchema = z.object({
+  job_id: z.string().uuid(),
+  ...jobInput,
+})
+
+const createJobBodySchema = z.object({
+  ...jobInput,
+})
+
 const createJobSchema = z.object({
+  company_id: z.string().uuid(),
   ...jobInput,
 })
 
 const createJobReplySchema = z.object({
   ...jobInput,
   ...jobGenerated,
+  company_id: z.string().uuid(),
   location: z.string(),
   disability_type: z.string(),
 })
@@ -99,6 +110,7 @@ export type CompanyJobsListInput = z.infer<typeof companyJobsListSchema>
 export const { schemas: jobSchemas, $ref } = buildJsonSchemas(
   {
     createJobSchema,
+    createJobBodySchema,
     createJobReplySchema,
     closeJobSchema,
     closeJobReplySchema,

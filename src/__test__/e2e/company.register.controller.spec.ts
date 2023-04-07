@@ -3,7 +3,7 @@ import { CREATED } from 'http-status'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('government user register (e2e)', () => {
+describe('register company (e2e)', () => {
   beforeAll(async () => {
     await server.ready()
   })
@@ -12,18 +12,17 @@ describe('government user register (e2e)', () => {
     await server.close()
   })
 
-  it('should be able to register a government user', async () => {
-    const response = await request(server.server)
-      .post('/government-users')
-      .send({
-        email: 'inss@gov.br',
-        password: '123456',
-      })
+  it('should be able to register a company', async () => {
+    const response = await request(server.server).post('/companies').send({
+      cnpj: '23.243.199/0001-84',
+      email: 'lojasponei@example.com',
+      password: '123456',
+    })
 
     expect(response.statusCode).toEqual(CREATED)
     expect(response.body).toEqual(
       expect.objectContaining({
-        user_id: expect.any(String),
+        company_id: expect.any(String),
       }),
     )
   })

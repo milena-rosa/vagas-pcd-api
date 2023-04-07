@@ -9,19 +9,14 @@ import httpStatus, { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status'
 import { ZodError } from 'zod'
 import { version } from '../package.json'
 import { env } from './env'
-import { verifyJWT } from './http/middlewares/verify-jwt'
-import { applicationRoutes } from './modules/application/application.route'
+import { verifyJWT } from './middlewares/verify-jwt'
 import { applicationSchemas } from './modules/application/application.schema'
-import { candidateRoutes } from './modules/candidate/candidate.route'
 import { candidateSchemas } from './modules/candidate/candidate.schema'
-import { companyRoutes } from './modules/company/company.route'
 import { companySchemas } from './modules/company/company.schema'
-import { governmentUserRoutes } from './modules/government-user/government-user.route'
 import { governmentUserSchemas } from './modules/government-user/government-user.schema'
-import { jobRoutes } from './modules/job/job.route'
 import { jobSchemas } from './modules/job/job.schema'
-import { userRoutes } from './modules/user/user.route'
 import { userSchemas } from './modules/user/user.schema'
+import { appRoutes } from './routes'
 
 export const server = fastify()
 
@@ -49,7 +44,6 @@ for (const schema of [
 ]) {
   server.addSchema(schema)
 }
-
 server.register(
   fastifySwagger,
   withRefResolver({
@@ -109,12 +103,7 @@ server.register(fastifySwaggerUi, {
 })
 
 // routes
-server.register(userRoutes)
-server.register(candidateRoutes, { prefix: 'candidates' })
-server.register(companyRoutes, { prefix: 'companies' })
-server.register(governmentUserRoutes, { prefix: 'government-users' })
-server.register(jobRoutes, { prefix: 'jobs' })
-server.register(applicationRoutes, { prefix: 'applications' })
+server.register(appRoutes)
 
 // errors
 server.setErrorHandler((error, _, reply) => {

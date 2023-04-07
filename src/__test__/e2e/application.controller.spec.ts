@@ -1,13 +1,11 @@
 import { server } from '@/app'
 import { createAndAuthenticateCandidate } from '@/utils/test/create-and-authenticate-candidate'
-import { createAndAuthenticateCompany } from '@/utils/test/create-and-authenticate-company'
-import { createApplications } from '@/utils/test/create-applications'
-import { DisabilityType, Location } from '@prisma/client'
-import { CREATED, OK } from 'http-status'
+import { createCompanyAndJobs } from '@/utils/test/create-company-and-jobs'
+import { OK } from 'http-status'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('application controller (e2e)', () => {
+describe('list candidate applications (e2e)', () => {
   beforeAll(async () => {
     await server.ready()
   })
@@ -16,44 +14,26 @@ describe('application controller (e2e)', () => {
     await server.close()
   })
 
-  it('should be able to apply for a job', async () => {
-    const { token: companyToken } = await createAndAuthenticateCompany(server)
+  it('should be able to fetch the applications history of the logged candidate', async () => {
+    const { job_id } = await createCompanyAndJobs(server)
     const { token: candidateToken } = await createAndAuthenticateCandidate(
       server,
     )
 
-    // create job
-    const jobResponse = await request(server.server)
-      .post('/jobs')
-      .set('Authorization', `Bearer ${companyToken}`)
-      .send({
-        title: 'Engenheiro(a) de software',
-        description: 'Vaga massinha com uma descrição legal.',
-        role: 'Analista',
-        salary: 10000,
-        disability_type: DisabilityType.ANY,
-        location: Location.ON_SITE,
-      })
-
-    const { id: jobId } = jobResponse.body
-
-    const response = await request(server.server)
-      .post(`/applications/${jobId}/apply`)
+    await request(server.server)
+      .post(`/applications/${job_id}`)
       .set('Authorization', `Bearer ${candidateToken}`)
       .send()
 
-    expect(response.statusCode).toEqual(CREATED)
-  })
-
-  it('should be able to list all candidates that applied for a job', async () => {
-    const { companyToken, jobId } = await createApplications(server)
-
-    const response = await request(server.server)
-      .get(`/applications/${jobId}`)
-      .set('Authorization', `Bearer ${companyToken}`)
+    const candidateApplicationsHistoryResponse = await request(server.server)
+      .get('/applications/history')
+      .set('Authorization', `Bearer ${candidateToken}`)
+      .query({
+        page: 1,
+      })
       .send()
 
-    expect(response.statusCode).toEqual(OK)
-    expect(response.body.candidates).toHaveLength(3)
+    expect(candidateApplicationsHistoryResponse.statusCode).toEqual(OK)
+    expect(candidateApplicationsHistoryResponse.body.jobs).toHaveLength(1)
   })
 })

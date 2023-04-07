@@ -2,32 +2,33 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { CREATED, OK } from 'http-status'
 import {
   CreateApplicationParams,
-  ListApplicationParams,
-  ListApplicationQuerystring,
+  ListJobApplicationParams,
+  ListJobApplicationQuerystring,
 } from './application.schema'
 import { makeCreateApplicationUseCase } from './use-cases/factories/make-create-application-use-case'
+import { makeFetchCandidateApplicationsHistoryUseCase } from './use-cases/factories/make-fetch-candidate-applications-history-use-case'
 import { makeListApplicationsUseCase } from './use-cases/factories/make-list-applications-use-case'
 
 export async function createApplication(
   request: FastifyRequest<{ Params: CreateApplicationParams }>,
   reply: FastifyReply,
 ) {
-  const { job_id: jobId } = request.params
+  const { job_id } = request.params
 
   const createApplicationUseCase = makeCreateApplicationUseCase()
 
   await createApplicationUseCase.execute({
-    candidateId: request.user.sub,
-    jobId,
+    candidate_id: request.user.sub,
+    job_id,
   })
 
   return reply.status(CREATED).send()
 }
 
-export async function listApplications(
+export async function listJobApplications(
   request: FastifyRequest<{
-    Params: ListApplicationParams
-    Querystring: ListApplicationQuerystring
+    Params: ListJobApplicationParams
+    Querystring: ListJobApplicationQuerystring
   }>,
   reply: FastifyReply,
 ) {
@@ -37,20 +38,36 @@ export async function listApplications(
   const fetchJobCandidatesUseCase = makeListApplicationsUseCase()
 
   const { candidates } = await fetchJobCandidatesUseCase.execute({
-    jobId: job_id,
+    job_id,
     page,
   })
 
-  const formattedCandidates = {
-    job_id,
-    candidates: candidates.map((candidate) => ({
-      candidate_id: candidate.candidate_id,
-      name: candidate.name,
-      email: candidate.user.email,
-      phone: candidate.phone,
-      resume: candidate.resume,
-    })),
-  }
+  return reply.status(OK).send({ job_id, candidates })
+}
 
-  return reply.status(OK).send(formattedCandidates)
+export async function listAllCandidateApplications(
+  request: FastifyRequest<{
+    Querystring: ListJobApplicationQuerystring
+  }>,
+  reply: FastifyReply,
+) {
+  const { page } = request.query
+
+  const fetchCandidateApplicationsHistoryUseCase =
+    makeFetchCandidateApplicationsHistoryUseCase()
+
+  const {
+    candidate_id,
+    jobs,
+    page: pageResponse,
+  } = await fetchCandidateApplicationsHistoryUseCase.execute({
+    candidate_id: request.user.sub,
+    page,
+  })
+
+  return reply.status(OK).send({
+    candidate_id,
+    jobs,
+    page: pageResponse,
+  })
 }

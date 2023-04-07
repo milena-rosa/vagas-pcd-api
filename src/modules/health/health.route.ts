@@ -1,14 +1,15 @@
 import { FastifyInstance } from 'fastify'
+import { OK } from 'http-status'
 
 export async function healthRoutes(app: FastifyInstance) {
   app.get(
-    '/health',
+    '/',
     {
       schema: {
         description: 'This is an endpoint for application health check',
         tags: ['health'],
         response: {
-          200: {
+          [OK]: {
             description: 'Success Response',
             type: 'object',
             properties: {

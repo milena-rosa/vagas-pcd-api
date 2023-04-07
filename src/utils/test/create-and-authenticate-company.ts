@@ -18,7 +18,7 @@ export async function createAndAuthenticateCompany(app: FastifyInstance) {
   const { token } = authResponse.body
 
   return {
-    companyId: company_id,
+    company_id,
     token,
   }
 }

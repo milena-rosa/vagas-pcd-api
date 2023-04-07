@@ -1,4 +1,4 @@
-import { verifyUserRole } from '@/http/middlewares/verify-user-role'
+import { verifyUserRole } from '@/middlewares/verify-user-role'
 import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
 import {
@@ -28,7 +28,7 @@ export async function jobRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate, verifyUserRole('COMPANY')],
       schema: {
-        body: $ref('createJobSchema'),
+        body: $ref('createJobBodySchema'),
         response: { [CREATED]: $ref('createJobReplySchema') },
         tags: ['job'],
       },
@@ -42,7 +42,7 @@ export async function jobRoutes(server: FastifyInstance) {
       preHandler: [server.authenticate, verifyUserRole('COMPANY')],
       schema: {
         params: $ref('closeJobSchema'),
-        response: { [CREATED]: $ref('closeJobReplySchema') },
+        response: { [OK]: $ref('closeJobReplySchema') },
         tags: ['job'],
       },
     },

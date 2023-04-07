@@ -1,4 +1,4 @@
-import { verifyUserRole } from '@/http/middlewares/verify-user-role'
+import { verifyUserRole } from '@/middlewares/verify-user-role'
 import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
 import {
@@ -38,7 +38,7 @@ export async function candidateRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
       schema: {
-        body: $ref('updateCandidateSchema'),
+        body: $ref('updateCandidateBodySchema'),
         response: { [CREATED]: $ref('updateCandidateReplySchema') },
         tags: ['candidate'],
       },

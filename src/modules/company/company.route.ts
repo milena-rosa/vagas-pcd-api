@@ -17,7 +17,7 @@ export async function companyRoutes(server: FastifyInstance) {
   )
 
   server.get(
-    '/profile/:company_id',
+    '/:company_id',
     {
       schema: {
         params: $ref('companyProfileSchema'),

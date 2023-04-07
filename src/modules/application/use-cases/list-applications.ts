@@ -1,28 +1,32 @@
+import { CandidatesRepository } from '@/repositories/candidates-repository'
 import {
-  CandidateUser,
-  CandidatesRepository,
-} from '@/repositories/candidates-repository'
-
-interface ListApplicationsUseCaseRequest {
-  jobId: string
-  page?: number
-}
-
-interface ListApplicationsUseCaseResponse {
-  candidates: CandidateUser[]
-}
+  ListJobApplicationInput,
+  ListJobApplicationsReply,
+} from '../application.schema'
 
 export class ListApplicationsUseCase {
   constructor(private candidatesRepository: CandidatesRepository) {}
 
   async execute({
-    jobId,
+    job_id,
     page = 1,
-  }: ListApplicationsUseCaseRequest): Promise<ListApplicationsUseCaseResponse> {
+  }: ListJobApplicationInput): Promise<ListJobApplicationsReply> {
     const candidates = await this.candidatesRepository.findManyByJobId(
-      jobId,
+      job_id,
       page,
     )
-    return { candidates }
+
+    const formattedCandidates = {
+      job_id,
+      candidates: candidates.map((candidate) => ({
+        candidate_id: candidate.candidate_id,
+        name: candidate.name,
+        email: candidate.user.email,
+        phone: candidate.phone,
+        resume: candidate.resume,
+      })),
+    }
+
+    return { ...formattedCandidates }
   }
 }

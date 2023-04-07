@@ -30,13 +30,13 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
       orderBy: {
         created_at: 'desc',
       },
-      take: 20,
-      skip: (page - 1) * 20,
       include: {
         job: {
-          include: { company: true },
+          include: { company: { include: { user: true } } },
         },
       },
+      take: 20,
+      skip: (page - 1) * 20,
     })
   }
 
@@ -47,7 +47,7 @@ export class PrismaApplicationsRepository implements ApplicationsRepository {
     return await prisma.application.create({
       data: {
         candidate: { connect: { candidate_id } },
-        job: { connect: { id: job_id } },
+        job: { connect: { job_id } },
       },
       include: {
         candidate: true,

@@ -1,7 +1,11 @@
-import { verifyUserRole } from '@/http/middlewares/verify-user-role'
+import { verifyUserRole } from '@/middlewares/verify-user-role'
 import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
-import { createApplication, listApplications } from './application.controller'
+import {
+  createApplication,
+  listAllCandidateApplications,
+  listJobApplications,
+} from './application.controller'
 import { $ref } from './application.schema'
 
 export async function applicationRoutes(server: FastifyInstance) {
@@ -10,7 +14,7 @@ export async function applicationRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
       schema: {
-        body: $ref('createApplicationSchema'),
+        params: $ref('createApplicationSchema'),
         response: { [CREATED]: $ref('createApplicationSchema') },
         tags: ['application'],
       },
@@ -19,28 +23,39 @@ export async function applicationRoutes(server: FastifyInstance) {
   )
 
   server.get(
-    '/:job-id',
+    '/:job_id',
     {
       preHandler: [server.authenticate, verifyUserRole('COMPANY')],
       schema: {
-        params: $ref('listApplicationsParamsSchema'),
-        querystring: $ref('listApplicationsQuerystringSchema'),
-        response: { [OK]: $ref('listApplicationsReplySchema') },
+        params: $ref('listJobApplicationsParamsSchema'),
+        querystring: $ref('listJobApplicationsQuerystringSchema'),
+        response: { [OK]: $ref('listJobApplicationsReplySchema') },
       },
     },
-    listApplications,
+    listJobApplications,
   )
 
-  // server.get(
-  //   '/history',
-  //   {
-  //     preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
-  //     schema: {
-  //       params: $ref('listApplicationsParamsSchema'),
-  //       querystring: $ref('listApplicationsQuerystringSchema'),
-  //       response: { [OK]: $ref('listApplicationsReplySchema') },
-  //     },
-  //   },
-  //   candidateApplicationsHistory,
-  // )
+  server.get(
+    '/history',
+    {
+      preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
+      schema: {
+        querystring: $ref('listCandidateApplicationsQuerystringSchema'),
+        response: { [OK]: $ref('listCandidateApplicationsReplySchema') },
+      },
+    },
+    listAllCandidateApplications,
+  )
+
+  server.get(
+    '/open',
+    {
+      preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
+      schema: {
+        querystring: $ref('listCandidateApplicationsQuerystringSchema'),
+        response: { [OK]: $ref('listCandidateApplicationsReplySchema') },
+      },
+    },
+    listAllCandidateApplications,
+  )
 }

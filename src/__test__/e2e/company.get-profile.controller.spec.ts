@@ -1,9 +1,9 @@
 import { server } from '@/app'
-import { CREATED, OK } from 'http-status'
+import { OK } from 'http-status'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('company controller (e2e)', () => {
+describe('get company profile (e2e)', () => {
   beforeAll(async () => {
     await server.ready()
   })
@@ -24,8 +24,7 @@ describe('company controller (e2e)', () => {
     const { company_id } = registerResponse.body
 
     const profileResponse = await request(server.server)
-      .get(`/companies/profile`)
-      .query({ company_id })
+      .get(`/companies/${company_id}`)
       .send()
 
     expect(profileResponse.statusCode).toEqual(OK)
@@ -33,21 +32,6 @@ describe('company controller (e2e)', () => {
       expect.objectContaining({
         cnpj: '23.243.199/0001-84',
         email: 'lojasponei@example.com',
-      }),
-    )
-  })
-
-  it('should be able to register a company', async () => {
-    const response = await request(server.server).post('/companies').send({
-      cnpj: '23.243.199/0001-84',
-      email: 'lojasponei@example.com',
-      password: '123456',
-    })
-
-    expect(response.statusCode).toEqual(CREATED)
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        company_id: expect.any(String),
       }),
     )
   })

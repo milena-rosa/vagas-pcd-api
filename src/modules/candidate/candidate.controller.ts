@@ -31,7 +31,7 @@ export async function updateCandidate(
 
   const updateUseCase = makeUpdateCandidateUseCase()
 
-  const candidate = await updateUseCase.execute({
+  const { candidate } = await updateUseCase.execute({
     candidate_id: request.user.sub,
     name,
     email,
@@ -50,7 +50,7 @@ export async function candidateProfile(
 ) {
   const getCandidateProfileUseCase = makeGetCandidateProfileUseCase()
 
-  const candidate = await getCandidateProfileUseCase.execute({
+  const { candidate } = await getCandidateProfileUseCase.execute({
     candidate_id: request.user.sub,
   })
 
