@@ -44,6 +44,7 @@ for (const schema of [
 ]) {
   server.addSchema(schema)
 }
+
 server.register(
   fastifySwagger,
   withRefResolver({

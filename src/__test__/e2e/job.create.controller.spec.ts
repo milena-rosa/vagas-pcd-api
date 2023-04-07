@@ -5,7 +5,7 @@ import { CREATED } from 'http-status'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe.only('create job (e2e)', () => {
+describe('create job (e2e)', () => {
   beforeAll(async () => {
     await server.ready()
   })
