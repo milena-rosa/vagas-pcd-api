@@ -58,7 +58,6 @@ server.register(
           'API desenvolvida para o trabalho de conclusão de curso de Engenharia de Computação da Univesp - turma 2018.2',
         version,
       },
-      servers: [{ url: `http://localhost:${env.PORT}` }],
     },
   }),
 )
