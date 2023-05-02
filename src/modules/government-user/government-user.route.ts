@@ -1,9 +1,24 @@
 import { FastifyInstance } from 'fastify'
-import { CREATED } from 'http-status'
-import { registerGovernmentUser } from './government-user.controller'
+import { CREATED, OK } from 'http-status'
+import {
+  authenticateGovernmentUser,
+  registerGovernmentUser,
+} from './government-user.controller'
 import { $ref } from './government-user.schema'
 
 export async function governmentUserRoutes(server: FastifyInstance) {
+  server.post(
+    '/sessions',
+    {
+      schema: {
+        body: $ref('authenticateGovernmentUserSchema'),
+        response: { [OK]: $ref('authenticateGovernmentUserReplySchema') },
+        tags: ['government-user'],
+      },
+    },
+    authenticateGovernmentUser,
+  )
+
   server.post(
     '/',
     {

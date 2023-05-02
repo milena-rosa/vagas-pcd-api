@@ -1,9 +1,25 @@
 import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
-import { companyProfile, registerCompany } from './company.controller'
+import {
+  authenticateCompany,
+  companyProfile,
+  registerCompany,
+} from './company.controller'
 import { $ref } from './company.schema'
 
 export async function companyRoutes(server: FastifyInstance) {
+  server.post(
+    '/sessions',
+    {
+      schema: {
+        body: $ref('authenticateCompanySchema'),
+        response: { [OK]: $ref('authenticateCompanyReplySchema') },
+        tags: ['company'],
+      },
+    },
+    authenticateCompany,
+  )
+
   server.post(
     '/',
     {

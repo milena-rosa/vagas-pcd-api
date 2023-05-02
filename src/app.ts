@@ -1,5 +1,6 @@
 import { AppError } from '@/errors/app-error'
 import fastifyCookie from '@fastify/cookie'
+import cors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
@@ -19,6 +20,10 @@ import { userSchemas } from './modules/user/user.schema'
 import { appRoutes } from './routes'
 
 export const server = fastify()
+
+server.register(cors, {
+  origin: 'http://localhost:3000',
+})
 
 server.register(fastifyJwt, {
   secret: env.JWT_SECRET,

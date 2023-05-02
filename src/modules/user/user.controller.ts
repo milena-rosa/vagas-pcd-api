@@ -31,7 +31,7 @@ export async function authenticate(
       httpOnly: true,
     })
     .status(OK)
-    .send({ token })
+    .send({ token, user })
 }
 
 export async function refreshToken(

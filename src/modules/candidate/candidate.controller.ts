@@ -1,9 +1,46 @@
+import { Role } from '@prisma/client'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { CREATED, OK } from 'http-status'
-import { CreateCandidateInput, UpdateCandidateInput } from './candidate.schema'
+import {
+  AuthenticateCandidateRequest,
+  CreateCandidateInput,
+  UpdateCandidateInput,
+} from './candidate.schema'
+import { makeAuthenticateCandidateUseCase } from './use-cases/factories/make-authenticate-candidate-use-case'
 import { makeGetCandidateProfileUseCase } from './use-cases/factories/make-get-candidate-profile-use-case'
 import { makeRegisterCandidateUseCase } from './use-cases/factories/make-register-candidate-use-case'
 import { makeUpdateCandidateUseCase } from './use-cases/factories/make-update-candidate-use-case'
+
+export async function authenticateCandidate(
+  request: FastifyRequest<{ Body: AuthenticateCandidateRequest }>,
+  reply: FastifyReply,
+) {
+  const { email, password } = request.body
+
+  const authenticateUseCase = makeAuthenticateCandidateUseCase()
+
+  const { candidate } = await authenticateUseCase.execute({ email, password })
+
+  const token = await reply.jwtSign(
+    { role: Role.CANDIDATE },
+    { sign: { sub: candidate.candidate_id } },
+  )
+
+  const refreshToken = await reply.jwtSign(
+    { role: Role.CANDIDATE },
+    { sign: { sub: candidate.candidate_id, expiresIn: '7d' } },
+  )
+
+  return reply
+    .setCookie('refreshToken', refreshToken, {
+      path: '/',
+      secure: true,
+      sameSite: true,
+      httpOnly: true,
+    })
+    .status(OK)
+    .send({ token, candidate })
+}
 
 export async function registerCandidate(
   request: FastifyRequest<{ Body: CreateCandidateInput }>,

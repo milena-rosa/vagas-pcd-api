@@ -108,6 +108,31 @@ const candidateReplySchema = z.object({
   ...candidateGenerated,
 })
 
+const authenticateCandidateSchema = z.object({
+  email: z
+    .string({
+      required_error: 'Email is required',
+      invalid_type_error: 'Email must be a string',
+    })
+    .email(),
+  password: z.string({
+    required_error: 'Password is required',
+    invalid_type_error: 'Password must be a string',
+  }),
+})
+
+const authenticateCandidateReplySchema = z.object({
+  token: z.string(),
+  candidate: z.object({
+    ...candidateInput,
+    ...candidateGenerated,
+  }),
+})
+
+export type AuthenticateCandidateRequest = z.infer<
+  typeof authenticateCandidateSchema
+>
+
 export type CreateCandidateInput = z.infer<typeof createCandidateSchema>
 export type CreateCandidateReply = z.infer<typeof createCandidateReplySchema>
 
@@ -127,6 +152,8 @@ export const { schemas: candidateSchemas, $ref } = buildJsonSchemas(
     updateCandidateBodySchema,
     updateCandidateReplySchema,
     candidateReplySchema,
+    authenticateSchema: authenticateCandidateSchema,
+    authenticateReplySchema: authenticateCandidateReplySchema,
   },
   { $id: 'candidate' },
 )

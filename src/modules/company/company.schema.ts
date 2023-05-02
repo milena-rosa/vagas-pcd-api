@@ -21,6 +21,7 @@ const companyGenerated = {
   city: z.string(),
   state: z.string(),
   zip_code: z.string(),
+  password_hash: z.string(),
   created_at: z.date(),
 }
 
@@ -47,6 +48,31 @@ const companyProfileSchema = z.object({
   company_id: z.string().uuid(),
 })
 
+const authenticateCompanySchema = z.object({
+  email: z
+    .string({
+      required_error: 'Email is required',
+      invalid_type_error: 'Email must be a string',
+    })
+    .email(),
+  password: z.string({
+    required_error: 'Password is required',
+    invalid_type_error: 'Password must be a string',
+  }),
+})
+
+const authenticateCompanyReplySchema = z.object({
+  token: z.string(),
+  company: z.object({
+    ...companyInput,
+    ...companyGenerated,
+  }),
+})
+
+export type AuthenticateCompanyRequest = z.infer<
+  typeof authenticateCompanySchema
+>
+
 export type CreateCompanyInput = z.infer<typeof createCompanySchema>
 export type CreateCompanyReply = z.infer<typeof createCompanyReplySchema>
 
@@ -59,6 +85,8 @@ export const { schemas: companySchemas, $ref } = buildJsonSchemas(
     createCompanyReplySchema,
     companyProfileSchema,
     companyReplySchema,
+    authenticateCompanySchema,
+    authenticateCompanyReplySchema,
   },
   { $id: 'company' },
 )

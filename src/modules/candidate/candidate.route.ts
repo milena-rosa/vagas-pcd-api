@@ -2,6 +2,7 @@ import { verifyUserRole } from '@/middlewares/verify-user-role'
 import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
 import {
+  authenticateCandidate,
   candidateProfile,
   registerCandidate,
   updateCandidate,
@@ -9,6 +10,18 @@ import {
 import { $ref } from './candidate.schema'
 
 export async function candidateRoutes(server: FastifyInstance) {
+  server.post(
+    '/sessions',
+    {
+      schema: {
+        body: $ref('authenticateSchema'),
+        response: { [OK]: $ref('authenticateReplySchema') },
+        tags: ['candidate'],
+      },
+    },
+    authenticateCandidate,
+  )
+
   server.post(
     '/',
     {
