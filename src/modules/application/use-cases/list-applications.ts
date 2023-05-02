@@ -23,7 +23,17 @@ export class ListApplicationsUseCase {
         name: candidate.name,
         email: candidate.user.email,
         phone: candidate.phone,
-        resume: candidate.resume,
+        zipCode: candidate.zipCode,
+        street: candidate.street,
+        number: candidate.number,
+        complement: candidate.complement,
+        neighborhood: candidate.neighborhood,
+        city: candidate.city,
+        state: candidate.state,
+        linkedin: candidate.linkedin,
+        professionalExperience: candidate.professionalExperience,
+        educationalBackground: candidate.educationalBackground,
+        skills: candidate.skills,
       })),
     }
 

@@ -47,10 +47,20 @@ model User {
 }
 
 model Candidate {
-  candidate_id String  @unique
-  name         String
-  phone        String?
-  resume       String
+  candidate_id           String  @unique
+  name                   String
+  zipCode                String
+  street                 String
+  number                 String
+  complement             String?
+  neighborhood           String
+  city                   String
+  state                  String
+  phone                  String
+  linkedin               String?
+  professionalExperience String?
+  educationalBackground  String?
+  skills                 String?
 
   user         User          @relation(fields: [candidate_id], references: [user_id])
   applications Application[]

@@ -9,8 +9,18 @@ const candidateInput = {
       invalid_type_error: 'Email must be a string',
     })
     .email(),
-  phone: z.string().nullable(),
-  resume: z.string().nullable(),
+  zipCode: z.string(),
+  street: z.string(),
+  number: z.string(),
+  complement: z.string().nullable(),
+  neighborhood: z.string(),
+  city: z.string(),
+  state: z.string(),
+  phone: z.string(),
+  linkedin: z.string().nullable(),
+  professionalExperience: z.string().nullable(),
+  educationalBackground: z.string().nullable(),
+  skills: z.string().nullable(),
 }
 
 const candidateGenerated = {
@@ -46,8 +56,18 @@ const candidateUpdateInput = {
     })
     .email()
     .optional(),
-  phone: z.string().nullable().optional(),
-  resume: z.string().nullable().optional(),
+  zipCode: z.string().optional(),
+  street: z.string().optional(),
+  number: z.string().optional(),
+  complement: z.string().optional(),
+  neighborhood: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  phone: z.string().optional(),
+  linkedin: z.string().nullable(),
+  professionalExperience: z.string().nullable(),
+  educationalBackground: z.string().nullable(),
+  skills: z.string().nullable(),
   password: z
     .string({
       required_error: 'Password is required',

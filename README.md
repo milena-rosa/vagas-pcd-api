@@ -15,13 +15,13 @@ LinkedIn Jobs like API.
 docker compose up -d
 ```
 
-3. Criar as tabelas no banco de dados.
+3. Copiar o arquivo `.env.example`, renomear para `.env` e inserir as informações necessárias (#chamanoprobleminha).
+
+4. Criar as tabelas no banco de dados.
 
 ```bash
 npx prisma migrate dev
 ```
-
-4. Copiar o arquivo `.env.example`, renomear para `.env` e inserir as informações necessárias (#chamanoprobleminha).
 
 5. Rodar a aplicação.
 

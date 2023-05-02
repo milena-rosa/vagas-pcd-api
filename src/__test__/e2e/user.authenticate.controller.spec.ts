@@ -17,7 +17,17 @@ describe('user authenticate (e2e)', () => {
       name: 'Jane Doe',
       email: 'janedoe@example.com',
       phone: '11999222333',
-      resume: 'https://linkedin.com/in/jane-doe',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       password: '123456',
     })
 

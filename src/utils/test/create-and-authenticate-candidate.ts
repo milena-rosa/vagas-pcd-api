@@ -7,7 +7,17 @@ export async function createAndAuthenticateCandidate(app: FastifyInstance) {
     email: 'janedoe@example.com',
     phone: '11999222333',
     password: '123456',
-    resume: 'https://linkedin.com/in/jane-doe',
+    zipCode: '45007-605',
+    street: 'Rua Padre Gilberto Vaz Sampaio',
+    number: '933',
+    complement: '',
+    neighborhood: 'Lagoa das Flores',
+    city: 'Vitória da Conquista',
+    state: 'BA',
+    linkedin: 'https://linkedin.com/in/jane-doe',
+    professionalExperience: '',
+    educationalBackground: '',
+    skills: '',
   })
 
   const { candidate_id } = registerResponse.body

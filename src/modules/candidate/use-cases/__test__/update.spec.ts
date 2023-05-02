@@ -36,11 +36,21 @@ describe('update candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
-      phone: null,
-      resume: 'https://linkedin.com/in/jane-doe',
+      phone: '(77) 939014245',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       user: mockUser,
     }
 
@@ -53,12 +63,26 @@ describe('update candidate use case', () => {
     const { candidate } = await sut.execute({
       candidate_id: mockCandidate.candidate_id,
       name: 'Joana Doe',
+      educationalBackground: '',
+      linkedin: '',
+      professionalExperience: '',
+      skills: '',
     })
 
     expect(candidate).toStrictEqual({
       candidate_id: mockCandidate.candidate_id,
       phone: mockCandidate.phone,
-      resume: mockCandidate.resume,
+      zipCode: mockCandidate.zipCode,
+      street: mockCandidate.street,
+      number: mockCandidate.number,
+      complement: mockCandidate.complement,
+      neighborhood: mockCandidate.neighborhood,
+      city: mockCandidate.city,
+      state: mockCandidate.state,
+      linkedin: mockCandidate.linkedin,
+      professionalExperience: mockCandidate.professionalExperience,
+      educationalBackground: mockCandidate.educationalBackground,
+      skills: mockCandidate.skills,
       email: mockCandidate.user.email,
       created_at: mockCandidate.user.created_at,
       password_hash: mockCandidate.user.password_hash,
@@ -75,11 +99,21 @@ describe('update candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
-      phone: null,
-      resume: 'https://linkedin.com/in/jane-doe',
+      phone: '(77) 939014245',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       user: mockUser,
     }
 
@@ -90,6 +124,10 @@ describe('update candidate use case', () => {
         candidate_id: mockCandidate.candidate_id,
         oldPassword: 'wrong-password',
         password: '654321',
+        educationalBackground: '',
+        linkedin: '',
+        professionalExperience: '',
+        skills: '',
       }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
@@ -103,11 +141,21 @@ describe('update candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
-      phone: null,
-      resume: 'https://linkedin.com/in/jane-doe',
+      phone: '(77) 939014245',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       user: mockUser,
     }
 
@@ -117,6 +165,10 @@ describe('update candidate use case', () => {
       sut.execute({
         candidate_id: mockCandidate.candidate_id,
         password: 'new-password',
+        educationalBackground: '',
+        linkedin: '',
+        professionalExperience: '',
+        skills: '',
       }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
@@ -130,11 +182,21 @@ describe('update candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
-      phone: null,
-      resume: 'https://linkedin.com/in/jane-doe',
+      phone: '(77) 939014245',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       user: mockUser,
     }
 
@@ -158,13 +220,27 @@ describe('update candidate use case', () => {
       candidate_id: mockCandidate.candidate_id,
       oldPassword: '123456',
       password: '654321',
+      educationalBackground: '',
+      linkedin: '',
+      professionalExperience: '',
+      skills: '',
     })
 
     expect(candidate).toStrictEqual({
       candidate_id: mockCandidateUpdated.candidate_id,
       name: mockCandidateUpdated.name,
       phone: mockCandidateUpdated.phone,
-      resume: mockCandidateUpdated.resume,
+      zipCode: mockCandidate.zipCode,
+      street: mockCandidate.street,
+      number: mockCandidate.number,
+      complement: mockCandidate.complement,
+      neighborhood: mockCandidate.neighborhood,
+      city: mockCandidate.city,
+      state: mockCandidate.state,
+      linkedin: mockCandidate.linkedin,
+      professionalExperience: mockCandidate.professionalExperience,
+      educationalBackground: mockCandidate.educationalBackground,
+      skills: mockCandidate.skills,
       email: mockCandidateUpdated.user.email,
       created_at: mockCandidateUpdated.user.created_at,
       password_hash: mockCandidateUpdated.user.password_hash,
@@ -180,11 +256,21 @@ describe('update candidate use case', () => {
       created_at: new Date(),
     }
 
-    const mockCandidate: CandidateUser = {
+    const mockCandidate = {
       candidate_id: mockUser.user_id,
       name: 'Jane Doe',
-      phone: null,
-      resume: 'https://linkedin.com/in/jane-doe',
+      phone: '(77) 939014245',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       user: mockUser,
     }
 
@@ -194,13 +280,27 @@ describe('update candidate use case', () => {
     const { candidate } = await sut.execute({
       candidate_id: mockCandidate.candidate_id,
       name: undefined,
+      educationalBackground: '',
+      linkedin: '',
+      professionalExperience: '',
+      skills: '',
     })
 
     expect(candidate).toStrictEqual({
       candidate_id: mockCandidate.candidate_id,
       name: mockCandidate.name,
       phone: mockCandidate.phone,
-      resume: mockCandidate.resume,
+      zipCode: mockCandidate.zipCode,
+      street: mockCandidate.street,
+      number: mockCandidate.number,
+      complement: mockCandidate.complement,
+      neighborhood: mockCandidate.neighborhood,
+      city: mockCandidate.city,
+      state: mockCandidate.state,
+      linkedin: mockCandidate.linkedin,
+      professionalExperience: mockCandidate.professionalExperience,
+      educationalBackground: mockCandidate.educationalBackground,
+      skills: mockCandidate.skills,
       email: mockCandidate.user.email,
       created_at: mockCandidate.user.created_at,
       password_hash: mockCandidate.user.password_hash,
@@ -214,6 +314,10 @@ describe('update candidate use case', () => {
       sut.execute({
         candidate_id: 'non-existent-user-id',
         name: 'Joana Doe',
+        educationalBackground: '',
+        linkedin: '',
+        professionalExperience: '',
+        skills: '',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })

@@ -9,7 +9,23 @@ export async function registerCandidate(
   request: FastifyRequest<{ Body: CreateCandidateInput }>,
   reply: FastifyReply,
 ) {
-  const { name, email, password, phone, resume } = request.body
+  const {
+    name,
+    email,
+    password,
+    phone,
+    zipCode,
+    street,
+    number,
+    complement,
+    neighborhood,
+    city,
+    state,
+    linkedin,
+    professionalExperience,
+    educationalBackground,
+    skills,
+  } = request.body
 
   const registerUseCase = makeRegisterCandidateUseCase()
   const { candidate } = await registerUseCase.execute({
@@ -17,7 +33,17 @@ export async function registerCandidate(
     email,
     password,
     phone,
-    resume: resume ?? '',
+    zipCode,
+    street,
+    number,
+    complement: complement ?? '',
+    neighborhood,
+    city,
+    state,
+    linkedin: linkedin ?? '',
+    professionalExperience: professionalExperience ?? '',
+    educationalBackground: educationalBackground ?? '',
+    skills: skills ?? '',
   })
 
   return reply.status(CREATED).send(candidate)
@@ -27,7 +53,24 @@ export async function updateCandidate(
   request: FastifyRequest<{ Body: UpdateCandidateInput }>,
   reply: FastifyReply,
 ) {
-  const { name, email, password, phone, resume, oldPassword } = request.body
+  const {
+    name,
+    email,
+    password,
+    phone,
+    zipCode,
+    street,
+    number,
+    complement,
+    neighborhood,
+    city,
+    state,
+    linkedin,
+    professionalExperience,
+    educationalBackground,
+    skills,
+    oldPassword,
+  } = request.body
 
   const updateUseCase = makeUpdateCandidateUseCase()
 
@@ -36,7 +79,17 @@ export async function updateCandidate(
     name,
     email,
     phone,
-    resume: resume ?? '',
+    zipCode,
+    street,
+    number,
+    complement: complement ?? '',
+    neighborhood,
+    city,
+    state,
+    linkedin: linkedin ?? '',
+    professionalExperience: professionalExperience ?? '',
+    educationalBackground: educationalBackground ?? '',
+    skills: skills ?? '',
     password,
     oldPassword,
   })

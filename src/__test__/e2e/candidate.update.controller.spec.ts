@@ -21,7 +21,17 @@ describe('candidate update (e2e)', () => {
       oldPassword: '123456',
       name: 'John Doe',
       email: 'johndoe@example.com',
-      resume: 'https://linkedin.com/in/john-doe',
+      zipCode: '45007-605',
+      street: 'Rua Padre Gilberto Vaz Sampaio',
+      number: '933',
+      complement: '',
+      neighborhood: 'Lagoa das Flores',
+      city: 'Vitória da Conquista',
+      state: 'BA',
+      linkedin: 'https://linkedin.com/in/jane-doe',
+      professionalExperience: '',
+      educationalBackground: '',
+      skills: '',
       phone: '11999888777',
     }
 
