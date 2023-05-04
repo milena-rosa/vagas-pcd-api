@@ -38,12 +38,10 @@ describe('candidate authenticate (e2e)', () => {
         password: '123456',
       })
 
-    console.log(response.error)
-
     expect(response.statusCode).toStrictEqual(OK)
     expect(response.body).toStrictEqual({
       token: expect.any(String),
-      candidate: expect.objectContaining({
+      user: expect.objectContaining({
         candidate_id: expect.any(String),
         name: 'Jane Doe',
         email: 'janedoe@example.com',

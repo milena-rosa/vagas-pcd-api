@@ -31,6 +31,9 @@ describe('fetch company open jobs use case', () => {
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       company_id: '123',
       salary: 10000,
       created_at: new Date(2023, 0, 1),
@@ -69,6 +72,9 @@ describe('fetch company open jobs use case', () => {
       location: Location.ON_SITE,
       company_id: '123',
       salary: 10000,
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       created_at: new Date(2023, 0, 1),
       closed_at: null,
     }

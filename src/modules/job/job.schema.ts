@@ -7,6 +7,8 @@ const jobInput = {
   description: z.string(),
   role: z.string(),
   salary: z.number().min(0),
+  perks: z.string(),
+  linkedin: z.string(),
   location: z.nativeEnum(Location),
   disability_type: z.nativeEnum(DisabilityType),
 }

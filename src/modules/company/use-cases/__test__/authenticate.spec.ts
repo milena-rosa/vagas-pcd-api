@@ -42,6 +42,8 @@ describe('authenticate company use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',

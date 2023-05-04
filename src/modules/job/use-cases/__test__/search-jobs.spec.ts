@@ -36,6 +36,8 @@ describe('search jobs use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -56,6 +58,9 @@ describe('search jobs use case', () => {
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       salary: 10000,
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       created_at: new Date(),
       closed_at: null,
       company: mockCompany,
@@ -83,6 +88,8 @@ describe('search jobs use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -103,6 +110,9 @@ describe('search jobs use case', () => {
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       salary: 10000,
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       created_at: new Date(),
       closed_at: null,
       company: mockCompany,
@@ -135,6 +145,8 @@ describe('search jobs use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -155,6 +167,9 @@ describe('search jobs use case', () => {
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       salary: 10000,
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       created_at: new Date(),
       closed_at: null,
       company: mockCompany,
@@ -187,6 +202,8 @@ describe('search jobs use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -207,6 +224,9 @@ describe('search jobs use case', () => {
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       salary: 10000,
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       created_at: new Date(),
       closed_at: null,
       company: mockCompany,

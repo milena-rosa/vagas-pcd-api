@@ -27,6 +27,9 @@ describe('search job (e2e)', () => {
         description: 'Vaga massinha com uma descrição legal.',
         role: 'Analista',
         salary: 10000,
+        linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+        perks:
+          '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
         disability_type: DisabilityType.HEARING,
         location: Location.ON_SITE,
       })
@@ -39,6 +42,9 @@ describe('search job (e2e)', () => {
         description: 'Vaga massinha com uma descrição legal.',
         role: 'Estágio',
         salary: 1000,
+        linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+        perks:
+          '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
         disability_type: DisabilityType.ANY,
         location: Location.ON_SITE,
       })

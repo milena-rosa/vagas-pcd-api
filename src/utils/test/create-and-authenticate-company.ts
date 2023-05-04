@@ -5,6 +5,8 @@ export async function createAndAuthenticateCompany(app: FastifyInstance) {
   const registerResponse = await request(app.server).post('/companies').send({
     cnpj: '23.243.199/0001-84',
     email: 'lojasponei@example.com',
+    linkedin: 'https://www.linkedin.com/company/lojasponei/',
+    about: 'Lojas Ponei é uma empresa massinha.',
     password: '123456',
   })
 

@@ -37,6 +37,8 @@ export class AuthenticateCompanyUseCase {
       company: {
         company_id: foundCompany.company_id,
         cnpj: foundCompany.cnpj,
+        about: foundCompany.about ?? '',
+        linkedin: foundCompany.linkedin ?? '',
         name: foundCompany.name ?? '',
         email: foundCompany.user.email,
         phone: foundCompany.phone ?? '',

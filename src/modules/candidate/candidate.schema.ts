@@ -108,6 +108,10 @@ const candidateReplySchema = z.object({
   ...candidateGenerated,
 })
 
+const recoverCandidateSchema = z.object({
+  token: z.string(),
+})
+
 const authenticateCandidateSchema = z.object({
   email: z
     .string({
@@ -123,15 +127,12 @@ const authenticateCandidateSchema = z.object({
 
 const authenticateCandidateReplySchema = z.object({
   token: z.string(),
-  candidate: z.object({
+  user: z.object({
     ...candidateInput,
     ...candidateGenerated,
+    role: z.string(),
   }),
 })
-
-export type AuthenticateCandidateRequest = z.infer<
-  typeof authenticateCandidateSchema
->
 
 export type CreateCandidateInput = z.infer<typeof createCandidateSchema>
 export type CreateCandidateReply = z.infer<typeof createCandidateReplySchema>
@@ -143,6 +144,12 @@ export type UpdateCandidateReply = z.infer<typeof updateCandidateReplySchema>
 export type GetCandidateProfileInput = z.infer<typeof getCandidateProfileSchema>
 export type GetCandidateProfileReply = z.infer<typeof candidateReplySchema>
 
+export type RecoverCandidateQuerystring = z.infer<typeof recoverCandidateSchema>
+
+export type AuthenticateCandidateRequest = z.infer<
+  typeof authenticateCandidateSchema
+>
+
 export const { schemas: candidateSchemas, $ref } = buildJsonSchemas(
   {
     candidateSchema,
@@ -152,8 +159,9 @@ export const { schemas: candidateSchemas, $ref } = buildJsonSchemas(
     updateCandidateBodySchema,
     updateCandidateReplySchema,
     candidateReplySchema,
-    authenticateSchema: authenticateCandidateSchema,
-    authenticateReplySchema: authenticateCandidateReplySchema,
+    authenticateCandidateSchema,
+    authenticateCandidateReplySchema,
+    recoverCandidateSchema,
   },
   { $id: 'candidate' },
 )

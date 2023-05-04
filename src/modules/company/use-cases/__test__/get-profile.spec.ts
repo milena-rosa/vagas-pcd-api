@@ -38,6 +38,8 @@ describe('get company profile use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -58,6 +60,8 @@ describe('get company profile use case', () => {
     expect(company).toStrictEqual({
       company_id: mockCompany.company_id,
       cnpj: mockCompany.cnpj,
+      about: mockCompany.about,
+      linkedin: mockCompany.linkedin,
       name: mockCompany.name,
       email: mockCompany.user.email,
       phone: mockCompany.phone,

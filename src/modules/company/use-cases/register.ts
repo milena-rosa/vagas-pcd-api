@@ -15,6 +15,8 @@ export class RegisterCompanyUseCase {
   async execute({
     cnpj,
     email,
+    about,
+    linkedin,
     password,
   }: CreateCompanyInput): Promise<{ company: CreateCompanyReply }> {
     const companyWithSameEmail = await this.usersRepository.findByEmail(email)
@@ -32,6 +34,8 @@ export class RegisterCompanyUseCase {
     try {
       const company = await this.companiesRepository.create({
         cnpj,
+        about,
+        linkedin,
         user: {
           create: {
             email,
@@ -45,6 +49,8 @@ export class RegisterCompanyUseCase {
         company: {
           company_id: company.company_id,
           cnpj: company.cnpj,
+          about: company.about ?? '',
+          linkedin: company.linkedin ?? '',
           name: company.name ?? '',
           email: company.user.email,
           phone: company.phone ?? '',

@@ -84,7 +84,9 @@ export class PrismaJobsRepository implements JobsRepository {
         title: data.title,
         description: data.description,
         role: data.role,
+        linkedin: data.linkedin,
         salary: data.salary,
+        perks: data.perks,
         location: data.location,
         disability_type: data.disability_type,
         company: {

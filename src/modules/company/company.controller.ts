@@ -1,10 +1,12 @@
+import { server } from '@/app'
 import { Role } from '@prisma/client'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { CREATED, OK } from 'http-status'
+import { CREATED, NOT_FOUND, OK } from 'http-status'
 import {
   AuthenticateCompanyRequest,
   CompanyProfileParams,
   CreateCompanyInput,
+  RecoverCompanyQuerystring,
 } from './company.schema'
 import { makeAuthenticateCompanyUseCase } from './use-cases/factories/make-authenticate-company-use-case'
 import { makeGetCompanyProfileUseCase } from './use-cases/factories/make-get-company-profile-use-case'
@@ -38,20 +40,28 @@ export async function authenticateCompany(
       httpOnly: true,
     })
     .status(OK)
-    .send({ token, company })
+    .send({
+      token,
+      user: {
+        ...company,
+        role: Role.COMPANY,
+      },
+    })
 }
 
 export async function registerCompany(
   request: FastifyRequest<{ Body: CreateCompanyInput }>,
   reply: FastifyReply,
 ) {
-  const { cnpj, email, password } = request.body
+  const { cnpj, email, password, about, linkedin } = request.body
 
   const registerUseCase = makeRegisterCompanyUseCase()
 
   const { company } = await registerUseCase.execute({
     cnpj,
     email,
+    about,
+    linkedin,
     password,
   })
 
@@ -67,6 +77,31 @@ export async function companyProfile(
   const getCompanyProfileUseCase = makeGetCompanyProfileUseCase()
   const { company } = await getCompanyProfileUseCase.execute({
     company_id,
+  })
+
+  return reply.status(OK).send(company)
+}
+
+export async function recoverCompany(
+  request: FastifyRequest<{ Querystring: RecoverCompanyQuerystring }>,
+  reply: FastifyReply,
+) {
+  const { token } = request.query
+
+  const decoded = server.jwt.decode(token) as {
+    role: string
+    sub: string
+    iat: number
+    exp: number
+  }
+
+  if (!decoded) {
+    return reply.status(NOT_FOUND).send()
+  }
+
+  const getCompanyProfileUseCase = makeGetCompanyProfileUseCase()
+  const { company } = await getCompanyProfileUseCase.execute({
+    company_id: decoded.sub,
   })
 
   return reply.status(OK).send(company)

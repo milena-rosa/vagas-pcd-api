@@ -15,6 +15,8 @@ describe('company authenticate (e2e)', () => {
   it('should be able to authenticate a company', async () => {
     await request(server.server).post('/companies').send({
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       email: 'lojasponei@example.com',
       password: '123456',
     })
@@ -29,7 +31,7 @@ describe('company authenticate (e2e)', () => {
     expect(response.statusCode).toStrictEqual(OK)
     expect(response.body).toEqual({
       token: expect.any(String),
-      company: expect.objectContaining({
+      user: expect.objectContaining({
         cnpj: '23.243.199/0001-84',
         email: 'lojasponei@example.com',
       }),

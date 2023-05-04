@@ -43,6 +43,8 @@ describe('register company use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -60,11 +62,15 @@ describe('register company use case', () => {
       email: mockUser.email,
       password: '123456',
       cnpj: mockCompany.cnpj,
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
     })
 
     expect(company).toStrictEqual({
       company_id: mockCompany.company_id,
       cnpj: mockCompany.cnpj,
+      linkedin: mockCompany.linkedin,
+      about: mockCompany.about,
       name: mockCompany.name,
       email: mockCompany.user.email,
       phone: mockCompany.phone,
@@ -91,6 +97,8 @@ describe('register company use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -108,6 +116,8 @@ describe('register company use case', () => {
       email: mockUser.email,
       password: '123456',
       cnpj: mockCompany.cnpj,
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
     })
 
     const isPasswordCorrectlyHashed = await compare(
@@ -133,6 +143,8 @@ describe('register company use case', () => {
         email: mockUser.email,
         password: '123456',
         cnpj: '23.111.111/0001-11',
+        linkedin: 'https://www.linkedin.com/company/lojasponei/',
+        about: 'Lojas Ponei é uma empresa massinha.',
       }),
     ).rejects.toBeInstanceOf(EmailAlreadyRegisteredError)
   })
@@ -149,6 +161,8 @@ describe('register company use case', () => {
     const mockCompany: CompanyUser = {
       company_id: mockUser.user_id,
       cnpj: '23.243.199/0001-84',
+      linkedin: 'https://www.linkedin.com/company/lojasponei/',
+      about: 'Lojas Ponei é uma empresa massinha.',
       name: 'Lojas Pônei',
       city: 'Poneilandia',
       state: 'SP',
@@ -167,6 +181,8 @@ describe('register company use case', () => {
         email: 'new@example.com',
         cnpj: mockCompany.cnpj,
         password: '123456',
+        linkedin: 'https://www.linkedin.com/company/lojasponei/',
+        about: 'Lojas Ponei é uma empresa massinha.',
       }),
     ).rejects.toBeInstanceOf(CNPJAlreadyRegisteredError)
   })

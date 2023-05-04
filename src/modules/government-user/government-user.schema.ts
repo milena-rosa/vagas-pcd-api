@@ -29,6 +29,10 @@ const createGovernmentUserReplySchema = z.object({
   ...governmentUserGenerated,
 })
 
+const recoverGovernmentUserSchema = z.object({
+  token: z.string(),
+})
+
 const authenticateGovernmentUserSchema = z.object({
   email: z
     .string({
@@ -44,15 +48,12 @@ const authenticateGovernmentUserSchema = z.object({
 
 const authenticateGovernmentUserReplySchema = z.object({
   token: z.string(),
-  governmentUser: z.object({
+  user: z.object({
     ...governmentUserInput,
     ...governmentUserGenerated,
+    role: z.string(),
   }),
 })
-
-export type AuthenticateGovernmentUserRequest = z.infer<
-  typeof authenticateGovernmentUserSchema
->
 
 export type CreateGovernmentUserInput = z.infer<
   typeof createGovernmentUserSchema
@@ -66,12 +67,21 @@ export type GovernmentUserProfileReply = z.infer<
   typeof createGovernmentUserReplySchema
 >
 
+export type RecoverGovernmentUserQuerystring = z.infer<
+  typeof recoverGovernmentUserSchema
+>
+
+export type AuthenticateGovernmentUserRequest = z.infer<
+  typeof authenticateGovernmentUserSchema
+>
+
 export const { schemas: governmentUserSchemas, $ref } = buildJsonSchemas(
   {
     createGovernmentUserSchema,
     createGovernmentUserReplySchema,
     authenticateGovernmentUserSchema,
     authenticateGovernmentUserReplySchema,
+    recoverGovernmentUserSchema,
   },
   { $id: 'government-user' },
 )

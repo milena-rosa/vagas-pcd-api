@@ -28,7 +28,7 @@ describe('government user authenticate (e2e)', () => {
     expect(response.statusCode).toStrictEqual(OK)
     expect(response.body).toStrictEqual({
       token: expect.any(String),
-      governmentUser: expect.objectContaining({
+      user: expect.objectContaining({
         email: 'inss@gov.br',
       }),
     })

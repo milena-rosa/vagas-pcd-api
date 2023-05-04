@@ -16,8 +16,16 @@ export async function createJob(
   request: FastifyRequest<{ Body: CreateJobInput }>,
   reply: FastifyReply,
 ) {
-  const { title, description, role, salary, location, disability_type } =
-    request.body
+  const {
+    title,
+    description,
+    role,
+    linkedin,
+    salary,
+    perks,
+    location,
+    disability_type,
+  } = request.body
 
   const createJobUseCase = makeCreateJobUseCase()
 
@@ -26,7 +34,9 @@ export async function createJob(
     title,
     description,
     role,
+    linkedin,
     salary,
+    perks,
     location,
     disability_type,
   })

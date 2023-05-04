@@ -1,9 +1,11 @@
+import { server } from '@/app'
 import { Role } from '@prisma/client'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { CREATED, OK } from 'http-status'
+import { CREATED, NOT_FOUND, OK } from 'http-status'
 import {
   AuthenticateCandidateRequest,
   CreateCandidateInput,
+  RecoverCandidateQuerystring,
   UpdateCandidateInput,
 } from './candidate.schema'
 import { makeAuthenticateCandidateUseCase } from './use-cases/factories/make-authenticate-candidate-use-case'
@@ -39,7 +41,13 @@ export async function authenticateCandidate(
       httpOnly: true,
     })
     .status(OK)
-    .send({ token, candidate })
+    .send({
+      token,
+      user: {
+        ...candidate,
+        role: Role.CANDIDATE,
+      },
+    })
 }
 
 export async function registerCandidate(
@@ -142,6 +150,31 @@ export async function candidateProfile(
 
   const { candidate } = await getCandidateProfileUseCase.execute({
     candidate_id: request.user.sub,
+  })
+
+  return reply.status(OK).send(candidate)
+}
+
+export async function recoverCandidate(
+  request: FastifyRequest<{ Querystring: RecoverCandidateQuerystring }>,
+  reply: FastifyReply,
+) {
+  const { token } = request.query
+
+  const decoded = server.jwt.decode(token) as {
+    role: string
+    sub: string
+    iat: number
+    exp: number
+  }
+
+  if (!decoded) {
+    return reply.status(NOT_FOUND).send()
+  }
+
+  const getCandidateProfileUseCase = makeGetCandidateProfileUseCase()
+  const { candidate } = await getCandidateProfileUseCase.execute({
+    candidate_id: decoded.sub,
   })
 
   return reply.status(OK).send(candidate)

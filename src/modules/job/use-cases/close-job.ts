@@ -27,6 +27,7 @@ export class CloseJobUseCase {
     return {
       job: {
         ...job,
+        linkedin: job.linkedin ?? '',
         disability_type: DisabilityTypeDictionary[job.disability_type],
         location: LocationDictionary[job.location],
       },

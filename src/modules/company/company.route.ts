@@ -3,6 +3,7 @@ import { CREATED, OK } from 'http-status'
 import {
   authenticateCompany,
   companyProfile,
+  recoverCompany,
   registerCompany,
 } from './company.controller'
 import { $ref } from './company.schema'
@@ -42,5 +43,17 @@ export async function companyRoutes(server: FastifyInstance) {
       },
     },
     companyProfile,
+  )
+
+  server.get(
+    '/recover',
+    {
+      schema: {
+        querystring: $ref('recoverCompanySchema'),
+        response: { [OK]: $ref('companyReplySchema') },
+        tags: ['company'],
+      },
+    },
+    recoverCompany,
   )
 }

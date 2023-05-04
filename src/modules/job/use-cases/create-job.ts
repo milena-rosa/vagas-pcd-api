@@ -18,7 +18,9 @@ export class CreateJobUseCase {
     title,
     description,
     role,
+    linkedin,
     salary,
+    perks,
     location,
     disability_type,
   }: CreateJobInput): Promise<{ job: CreateJobReply }> {
@@ -32,7 +34,9 @@ export class CreateJobUseCase {
       title,
       description,
       role,
+      linkedin,
       salary,
+      perks,
       location,
       disability_type,
     })
@@ -40,6 +44,7 @@ export class CreateJobUseCase {
     return {
       job: {
         ...job,
+        linkedin: job.linkedin ?? '',
         disability_type: DisabilityTypeDictionary[job.disability_type],
         location: LocationDictionary[job.location],
       },

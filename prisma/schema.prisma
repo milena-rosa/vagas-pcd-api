@@ -72,6 +72,8 @@ model Company {
   company_id String @unique
 
   cnpj       String  @unique
+  about      String?
+  linkedin   String?
   name       String?
   phone      String?
   street     String?
@@ -102,6 +104,8 @@ model Job {
   role            String
   location        Location       @default(ON_SITE)
   salary          Float
+  perks           String
+  linkedin        String?
   disability_type DisabilityType
   created_at      DateTime       @default(now())
   closed_at       DateTime?

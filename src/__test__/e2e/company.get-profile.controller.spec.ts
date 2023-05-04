@@ -17,6 +17,8 @@ describe('get company profile (e2e)', () => {
       .post('/companies')
       .send({
         cnpj: '23.243.199/0001-84',
+        linkedin: 'https://www.linkedin.com/company/lojasponei/',
+        about: 'Lojas Ponei é uma empresa massinha.',
         email: 'lojasponei@example.com',
         password: '123456',
       })

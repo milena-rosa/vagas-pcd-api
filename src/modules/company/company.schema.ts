@@ -3,6 +3,8 @@ import { z } from 'zod'
 
 const companyInput = {
   cnpj: z.string(),
+  about: z.string(),
+  linkedin: z.string(),
   email: z
     .string({
       required_error: 'Email is required',
@@ -48,6 +50,10 @@ const companyProfileSchema = z.object({
   company_id: z.string().uuid(),
 })
 
+const recoverCompanySchema = z.object({
+  token: z.string(),
+})
+
 const authenticateCompanySchema = z.object({
   email: z
     .string({
@@ -63,21 +69,24 @@ const authenticateCompanySchema = z.object({
 
 const authenticateCompanyReplySchema = z.object({
   token: z.string(),
-  company: z.object({
+  user: z.object({
     ...companyInput,
     ...companyGenerated,
+    role: z.string(),
   }),
 })
-
-export type AuthenticateCompanyRequest = z.infer<
-  typeof authenticateCompanySchema
->
 
 export type CreateCompanyInput = z.infer<typeof createCompanySchema>
 export type CreateCompanyReply = z.infer<typeof createCompanyReplySchema>
 
 export type CompanyProfileParams = z.infer<typeof companyProfileSchema>
 export type CompanyProfileReply = z.infer<typeof companyReplySchema>
+
+export type RecoverCompanyQuerystring = z.infer<typeof recoverCompanySchema>
+
+export type AuthenticateCompanyRequest = z.infer<
+  typeof authenticateCompanySchema
+>
 
 export const { schemas: companySchemas, $ref } = buildJsonSchemas(
   {
@@ -87,6 +96,7 @@ export const { schemas: companySchemas, $ref } = buildJsonSchemas(
     companyReplySchema,
     authenticateCompanySchema,
     authenticateCompanyReplySchema,
+    recoverCompanySchema,
   },
   { $id: 'company' },
 )

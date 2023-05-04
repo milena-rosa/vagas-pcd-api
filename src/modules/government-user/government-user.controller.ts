@@ -39,7 +39,13 @@ export async function authenticateGovernmentUser(
       httpOnly: true,
     })
     .status(OK)
-    .send({ token, governmentUser })
+    .send({
+      token,
+      user: {
+        ...governmentUser,
+        role: Role.GOVERNMENT,
+      },
+    })
 }
 
 export async function registerGovernmentUser(

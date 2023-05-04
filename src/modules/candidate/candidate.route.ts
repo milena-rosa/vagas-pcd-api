@@ -4,6 +4,7 @@ import { CREATED, OK } from 'http-status'
 import {
   authenticateCandidate,
   candidateProfile,
+  recoverCandidate,
   registerCandidate,
   updateCandidate,
 } from './candidate.controller'
@@ -14,8 +15,8 @@ export async function candidateRoutes(server: FastifyInstance) {
     '/sessions',
     {
       schema: {
-        body: $ref('authenticateSchema'),
-        response: { [OK]: $ref('authenticateReplySchema') },
+        body: $ref('authenticateCandidateSchema'),
+        response: { [OK]: $ref('authenticateCandidateReplySchema') },
         tags: ['candidate'],
       },
     },
@@ -44,6 +45,19 @@ export async function candidateRoutes(server: FastifyInstance) {
       },
     },
     candidateProfile,
+  )
+
+  server.get(
+    '/recover',
+    {
+      // preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
+      schema: {
+        querystring: $ref('recoverCandidateSchema'),
+        response: { [OK]: $ref('candidateReplySchema') },
+        tags: ['candidate'],
+      },
+    },
+    recoverCandidate,
   )
 
   server.patch(
