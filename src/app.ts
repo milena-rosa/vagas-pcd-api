@@ -22,7 +22,7 @@ import { appRoutes } from './routes'
 export const server = fastify()
 
 server.register(cors, {
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000' || 'https://vagaspcd.vercel.app',
 })
 
 server.register(fastifyJwt, {
