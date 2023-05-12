@@ -45,8 +45,6 @@ export async function listJobApplications(
       page,
     })
 
-  console.log(job_title, candidates)
-
   return reply
     .status(OK)
     .send({ job_id, job_role, job_title, job_description, candidates })
