@@ -23,7 +23,7 @@ export const server = fastify()
 
 console.log(1)
 server.register(cors, {
-  origin: 'http://localhost:3000' || 'https://vagaspcd.vercel.app',
+  origin: env.ORIGIN,
 })
 console.log(2)
 server.register(fastifyJwt, {
