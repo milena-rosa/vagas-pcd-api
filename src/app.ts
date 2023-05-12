@@ -104,7 +104,7 @@ server.setErrorHandler((error, _, reply) => {
   if (env.NODE_ENV !== 'production') {
     console.error(error)
   }
-  console.log(10)
+  console.error(error)
   return reply
     .status(INTERNAL_SERVER_ERROR)
     .send({ message: httpStatus['500_NAME'] })
