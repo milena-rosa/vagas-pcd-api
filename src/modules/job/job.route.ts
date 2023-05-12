@@ -6,6 +6,7 @@ import {
   companyJobsHistory,
   companyOpenJobs,
   createJob,
+  getJob,
   searchJobs,
 } from './job.controller'
 import { $ref } from './job.schema'
@@ -21,6 +22,18 @@ export async function jobRoutes(server: FastifyInstance) {
       },
     },
     searchJobs,
+  )
+
+  server.get(
+    '/:job_id',
+    {
+      schema: {
+        params: $ref('getJobInputSchema'),
+        response: { [OK]: $ref('getJobReplySchema') },
+        tags: ['job'],
+      },
+    },
+    getJob,
   )
 
   server.post(

@@ -1,24 +1,29 @@
 import { prisma } from '@/libs/__mocks__/prisma'
 import {
-  CandidateUser,
-  CandidatesRepository,
-} from '@/repositories/candidates-repository'
-import { PrismaCandidatesRepository } from '@/repositories/prisma/prisma-candidates-repository'
-import { User } from '@prisma/client'
+  ApplicationWithCandidate,
+  ApplicationsRepository,
+} from '@/repositories/applications-repository'
+import { CandidateUser } from '@/repositories/candidates-repository'
+import { JobsRepository } from '@/repositories/jobs-repository'
+import { PrismaApplicationsRepository } from '@/repositories/prisma/prisma-applications-repository'
+import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
+import { DisabilityType, Location, User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { randomUUID } from 'crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ListApplicationsUseCase } from '../list-applications'
 
-let candidatesRepository: CandidatesRepository
+let applicationsRepository: ApplicationsRepository
+let jobsRepository: JobsRepository
 let sut: ListApplicationsUseCase
 
 vi.mock('@/libs/prisma')
 
 describe('fetch job candidates use case', () => {
   beforeEach(() => {
-    candidatesRepository = new PrismaCandidatesRepository()
-    sut = new ListApplicationsUseCase(candidatesRepository)
+    applicationsRepository = new PrismaApplicationsRepository()
+    jobsRepository = new PrismaJobsRepository()
+    sut = new ListApplicationsUseCase(applicationsRepository, jobsRepository)
     vi.useFakeTimers()
   })
 
@@ -28,6 +33,24 @@ describe('fetch job candidates use case', () => {
   })
 
   it('should be able to fetch the candidates of a job', async () => {
+    const mockJob = {
+      job_id: randomUUID(),
+      company_id: '123',
+      title: 'Engenheiro(a) de software',
+      description: 'Vaga massinha com uma descrição legal.',
+      role: 'Analista',
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
+      disability_type: DisabilityType.ANY,
+      location: Location.ON_SITE,
+      salary: 10000,
+      created_at: new Date(),
+      closed_at: null,
+    }
+
+    prisma.job.findUnique.mockResolvedValueOnce(mockJob)
+
     const mockUser1: User = {
       user_id: randomUUID(),
       email: 'janedoe@example.com',
@@ -52,6 +75,14 @@ describe('fetch job candidates use case', () => {
       educationalBackground: '',
       skills: '',
       user: mockUser1,
+    }
+
+    const mockApplication1: ApplicationWithCandidate = {
+      id: randomUUID(),
+      candidate_id: mockCandidate1.candidate_id,
+      job_id: mockJob.job_id,
+      created_at: new Date(),
+      candidate: mockCandidate1,
     }
 
     const mockUser2: User = {
@@ -80,6 +111,14 @@ describe('fetch job candidates use case', () => {
       user: mockUser2,
     }
 
+    const mockApplication2 = {
+      id: randomUUID(),
+      candidate_id: mockCandidate2.candidate_id,
+      job_id: mockJob.job_id,
+      created_at: new Date(),
+      candidate: mockCandidate2,
+    }
+
     const mockUser3: User = {
       user_id: randomUUID(),
       email: 'janedoe3@example.com',
@@ -106,18 +145,44 @@ describe('fetch job candidates use case', () => {
       user: mockUser3,
     }
 
-    prisma.candidate.findMany.mockResolvedValue([
-      mockCandidate1,
-      mockCandidate2,
-      mockCandidate3,
+    const mockApplication3 = {
+      id: randomUUID(),
+      candidate_id: mockCandidate3.candidate_id,
+      job_id: mockJob.job_id,
+      created_at: new Date(),
+      candidate: mockCandidate3,
+    }
+
+    prisma.application.findMany.mockResolvedValue([
+      mockApplication1,
+      mockApplication2,
+      mockApplication3,
     ])
 
-    const { candidates } = await sut.execute({ job_id: '123' })
+    const { candidates } = await sut.execute({ job_id: mockJob.job_id })
 
     expect(candidates).toHaveLength(3)
   })
 
   it('should be able to fetch paginated candidates of a job', async () => {
+    const mockJob = {
+      job_id: randomUUID(),
+      company_id: '123',
+      title: 'Engenheiro(a) de software',
+      description: 'Vaga massinha com uma descrição legal.',
+      role: 'Analista',
+      linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
+      perks:
+        '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
+      disability_type: DisabilityType.ANY,
+      location: Location.ON_SITE,
+      salary: 10000,
+      created_at: new Date(),
+      closed_at: null,
+    }
+
+    prisma.job.findUnique.mockResolvedValueOnce(mockJob)
+
     const mockUser1: User = {
       user_id: randomUUID(),
       email: 'janedoe@example.com',
@@ -142,6 +207,14 @@ describe('fetch job candidates use case', () => {
       educationalBackground: '',
       skills: '',
       user: mockUser1,
+    }
+
+    const mockApplication1: ApplicationWithCandidate = {
+      id: randomUUID(),
+      candidate_id: mockCandidate1.candidate_id,
+      job_id: mockJob.job_id,
+      created_at: new Date(),
+      candidate: mockCandidate1,
     }
 
     const mockUser2: User = {
@@ -170,6 +243,14 @@ describe('fetch job candidates use case', () => {
       user: mockUser2,
     }
 
+    const mockApplication2 = {
+      id: randomUUID(),
+      candidate_id: mockCandidate2.candidate_id,
+      job_id: mockJob.job_id,
+      created_at: new Date(),
+      candidate: mockCandidate2,
+    }
+
     const mockUser3: User = {
       user_id: randomUUID(),
       email: 'janedoe3@example.com',
@@ -196,14 +277,22 @@ describe('fetch job candidates use case', () => {
       user: mockUser3,
     }
 
-    prisma.candidate.findMany.mockResolvedValue([
-      mockCandidate1,
-      mockCandidate2,
-      mockCandidate3,
+    const mockApplication3 = {
+      id: randomUUID(),
+      candidate_id: mockCandidate3.candidate_id,
+      job_id: mockJob.job_id,
+      created_at: new Date(),
+      candidate: mockCandidate3,
+    }
+
+    prisma.application.findMany.mockResolvedValue([
+      mockApplication1,
+      mockApplication2,
+      mockApplication3,
     ])
 
     const { candidates } = await sut.execute({
-      job_id: '123',
+      job_id: mockJob.job_id,
       page: 2,
     })
 

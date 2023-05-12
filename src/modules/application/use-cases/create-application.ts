@@ -25,6 +25,15 @@ export class CreateApplicationUseCase {
       throw new JobClosedError()
     }
 
+    const alreadyApplied =
+      await this.applicationsRepository.findByCandidateIdAndJobId(
+        candidate_id,
+        job_id,
+      )
+    if (alreadyApplied) {
+      return { application: alreadyApplied }
+    }
+
     const application = await this.applicationsRepository.create({
       candidate_id,
       job_id,

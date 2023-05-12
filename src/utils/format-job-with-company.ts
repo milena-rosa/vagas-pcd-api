@@ -8,6 +8,8 @@ export function formatJobWithCompany(job: JobWithCompany) {
   return {
     company_id: job.company_id,
     cnpj: job.company.cnpj,
+    about: job.company.about ?? '',
+    company_linkedin: job.company.linkedin ?? '',
     name: job.company.name ?? '',
     email: job.company.user.email,
     phone: job.company.phone ?? '',

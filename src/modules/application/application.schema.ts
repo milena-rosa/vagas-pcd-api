@@ -38,6 +38,9 @@ const listJobApplicationsQuerystringSchema = z.object({
 
 const listJobApplicationsReplySchema = z.object({
   job_id: z.string().uuid(),
+  job_title: z.string(),
+  job_description: z.string(),
+  job_role: z.string(),
   candidates: z.array(candidateSchema),
 })
 
@@ -55,12 +58,16 @@ const applicationSchema = z.object({
   company_name: z.string(),
   company_city: z.string(),
   company_state: z.string(),
+  company_about: z.string(),
+  company_linkedin: z.string(),
   job_id: z.string().uuid(),
-  title: z.string(),
-  description: z.string(),
-  role: z.string(),
+  job_title: z.string(),
+  job_description: z.string(),
+  job_role: z.string(),
   salary: z.number(),
-  location: z.string(),
+  perks: z.string(),
+  job_location: z.string(),
+  job_linkedin: z.string(),
   disability_type: z.string(),
   job_created_at: z.date(),
   job_closed_at: z.date().nullable(),
@@ -73,22 +80,27 @@ const listCandidateApplicationsReplySchema = z.object({
   page: z.number(),
 })
 
-const summarySchema = z.array(
-  z.object({
-    company_id: z.string().uuid(),
-    company_name: z.string(),
-    company_cnpj: z.string().refine((value) => validateCNPJ(value)),
-    company_phone: z.string(),
-    company_street: z.string(),
-    company_number: z.string(),
-    company_complement: z.string(),
-    company_city: z.string(),
-    company_state: z.string(),
-    company_zip_code: z.string(),
-    n_jobs: z.number(),
-    n_applications: z.number(),
-  }),
-)
+const summaryItemSchema = z.object({
+  company_id: z.string().uuid(),
+  company_name: z.string(),
+  company_email: z.string().email(),
+  company_about: z.string().email(),
+  company_linkedin: z.string().email(),
+  company_cnpj: z.string().refine((value) => validateCNPJ(value)),
+  company_phone: z.string(),
+  company_street: z.string(),
+  company_number: z.string(),
+  company_complement: z.string(),
+  company_city: z.string(),
+  company_state: z.string(),
+  company_zip_code: z.string(),
+  n_jobs: z.number(),
+  n_applications: z.number(),
+})
+
+const summarySchema = z.array(summaryItemSchema)
+
+const exportSummaryCsvSchema = z.array(z.array(z.string()))
 
 export type CreateApplicationParams = z.infer<typeof createApplicationSchema>
 export type CreateApplicationInput = z.infer<
@@ -121,7 +133,11 @@ export type ListCandidateApplicationsReply = z.infer<
   typeof listCandidateApplicationsReplySchema
 >
 
+export type SummaryItem = z.infer<typeof summaryItemSchema>
+
 export type Summary = z.infer<typeof summarySchema>
+
+export type ExportSummaryCSVData = z.infer<typeof exportSummaryCsvSchema>
 
 export const { schemas: applicationSchemas, $ref } = buildJsonSchemas(
   {
@@ -136,6 +152,7 @@ export const { schemas: applicationSchemas, $ref } = buildJsonSchemas(
     listCandidateApplicationsReplySchema,
     listCandidateApplicationsInputSchema,
     summarySchema,
+    exportSummaryCsvSchema,
   },
   { $id: 'application' },
 )

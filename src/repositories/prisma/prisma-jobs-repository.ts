@@ -11,6 +11,17 @@ export class PrismaJobsRepository implements JobsRepository {
     return await prisma.job.findUnique({ where: { job_id: jobId } })
   }
 
+  async findByIdWithCompany(jobId: string) {
+    return await prisma.job.findUnique({
+      where: { job_id: jobId },
+      include: {
+        company: {
+          include: { user: true },
+        },
+      },
+    })
+  }
+
   async findMany(query: string, page: number) {
     const disability_type = Object.keys(DisabilityTypeDictionary).find((key) =>
       DisabilityTypeDictionary[key as DisabilityType]
@@ -57,9 +68,8 @@ export class PrismaJobsRepository implements JobsRepository {
       where: {
         AND: [{ company: { company_id: companyId } }, { closed_at: null }],
       },
-      orderBy: {
-        created_at: 'desc',
-      },
+      orderBy: { created_at: 'desc' },
+      include: { applications: true },
       take: 20,
       skip: (page - 1) * 20,
     })
@@ -70,9 +80,8 @@ export class PrismaJobsRepository implements JobsRepository {
       where: {
         company: { company_id: companyId },
       },
-      orderBy: {
-        created_at: 'desc',
-      },
+      orderBy: { created_at: 'desc' },
+      include: { applications: true },
       take: 20,
       skip: (page - 1) * 20,
     })
@@ -101,20 +110,5 @@ export class PrismaJobsRepository implements JobsRepository {
       where: { job_id: userId },
       data,
     })
-  }
-
-  async bla(jobId: string) {
-    const bla = await prisma.job.findMany({
-      where: {
-        job_id: jobId,
-      },
-      include: {
-        applications: {
-          include: { candidate: { include: { user: true } } },
-        },
-      },
-    })
-    console.log('AAAAAAAAAAAAAAA', bla)
-    return bla
   }
 }

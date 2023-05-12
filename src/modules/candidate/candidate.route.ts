@@ -50,7 +50,6 @@ export async function candidateRoutes(server: FastifyInstance) {
   server.get(
     '/recover',
     {
-      // preHandler: [server.authenticate, verifyUserRole('CANDIDATE')],
       schema: {
         querystring: $ref('recoverCandidateSchema'),
         response: { [OK]: $ref('candidateReplySchema') },

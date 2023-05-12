@@ -33,12 +33,14 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     })) as any
   }
 
-  async create({ cnpj, user }: Prisma.CompanyCreateInput) {
+  async create({ cnpj, about, linkedin, user }: Prisma.CompanyCreateInput) {
     const { data } = await cnpjApi.get<CompanyApiData>(cnpj)
 
     return await prisma.company.create({
       data: {
         cnpj,
+        about,
+        linkedin,
         name: data.razao_social,
         zip_code: data.cep,
         state: data.uf,

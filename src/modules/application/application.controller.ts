@@ -6,6 +6,7 @@ import {
   ListJobApplicationQuerystring,
 } from './application.schema'
 import { makeCreateApplicationUseCase } from './use-cases/factories/make-create-application-use-case'
+import { makeExportSummaryCsvUseCase } from './use-cases/factories/make-export-summary-csv-use-case'
 import { makeFetchCandidateApplicationsHistoryUseCase } from './use-cases/factories/make-fetch-candidate-applications-history-use-case'
 import { makeListApplicationsUseCase } from './use-cases/factories/make-list-applications-use-case'
 import { makeSummaryUseCase } from './use-cases/factories/make-summary-use-case'
@@ -38,12 +39,17 @@ export async function listJobApplications(
 
   const fetchJobCandidatesUseCase = makeListApplicationsUseCase()
 
-  const { candidates } = await fetchJobCandidatesUseCase.execute({
-    job_id,
-    page,
-  })
+  const { job_role, job_title, job_description, candidates } =
+    await fetchJobCandidatesUseCase.execute({
+      job_id,
+      page,
+    })
 
-  return reply.status(OK).send({ job_id, candidates })
+  console.log(job_title, candidates)
+
+  return reply
+    .status(OK)
+    .send({ job_id, job_role, job_title, job_description, candidates })
 }
 
 export async function listAllCandidateApplications(
@@ -79,4 +85,15 @@ export async function summary(request: FastifyRequest, reply: FastifyReply) {
   const { summary } = await summaryUseCase.execute()
 
   return reply.status(OK).send(summary)
+}
+
+export async function exportSummaryCsv(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const exportSummaryCsvUseCase = makeExportSummaryCsvUseCase()
+
+  const csvData = await exportSummaryCsvUseCase.execute()
+
+  return reply.status(OK).send(csvData)
 }

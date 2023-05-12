@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
 import {
   authenticateGovernmentUser,
+  recoverGovernmentUser,
   registerGovernmentUser,
 } from './government-user.controller'
 import { $ref } from './government-user.schema'
@@ -17,6 +18,18 @@ export async function governmentUserRoutes(server: FastifyInstance) {
       },
     },
     authenticateGovernmentUser,
+  )
+
+  server.get(
+    '/recover',
+    {
+      schema: {
+        querystring: $ref('recoverGovernmentUserSchema'),
+        response: { [OK]: $ref('governmentUserReplySchema') },
+        tags: ['candidate'],
+      },
+    },
+    recoverGovernmentUser,
   )
 
   server.post(

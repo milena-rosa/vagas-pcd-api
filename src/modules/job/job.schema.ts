@@ -65,6 +65,8 @@ const searchJobReplySchema = z.array(
     location: z.string(),
     disability_type: z.string(),
     cnpj: z.string(),
+    about: z.string(),
+    company_linkedin: z.string(),
     email: z.string().email(),
     name: z.string(),
     phone: z.string(),
@@ -87,12 +89,40 @@ const jobListReplySchema = z.array(
     ...jobGenerated,
     location: z.string(),
     disability_type: z.string(),
+    n_applications: z.number(),
   }),
 )
 
 const companyJobsListSchema = z.object({
   company_id: z.string().uuid(),
   page: z.coerce.number().min(1).default(1).optional(),
+})
+
+const getJobInputSchema = z.object({
+  job_id: z.string(),
+})
+
+const getJobReplySchema = z.object({
+  job: z.object({
+    ...jobInput,
+    ...jobGenerated,
+    location: z.string(),
+    disability_type: z.string(),
+  }),
+  company: z.object({
+    cnpj: z.string(),
+    about: z.string(),
+    linkedin: z.string(),
+    email: z.string().email(),
+    name: z.string(),
+    phone: z.string(),
+    street: z.string(),
+    number: z.string(),
+    complement: z.string(),
+    city: z.string(),
+    state: z.string(),
+    zip_code: z.string(),
+  }),
 })
 
 export type CreateJobInput = z.infer<typeof createJobSchema>
@@ -109,6 +139,9 @@ export type JobListReply = z.infer<typeof jobListReplySchema>
 
 export type CompanyJobsListInput = z.infer<typeof companyJobsListSchema>
 
+export type GetJobParams = z.infer<typeof getJobInputSchema>
+export type GetJobReply = z.infer<typeof getJobReplySchema>
+
 export const { schemas: jobSchemas, $ref } = buildJsonSchemas(
   {
     createJobSchema,
@@ -120,7 +153,9 @@ export const { schemas: jobSchemas, $ref } = buildJsonSchemas(
     searchJobReplySchema,
     jobListSchema,
     jobListReplySchema,
-    companyJobsHistorySchema: companyJobsListSchema,
+    companyJobsListSchema,
+    getJobInputSchema,
+    getJobReplySchema,
   },
   { $id: 'job' },
 )

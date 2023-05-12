@@ -9,9 +9,9 @@ import { userRoutes } from './modules/user/user.route'
 
 export async function appRoutes(server: FastifyInstance) {
   server.register(userRoutes)
-  server.register(candidateRoutes, { prefix: 'candidates' })
-  server.register(companyRoutes, { prefix: 'companies' })
-  server.register(governmentUserRoutes, { prefix: 'government-users' })
+  server.register(candidateRoutes, { prefix: 'candidate' })
+  server.register(companyRoutes, { prefix: 'company' })
+  server.register(governmentUserRoutes, { prefix: 'government' })
   server.register(jobRoutes, { prefix: 'jobs' })
   server.register(applicationRoutes, { prefix: 'applications' })
   server.register(healthRoutes, { prefix: 'health' })

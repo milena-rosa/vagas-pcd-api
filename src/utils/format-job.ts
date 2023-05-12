@@ -1,10 +1,10 @@
 import {
   DisabilityTypeDictionary,
+  JobWithApplications,
   LocationDictionary,
 } from '@/repositories/jobs-repository'
-import { Job } from '@prisma/client'
 
-export function formatJob(job: Job) {
+export function formatJob(job: JobWithApplications) {
   return {
     company_id: job.company_id,
     job_id: job.job_id,
@@ -18,5 +18,6 @@ export function formatJob(job: Job) {
     perks: job.perks,
     created_at: job.created_at,
     closed_at: job.closed_at,
+    n_applications: job.applications.length,
   }
 }

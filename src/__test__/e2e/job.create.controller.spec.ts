@@ -32,8 +32,6 @@ describe('create job (e2e)', () => {
         disability_type: DisabilityType.ANY,
       })
 
-    console.log(response.error)
-
     expect(response.statusCode).toEqual(CREATED)
     expect(response.body.job_id).toEqual(expect.any(String))
     expect(response.body.company_id).toEqual(company_id)

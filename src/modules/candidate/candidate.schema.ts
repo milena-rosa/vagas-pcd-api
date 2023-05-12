@@ -64,10 +64,10 @@ const candidateUpdateInput = {
   city: z.string().optional(),
   state: z.string().optional(),
   phone: z.string().optional(),
-  linkedin: z.string().nullable(),
-  professionalExperience: z.string().nullable(),
-  educationalBackground: z.string().nullable(),
-  skills: z.string().nullable(),
+  linkedin: z.string().optional(),
+  professionalExperience: z.string().optional(),
+  educationalBackground: z.string().optional(),
+  skills: z.string().optional(),
   password: z
     .string({
       required_error: 'Password is required',

@@ -3,6 +3,7 @@ import { FastifyInstance } from 'fastify'
 import { CREATED, OK } from 'http-status'
 import {
   createApplication,
+  exportSummaryCsv,
   listAllCandidateApplications,
   listJobApplications,
   summary,
@@ -73,5 +74,17 @@ export async function applicationRoutes(server: FastifyInstance) {
       },
     },
     summary,
+  )
+
+  server.get(
+    '/summary-csv',
+    {
+      preHandler: [server.authenticate, verifyUserRole('GOVERNMENT')],
+      schema: {
+        response: { [OK]: $ref('exportSummaryCsvSchema') },
+        tags: ['application'],
+      },
+    },
+    exportSummaryCsv,
   )
 }
