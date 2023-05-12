@@ -21,6 +21,12 @@ import { appRoutes } from './routes'
 
 export const server = fastify()
 
+console.log(
+  '%capp.ts line:24 process.env',
+  'color: white; background-color: #007acc;',
+  process.env,
+)
+
 server.register(cors, {
   origin: 'http://localhost:3000' || 'https://vagaspcd.vercel.app',
 })
