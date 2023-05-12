@@ -3,7 +3,7 @@ import { env } from './env'
 
 server
   .listen({
-    host: '0.0.0.0',
+    host: env.HOST,
     port: env.PORT,
   })
   .then(() => {
