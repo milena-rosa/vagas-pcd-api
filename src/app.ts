@@ -21,16 +21,11 @@ import { appRoutes } from './routes'
 
 export const server = fastify()
 
-console.log(
-  '%capp.ts line:24 process.env',
-  'color: white; background-color: #007acc;',
-  process.env,
-)
-
+console.log(1)
 server.register(cors, {
   origin: 'http://localhost:3000' || 'https://vagaspcd.vercel.app',
 })
-
+console.log(2)
 server.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
@@ -42,9 +37,9 @@ server.register(fastifyJwt, {
   },
 })
 server.decorate('authenticate', verifyJWT)
-
+console.log(3)
 server.register(fastifyCookie)
-
+console.log(4)
 for (const schema of [
   ...userSchemas,
   ...candidateSchemas,
@@ -55,7 +50,7 @@ for (const schema of [
 ]) {
   server.addSchema(schema)
 }
-
+console.log(5)
 server.register(
   fastifySwagger,
   withRefResolver({
@@ -72,7 +67,7 @@ server.register(
     },
   }),
 )
-
+console.log(6)
 server.register(fastifySwaggerUi, {
   routePrefix: '/docs',
   uiConfig: {
@@ -90,10 +85,10 @@ server.register(fastifySwaggerUi, {
   staticCSP: true,
   transformStaticCSP: (header) => header,
 })
-
+console.log(7)
 // routes
 server.register(appRoutes)
-
+console.log(8)
 // errors
 server.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
@@ -104,13 +99,14 @@ server.setErrorHandler((error, _, reply) => {
   if (error instanceof AppError) {
     return reply.status(error.status).send({ message: error.message })
   }
-
+  console.log(9)
   // TODO: in production: DataDog/Sentry...
   if (env.NODE_ENV !== 'production') {
     console.error(error)
   }
-
+  console.log(10)
   return reply
     .status(INTERNAL_SERVER_ERROR)
     .send({ message: httpStatus['500_NAME'] })
 })
+console.log(11)
