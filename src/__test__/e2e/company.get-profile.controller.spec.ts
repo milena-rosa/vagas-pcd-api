@@ -14,7 +14,7 @@ describe('get company profile (e2e)', () => {
 
   it('should be able to get company profile', async () => {
     const registerResponse = await request(server.server)
-      .post('/companies')
+      .post('/company')
       .send({
         cnpj: '23.243.199/0001-84',
         linkedin: 'https://www.linkedin.com/company/lojasponei/',
@@ -26,7 +26,7 @@ describe('get company profile (e2e)', () => {
     const { company_id } = registerResponse.body
 
     const profileResponse = await request(server.server)
-      .get(`/companies/${company_id}`)
+      .get(`/company/${company_id}`)
       .send()
 
     expect(profileResponse.statusCode).toEqual(OK)

@@ -13,7 +13,7 @@ describe('candidate authenticate (e2e)', () => {
   })
 
   it('should be able to authenticate a candidate', async () => {
-    await request(server.server).post('/candidates').send({
+    await request(server.server).post('/candidate').send({
       name: 'Jane Doe',
       email: 'janedoe@example.com',
       phone: '11999222333',
@@ -32,7 +32,7 @@ describe('candidate authenticate (e2e)', () => {
     })
 
     const response = await request(server.server)
-      .post('/candidates/sessions')
+      .post('/candidate/sessions')
       .send({
         email: 'janedoe@example.com',
         password: '123456',

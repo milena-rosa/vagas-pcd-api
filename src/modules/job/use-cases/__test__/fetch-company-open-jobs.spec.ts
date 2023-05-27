@@ -1,5 +1,8 @@
 import { prisma } from '@/libs/__mocks__/prisma'
-import { JobsRepository } from '@/repositories/jobs-repository'
+import {
+  JobWithApplications,
+  JobsRepository,
+} from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
 import { DisabilityType, Location } from '@prisma/client'
 import { randomUUID } from 'crypto'
@@ -26,18 +29,21 @@ describe('fetch company open jobs use case', () => {
   it('should be able to fetch company jobs history use case', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const mockJob = {
+    const mockJob: JobWithApplications = {
+      title: 'Vaga massinha com uma descrição legal.',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
+      company_id: '123',
       linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
       perks:
         '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
-      company_id: '123',
       salary: 10000,
       created_at: new Date(2023, 0, 1),
       closed_at: null,
+      job_id: '123',
+      applications: [],
     }
 
     prisma.job.findMany.mockResolvedValueOnce([
@@ -65,18 +71,21 @@ describe('fetch company open jobs use case', () => {
   it('should be able to fetch paginated company jobs history', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const mockJob = {
+    const mockJob: JobWithApplications = {
+      title: 'Vaga massinha com uma descrição legal.',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
       location: Location.ON_SITE,
       company_id: '123',
-      salary: 10000,
       linkedin: 'https://www.linkedin.com/jobs/view/3580802802',
       perks:
         '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
+      salary: 10000,
       created_at: new Date(2023, 0, 1),
       closed_at: null,
+      job_id: '123',
+      applications: [],
     }
 
     const mockJobs = []

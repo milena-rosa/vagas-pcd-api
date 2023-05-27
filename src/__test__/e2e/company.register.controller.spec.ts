@@ -13,7 +13,7 @@ describe('register company (e2e)', () => {
   })
 
   it('should be able to register a company', async () => {
-    const response = await request(server.server).post('/companies').send({
+    const response = await request(server.server).post('/company').send({
       cnpj: '23.243.199/0001-84',
       linkedin: 'https://www.linkedin.com/company/lojasponei/',
       about: 'Lojas Ponei é uma empresa massinha.',

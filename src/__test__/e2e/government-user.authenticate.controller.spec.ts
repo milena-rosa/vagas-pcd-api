@@ -13,13 +13,13 @@ describe('government user authenticate (e2e)', () => {
   })
 
   it('should be able to authenticate a government user', async () => {
-    await request(server.server).post('/government-users').send({
+    await request(server.server).post('/government').send({
       email: 'inss@gov.br',
       password: '123456',
     })
 
     const response = await request(server.server)
-      .post('/government-users/sessions')
+      .post('/government/sessions')
       .send({
         email: 'inss@gov.br',
         password: '123456',

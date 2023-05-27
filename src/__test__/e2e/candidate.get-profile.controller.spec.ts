@@ -17,7 +17,7 @@ describe('candidate get profile (e2e)', () => {
     const { candidate_id, token } = await createAndAuthenticateCandidate(server)
 
     const profileResponse = await request(server.server)
-      .get('/candidates/me')
+      .get('/candidate/me')
       .set('Authorization', `Bearer ${token}`)
       .send()
 

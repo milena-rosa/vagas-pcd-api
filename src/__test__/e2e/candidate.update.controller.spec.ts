@@ -36,7 +36,7 @@ describe('candidate update (e2e)', () => {
     }
 
     const response = await request(server.server)
-      .patch('/candidates')
+      .patch('/candidate')
       .set('Authorization', `Bearer ${token}`)
       .send(newData)
 

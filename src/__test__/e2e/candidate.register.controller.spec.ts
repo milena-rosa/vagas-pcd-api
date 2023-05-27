@@ -13,7 +13,7 @@ describe('register candidate (e2e)', () => {
   })
 
   it('should be able to register a candidate', async () => {
-    const response = await request(server.server).post('/candidates').send({
+    const response = await request(server.server).post('/candidate').send({
       name: 'Jane Doe',
       email: 'janedoe@example.com',
       phone: '11999222333',

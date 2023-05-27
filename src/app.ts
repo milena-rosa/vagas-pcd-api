@@ -16,7 +16,6 @@ import { candidateSchemas } from './modules/candidate/candidate.schema'
 import { companySchemas } from './modules/company/company.schema'
 import { governmentUserSchemas } from './modules/government-user/government-user.schema'
 import { jobSchemas } from './modules/job/job.schema'
-import { userSchemas } from './modules/user/user.schema'
 import { appRoutes } from './routes'
 
 export const server = fastify()
@@ -40,7 +39,6 @@ server.decorate('authenticate', verifyJWT)
 server.register(fastifyCookie)
 
 for (const schema of [
-  ...userSchemas,
   ...candidateSchemas,
   ...companySchemas,
   ...governmentUserSchemas,

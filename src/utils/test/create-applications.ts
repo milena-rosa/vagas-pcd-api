@@ -5,7 +5,7 @@ import { createCompanyAndJobs } from './create-company-and-jobs'
 export async function createApplications(app: FastifyInstance) {
   const { job_id, company_id, companyToken } = await createCompanyAndJobs(app)
 
-  await request(app.server).post('/candidates').send({
+  await request(app.server).post('/candidate').send({
     name: 'Jane Doe',
     email: 'janedoe@example.com',
     phone: '11999222333',
@@ -25,7 +25,7 @@ export async function createApplications(app: FastifyInstance) {
 
   const {
     body: { token: candidateToken1 },
-  } = await request(app.server).post('/sessions').send({
+  } = await request(app.server).post('/candidate/sessions').send({
     email: 'janedoe@example.com',
     password: '123456',
   })
@@ -35,7 +35,7 @@ export async function createApplications(app: FastifyInstance) {
     .set('Authorization', `Bearer ${candidateToken1}`)
     .send()
 
-  await request(app.server).post('/candidates').send({
+  await request(app.server).post('/candidate').send({
     name: 'Jane Doe',
     email: 'janedoe2@example.com',
     phone: '11999222333',
@@ -55,8 +55,8 @@ export async function createApplications(app: FastifyInstance) {
 
   const {
     body: { token: candidateToken2 },
-  } = await request(app.server).post('/sessions').send({
-    email: 'janedoe@example.com',
+  } = await request(app.server).post('/candidate/sessions').send({
+    email: 'janedoe2@example.com',
     password: '123456',
   })
 
@@ -65,7 +65,7 @@ export async function createApplications(app: FastifyInstance) {
     .set('Authorization', `Bearer ${candidateToken2}`)
     .send()
 
-  await request(app.server).post('/candidates').send({
+  await request(app.server).post('/candidate').send({
     name: 'Jane Doe',
     email: 'janedoe3@example.com',
     phone: '11999222333',
@@ -85,8 +85,8 @@ export async function createApplications(app: FastifyInstance) {
 
   const {
     body: { token: candidateToken3 },
-  } = await request(app.server).post('/sessions').send({
-    email: 'janedoe@example.com',
+  } = await request(app.server).post('/candidate/sessions').send({
+    email: 'janedoe3@example.com',
     password: '123456',
   })
 

@@ -13,12 +13,10 @@ describe('government user register (e2e)', () => {
   })
 
   it('should be able to register a government user', async () => {
-    const response = await request(server.server)
-      .post('/government-users')
-      .send({
-        email: 'inss@gov.br',
-        password: '123456',
-      })
+    const response = await request(server.server).post('/government').send({
+      email: 'inss@gov.br',
+      password: '123456',
+    })
 
     expect(response.statusCode).toEqual(CREATED)
     expect(response.body).toEqual(

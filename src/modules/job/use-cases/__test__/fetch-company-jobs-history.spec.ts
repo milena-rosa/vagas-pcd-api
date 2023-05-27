@@ -1,5 +1,8 @@
 import { prisma } from '@/libs/__mocks__/prisma'
-import { JobsRepository } from '@/repositories/jobs-repository'
+import {
+  JobWithApplications,
+  JobsRepository,
+} from '@/repositories/jobs-repository'
 import { PrismaJobsRepository } from '@/repositories/prisma/prisma-jobs-repository'
 import { DisabilityType, Location } from '@prisma/client'
 import { randomUUID } from 'crypto'
@@ -26,7 +29,8 @@ describe('fetch company jobs history use case', () => {
   it('should be able to fetch the company jobs history', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const mockJob = {
+    const mockJob: JobWithApplications = {
+      title: 'Vaga massinha com uma descrição legal.',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
@@ -38,6 +42,8 @@ describe('fetch company jobs history use case', () => {
         '- Vale alimentação: R$ 500,00;\n - Vale refeição: R$ 1000,00;\n- Plano de saúde;\n-Gympass.',
       created_at: new Date(2023, 0, 1),
       closed_at: null,
+      job_id: '123',
+      applications: [],
     }
 
     prisma.job.findMany.mockResolvedValue([
@@ -73,7 +79,8 @@ describe('fetch company jobs history use case', () => {
   it('should be able to fetch paginated company jobs history', async () => {
     vi.setSystemTime(new Date(2023, 2, 1))
 
-    const mockJob = {
+    const mockJob: JobWithApplications = {
+      title: 'Vaga massinha com uma descrição legal.',
       description: 'Vaga massinha com uma descrição legal.',
       role: 'Analista',
       disability_type: DisabilityType.ANY,
@@ -85,6 +92,8 @@ describe('fetch company jobs history use case', () => {
       salary: 10000,
       created_at: new Date(2023, 0, 1),
       closed_at: null,
+      job_id: '123',
+      applications: [],
     }
 
     const mockJobs = []

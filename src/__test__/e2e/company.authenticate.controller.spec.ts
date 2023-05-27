@@ -13,7 +13,7 @@ describe('company authenticate (e2e)', () => {
   })
 
   it('should be able to authenticate a company', async () => {
-    await request(server.server).post('/companies').send({
+    await request(server.server).post('/company').send({
       cnpj: '23.243.199/0001-84',
       linkedin: 'https://www.linkedin.com/company/lojasponei/',
       about: 'Lojas Ponei é uma empresa massinha.',
@@ -22,7 +22,7 @@ describe('company authenticate (e2e)', () => {
     })
 
     const response = await request(server.server)
-      .post('/companies/sessions')
+      .post('/company/sessions')
       .send({
         email: 'lojasponei@example.com',
         password: '123456',
